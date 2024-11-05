@@ -42,10 +42,9 @@ allow-direct-references = true
 
 [tool.hatch.envs.default]
 description = "The standard dev, build, and test environment"
-dependencies = ["mypy"]
 
 [tool.hatch.envs.default.scripts]
-test = ["unit-tests", "script-tests", "type-check"]
+test = ["unit-tests", "script-tests"]
 unit-tests = "python -m unittest discover {args:tests}"
 script-tests = [
     "rm -rf test_*",
@@ -56,7 +55,6 @@ script-tests = [
     "hatch run ./scripts/test_account",
     "hatch run ./scripts/test_token",
 ]
-type-check = "mypy {args:autonity_cli tests}"
 
 [tool.hatch.envs.github]
 description = "Develop and build against autonity.py from Github"
@@ -75,26 +73,14 @@ post-install-commands = [
 
 [tool.hatch.envs.lint]
 description = "Run code linters"
-detached = true
-dependencies = ["black", "check-wheel-contents", "ruff"]
+dependencies = ["black", "check-wheel-contents", "ruff", "pyright"]
 
 [tool.hatch.envs.lint.scripts]
-all = ["check-code", "check-wheel"]
+all = ["check-code", "check-wheel", "check-type"]
 check-code = ["ruff check {args:.}", "black --check {args:.}"]
 check-wheel = [
     "hatch build",
     "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
 ]
+check-type = "pyright {args:autonity_cli tests}"
 format = ["black {args:.}", "ruff check --fix --select I {args:.}"]
-
-[tool.mypy]
-check_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-exclude = "tests/archive"
-scripts_are_modules = true
-strict_optional = true
-
-[tool.ruff.lint.per-file-ignores]
-"/autonity.py" = ["E902"]
