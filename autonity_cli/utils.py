@@ -4,6 +4,7 @@ Utility functions that are only meant to be called by other functions in this pa
 
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -11,18 +12,12 @@ from getpass import getpass
 from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 from autonity import Autonity
-from autonity.abi_manager import ABIManager
-from autonity.utils.denominations import NEWTON_DECIMALS
-from autonity.utils.keyfile import get_address_from_keyfile, load_keyfile
-from autonity.utils.tx import (
-    create_contract_function_transaction,
-    create_transaction,
-    finalize_transaction,
-)
-from autonity.utils.web3 import create_web3_for_endpoint
+from autonity.contracts import autonity
+from autonity.constants import AUTONITY_CONTRACT_ADDRESS
 from click import ClickException
-from web3 import Web3
+from web3 import HTTPProvider, IPCProvider, LegacyWebSocketProvider, Web3
 from web3.contract.contract import ContractFunction
+from web3.providers import BaseProvider
 from web3.types import (
     ABI,
     BlockIdentifier,
@@ -34,8 +29,15 @@ from web3.types import (
 )
 
 from . import config
-from .constants import AutonDenoms
+from .constants import AutonDenoms, COMMISSION_RATE_PRECISION
+from .denominations import NEWTON_DECIMALS
+from .keyfile import get_address_from_keyfile, load_keyfile
 from .logging import log
+from .tx import (
+    create_contract_function_transaction,
+    create_transaction,
+    finalize_transaction,
+)
 
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
@@ -63,16 +65,32 @@ def web3_from_endpoint_arg(w3: Optional[Web3], endpoint_arg: Optional[str]) -> W
     """
 
     if w3 is None:
-        # TODO: For now, ignore the chain ID by default.  Later, this
-        # check should be enabled and controllable by a flag.
-        return create_web3_for_endpoint(
-            config.get_rpc_endpoint(endpoint_arg), ignore_chain_id=True
-        )
-
+        return Web3(web3_provider_for_endpoint(config.get_rpc_endpoint(endpoint_arg)))
     return w3
 
 
-def autonity_from_endpoint_arg(endpoint_arg: Optional[str]) -> Autonity:
+def web3_provider_for_endpoint(endpoint: str) -> BaseProvider:
+    """
+    Given an rpc endpoint, return an appropriate provider (https, ws,
+    or IPC). If identifier isn't a valid format of one of these three
+    types, throws an exception.
+    """
+    regex_http = re.compile(r"^(?:http)s?://")
+    if re.match(regex_http, endpoint) is not None:
+        return HTTPProvider(endpoint)
+
+    regex_ws = re.compile(r"^(?:ws)s?://")
+    if re.match(regex_ws, endpoint) is not None:
+        return LegacyWebSocketProvider(endpoint)
+
+    regex_ipc = re.compile("([^ !$`&*()+]|(\\[ !$`&*()+]))+\\.ipc")
+    if re.match(regex_ipc, endpoint) is not None:
+        return IPCProvider(endpoint)
+
+    raise ValueError(f"cannot determine provider for: {endpoint}")
+
+
+def autonity_from_endpoint_arg(endpoint_arg: Optional[str]) -> autonity.Autonity:
     """
     Construct a reference to the Autonity contract from an endpoint
     argument.  Intended for the case of Protocol queries where the CLI
@@ -442,7 +460,7 @@ def newton_or_token_to_address(
                 "cannot use --ntn and --token <addr> arguments together"
             )
 
-        return Autonity.address()
+        return AUTONITY_CONTRACT_ADDRESS
 
     if token:
         return Web3.to_checksum_address(token)
@@ -531,28 +549,38 @@ def contract_address_and_abi_from_args(
         config.get_contract_address(contract_address_str)
     )
     contract_abi_path = config.get_contract_abi(contract_abi_path)
-    contract_abi = ABIManager.load_abi_file(contract_abi_path)
+    contract_abi = _load_abi_file(contract_abi_path)
     return contract_address, contract_abi
 
 
-def parse_commission_rate(rate_str: str, rate_precision: int) -> int:
+def _load_abi_file(file_name: str) -> ABI:
+    """
+    Load an ABI from a file.
+    """
+    with open(file_name, "r", encoding="utf8") as abi_f:
+        return json.load(abi_f)
+
+
+def parse_commission_rate(rate_str: str) -> int:
     """
     Support multiple rate formats and parse to a fixed-precision int
     argument.
     """
-
     # Handle ambiguous case
     if rate_str == "1" or rate_str.startswith("1.0"):
         raise ClickException(
-            f"ambiguous rate.  Use X%, 0.xx or a fixed-point value (out of {rate_precision}"
+            "ambiguous rate. Use X%, 0.xx or a fixed-point value "
+            f"(out of {COMMISSION_RATE_PRECISION}"
         )
 
     if rate_str.endswith("%"):
-        return int(Decimal(rate_precision) * Decimal(rate_str[:-1]) / Decimal(100))
+        return int(
+            Decimal(COMMISSION_RATE_PRECISION) * Decimal(rate_str[:-1]) / Decimal(100)
+        )
 
     rate_dec = Decimal(rate_str)
     if rate_dec < Decimal(1):
-        return int(Decimal(rate_precision) * rate_dec)
+        return int(Decimal(COMMISSION_RATE_PRECISION) * rate_dec)
 
     try:
         rate_int = int(rate_str)

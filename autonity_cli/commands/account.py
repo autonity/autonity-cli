@@ -7,20 +7,7 @@ import json
 from typing import Dict, List, Optional
 
 import eth_account
-from autonity.autonity import Autonity
-from autonity.erc20 import ERC20
-from autonity.utils.denominations import (
-    format_auton_quantity,
-    format_newton_quantity,
-    format_quantity,
-)
-from autonity.utils.keyfile import (
-    PrivateKey,
-    create_keyfile_from_private_key,
-    decrypt_keyfile,
-    get_address_from_keyfile,
-)
-from autonity.utils.tx import sign_tx
+from autonity import Autonity, ERC20
 from click import ClickException, Path, argument, command, group, option
 from eth_account import Account
 from eth_account.messages import encode_defunct
@@ -30,6 +17,17 @@ from web3.types import BlockIdentifier
 
 from .. import config
 from ..logging import log
+from ..denominations import (
+    format_auton_quantity,
+    format_newton_quantity,
+    format_quantity,
+)
+from ..keyfile import (
+    PrivateKey,
+    create_keyfile_from_private_key,
+    decrypt_keyfile,
+    get_address_from_keyfile,
+)
 from ..options import (
     from_option,
     keyfile_and_password_options,
@@ -38,6 +36,7 @@ from ..options import (
     newton_or_token_option,
     rpc_endpoint_option,
 )
+from ..tx import sign_tx
 from ..user import get_account_stats
 from ..utils import (
     address_keyfile_dict,
@@ -186,11 +185,11 @@ def lntn_balances(
 
     balances: Dict[str, str] = {}
     for validator in validators:
-        log(f"computing holdings for validators {validator['node_address']}")
-        lntn = ERC20(w3, validator["liquid_contract"])
+        log(f"computing holdings for validators {validator.node_address}")
+        lntn = ERC20(w3, validator.liquid_state_contract)
         bal = lntn.balance_of(account_addr)
         if bal:
-            balances[validator["node_address"]] = format_newton_quantity(bal)
+            balances[validator.node_address] = format_newton_quantity(bal)
 
     print(to_json(balances, pretty=True))
 

@@ -9,11 +9,6 @@ pushd _test_governance_cli
 ../scripts/setup_config_file.sh
 
 # Test help text (does some parameter validation)
-aut governance set-max-bond-applied-gas --help > /dev/null
-aut governance set-max-unbond-applied-gas --help > /dev/null
-aut governance set-max-unbond-released-gas --help > /dev/null
-aut governance set-max-rewards-distribution-gas --help > /dev/null
-aut governance set-staking-gas-price --help > /dev/null
 aut governance set-minimum-base-fee --help > /dev/null
 aut governance set-committee-size --help > /dev/null
 aut governance set-unbonding-period --help > /dev/null
@@ -28,7 +23,6 @@ aut governance set-supply-control-contract --help > /dev/null
 aut governance set-stabilization-contract --help > /dev/null
 aut governance set-inflation-controller-contract --help > /dev/null
 aut governance set-upgrade-manager-contract --help > /dev/null
-aut governance set-non-stakable-vesting-contract --help > /dev/null
 aut governance mint --help > /dev/null
 aut governance burn --help > /dev/null
 

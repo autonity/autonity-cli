@@ -5,15 +5,15 @@ The `contract` command group
 import json
 from typing import List, Optional, Tuple, cast
 
-from autonity.abi_parser import (
+from click import ClickException, Path, argument, command, group, option
+from web3.contract.contract import ContractFunction
+
+from ..abi_parser import (
     find_abi_constructor,
     find_abi_function,
     parse_arguments,
     parse_return_value,
 )
-from click import ClickException, Path, argument, command, group, option
-from web3.contract.contract import ContractFunction
-
 from ..logging import log
 from ..options import (
     contract_options,
