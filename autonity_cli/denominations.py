@@ -7,8 +7,6 @@ Constants related to known token precisions.
 
 from decimal import Decimal
 
-from web3.types import Wei
-
 AUTON_DECIMALS = 18
 NEWTON_DECIMALS = 18
 
@@ -24,12 +22,12 @@ def format_quantity(units: int, decimals: int) -> str:
     return f"{adjusted:f}"
 
 
-def format_auton_quantity(wei: Wei) -> str:
+def format_auton_quantity(units: int) -> str:
     """
     Format a quantity of Wei as a string representing a quantity of
     Auton, with decimal places.
     """
-    return format_quantity(wei, AUTON_DECIMALS)
+    return format_quantity(units, AUTON_DECIMALS)
 
 
 def format_newton_quantity(units: int) -> str:

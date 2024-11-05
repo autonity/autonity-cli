@@ -6,8 +6,7 @@ import asyncio
 import json
 from typing import Optional
 
-from autonity.erc20 import ERC20
-from autonity.utils.tx import send_tx, wait_for_tx
+from autonity import ERC20
 from click import ClickException, Path, argument, command, group, option
 from eth_account.account import SignedTransaction
 from web3 import Web3
@@ -23,6 +22,7 @@ from ..options import (
     tx_aux_options,
     tx_value_option,
 )
+from ..tx import send_tx, wait_for_tx
 from ..utils import (
     create_contract_tx_from_args,
     create_tx_from_args,
@@ -124,7 +124,7 @@ def make(
         w3 = web3_from_endpoint_arg(w3, rpc_endpoint)
         erc = ERC20(w3, token_addresss)
         token_units = parse_token_value_representation(value, erc.decimals())
-        function = erc.transfer(recipient=to_addr, amount=token_units)
+        function = erc.transfer(to_addr, token_units)
         tx = create_contract_tx_from_args(
             function=function,
             from_addr=from_addr,

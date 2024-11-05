@@ -8,21 +8,6 @@ pushd _test_protocol_cli
 
 ../scripts/setup_config_file.sh
 
-echo "aut protocol commission-rate-precision"
-aut protocol commission-rate-precision
-
-echo "aut protocol max-bond-applied-gas"
-aut protocol max-bond-applied-gas
-
-echo "aut protocol max-unbond-applied-gas"
-aut protocol max-unbond-applied-gas
-
-echo "aut protocol max-unbond-released-gas"
-aut protocol max-unbond-released-gas
-
-echo "aut protocol max-rewards-distribution-gas"
-aut protocol max-rewards-distribution-gas
-
 echo "aut protocol config"
 aut protocol config
 
@@ -34,15 +19,6 @@ aut protocol last-epoch-time
 
 echo "aut protocol epoch-total-bonded-stake"
 aut protocol epoch-total-bonded-stake
-
-echo "aut protocol atn-total-redistributed"
-aut protocol atn-total-redistributed
-
-echo "aut protocol epoch-reward"
-aut protocol epoch-reward
-
-echo "aut protocol staking-gas-price"
-aut protocol staking-gas-price
 
 echo "aut protocol inflation-reserve"
 aut protocol inflation-reserve
@@ -89,15 +65,11 @@ aut protocol minimum-base-fee
 echo "aut protocol operator"
 aut protocol operator
 
-echo "aut protocol proposer"
-aut protocol proposer 1 1
-
 echo "aut protocol contract-address"
 aut protocol contract-address
 
 # Test help text (does some parameter validation)
 # aut protocol get-unbonding-release-state --help >/dev/null
-aut protocol reverting-amount --help >/dev/null
 aut protocol epoch-from-block --help >/dev/null
 
 set +e

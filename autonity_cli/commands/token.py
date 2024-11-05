@@ -4,11 +4,11 @@ The `token` command group.
 
 from typing import Optional
 
-from autonity.erc20 import ERC20
-from autonity.utils.denominations import format_quantity
+from autonity import ERC20
 from click import ClickException, argument, command, group
 from web3 import Web3
 
+from ..denominations import format_quantity
 from ..options import (
     from_option,
     keyfile_option,
