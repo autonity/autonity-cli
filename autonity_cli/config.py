@@ -9,9 +9,9 @@ import os.path
 from getpass import getpass
 from typing import Optional
 
-from autonity.validator import NodeAddress
 from click import ClickException
 from web3 import Web3
+from web3.types import ChecksumAddress
 
 from .config_file import CONFIG_FILE_NAME, get_config_file
 from .logging import log
@@ -115,7 +115,7 @@ def get_rpc_endpoint(endpoint: Optional[str]) -> str:
     return endpoint
 
 
-def get_node_address(validator_addr_str: Optional[str]) -> NodeAddress:
+def get_node_address(validator_addr_str: Optional[str]) -> ChecksumAddress:
     """
     Validator address to use, cli parameter falling back to any config file.
     """
@@ -125,7 +125,7 @@ def get_node_address(validator_addr_str: Optional[str]) -> NodeAddress:
         if not validator_addr_str:
             raise ClickException("no validator specified")
 
-    return NodeAddress(Web3.to_checksum_address(validator_addr_str))
+    return Web3.to_checksum_address(validator_addr_str)
 
 
 def get_contract_address(contract_address_str: Optional[str]) -> str:

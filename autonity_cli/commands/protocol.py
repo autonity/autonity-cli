@@ -4,7 +4,8 @@ The `protocol` command group.
 
 from typing import Any, Optional, Sequence
 
-from autonity.autonity import AUTONITY_CONTRACT_ADDRESS, Autonity
+from autonity import Autonity
+from autonity.constants import AUTONITY_CONTRACT_ADDRESS
 from click import argument, command, echo, group
 
 from ..options import rpc_endpoint_option
@@ -362,32 +363,15 @@ protocol_group.add_command(operator)
 
 @command()
 @rpc_endpoint_option
-@argument("height", type=int, nargs=1)
-@argument("round_", metavar="ROUND", type=int, nargs=1)
-def proposer(rpc_endpoint: Optional[str], height: int, round_: int) -> None:
-    """
-    Proposer at the given height and round
-    """
+@argument("unbonding_id", type=int, nargs=1)
+def get_unbonding_release_state(rpc_endpoint: Optional[str], unbonding_id: int) -> None:
+    """Get the release state of the unbonding request"""
 
     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
-    print(aut.get_proposer(height, round_))
+    print(aut.get_unbonding_release_state(unbonding_id))
 
 
-protocol_group.add_command(proposer)
-
-
-# -- Removed until https://github.com/autonity/autonity.py/pull/55 is released
-# @command()
-# @rpc_endpoint_option
-# @argument("unbonding_id", type=int, nargs=1)
-# def get_unbonding_release_state(rpc_endpoint: Optional[str], unbonding_id: int) -> None:
-#     """Get the release state of the unbonding request"""
-
-#     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
-#     print(aut.get_unbonding_release_state(unbonding_id))
-
-
-# protocol_group.add_command(get_unbonding_release_state)
+protocol_group.add_command(get_unbonding_release_state)
 
 
 @command()

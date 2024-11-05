@@ -3,19 +3,20 @@ The `validator` command group.
 """
 
 import sys
+from dataclasses import asdict
 from typing import Optional
 from urllib import parse as urlparse
 
-from autonity.autonity import Autonity
-from autonity.utils.denominations import format_auton_quantity, format_newton_quantity
-from autonity.validator import OracleAddress, Validator
+from autonity import Autonity, LiquidNewton
 from click import argument, command, echo, group, option
 from web3 import Web3
-from web3.types import HexBytes
+from web3.types import ChecksumAddress, HexBytes
+from web3.exceptions import ContractLogicError
 
 from .protocol import protocol_group
 from ..config import get_node_address
 from ..constants import UnixExitStatus
+from ..denominations import format_auton_quantity, format_newton_quantity
 from ..options import (
     from_option,
     keyfile_option,
@@ -66,17 +67,15 @@ def info(rpc_endpoint: Optional[str], validator_addr_str: str) -> None:
 
     validator_addr = get_node_address(validator_addr_str)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
-    validator_data = aut.get_validator(validator_addr)
-    if (
-        validator_data is None
-        or validator_data.get("node_address", "") != validator_addr
-    ):
+    try:
+        validator_data = aut.get_validator(validator_addr)
+    except ContractLogicError:
         echo(
             f"The address {validator_addr} is not registered as a validator.",
             err=True,
         )
         sys.exit(UnixExitStatus.WEB3_RESOURCE_NOT_FOUND)
-    echo(to_json(aut.get_validator(validator_addr), pretty=True))
+    echo(to_json(asdict(validator_data), pretty=True))
 
 
 validator.add_command(info)
@@ -217,7 +216,7 @@ def register(
     nonce: Optional[int],
     chain_id: Optional[int],
     enode: str,
-    oracle: OracleAddress,
+    oracle: ChecksumAddress,
     consensus_key: str,
     proof: str,
 ) -> None:
@@ -415,10 +414,12 @@ def unclaimed_rewards(
     validator_addr = get_node_address(validator_addr_str)
     account = from_address_from_argument(account, keyfile)
 
-    aut = autonity_from_endpoint_arg(rpc_endpoint)
-    vdesc = aut.get_validator(validator_addr)
-    val = Validator(aut.contract.w3, vdesc)
-    unclaimed_atn, unclaimed_ntn = val.unclaimed_rewards(account)
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidNewton(w3, validator.liquid_state_contract)
+    unclaimed_atn, unclaimed_ntn = liquid_newton.unclaimed_rewards(account)
     print(
         format_newton_quantity(unclaimed_ntn)
         if ntn
@@ -457,11 +458,11 @@ def claim_rewards(
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     aut = Autonity(w3)
-    vdesc = aut.get_validator(validator_addr)
-    val = Validator(w3, vdesc)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidNewton(w3, validator.liquid_state_contract)
 
     tx = create_contract_tx_from_args(
-        function=val.claim_rewards(),
+        function=liquid_newton.claim_rewards(),
         from_addr=from_addr,
         gas=gas,
         gas_price=gas_price,
