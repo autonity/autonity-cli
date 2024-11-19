@@ -5,7 +5,7 @@ The `gov` command group.
 from typing import Optional
 
 from click import argument, command, group
-from eth_utils import to_checksum_address
+from web3 import Web3
 
 from ..options import from_option, keyfile_option, rpc_endpoint_option, tx_aux_options
 from ..utils import (
@@ -451,7 +451,7 @@ def set_operator_account(
     `setOperatorAccount` on Autonity contract.
     """
 
-    operator_address = to_checksum_address(operator_address_str)
+    operator_address = Web3.to_checksum_address(operator_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -496,7 +496,7 @@ def set_treasury_account(
     account.  See `setTreasuryAccount` on Autonity contract.
     """
 
-    treasury_address = to_checksum_address(treasury_address_str)
+    treasury_address = Web3.to_checksum_address(treasury_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -586,7 +586,7 @@ def set_accountability_contract(
     `setAccountabilityContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -631,7 +631,7 @@ def set_oracle_contract(
     `setOracleContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -676,7 +676,7 @@ def set_acu_contract(
     `setAcuContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -721,7 +721,7 @@ def set_supply_control_contract(
     `setSupplyControlContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -766,7 +766,7 @@ def set_stabilization_contract(
     `setSupplyControlContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -811,7 +811,7 @@ def set_inflation_controller_contract(
     account. See `setInflationControllerContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -856,7 +856,7 @@ def set_upgrade_manager_contract(
     See `setUpgradeManagerContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -901,7 +901,7 @@ def set_non_stakable_vesting_contract(
     account. See `setNonStakableVestingContract` on Autonity contract.
     """
 
-    contract_address = to_checksum_address(contract_address_str)
+    contract_address = Web3.to_checksum_address(contract_address_str)
     from_addr = from_address_from_argument(from_str, keyfile)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -952,7 +952,7 @@ def mint(
 
     token_units = parse_newton_value_representation(amount_str)
     from_addr = from_address_from_argument(from_str, keyfile)
-    recipient = to_checksum_address(recipient_str) if recipient_str else from_addr
+    recipient = Web3.to_checksum_address(recipient_str) if recipient_str else from_addr
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -1003,7 +1003,7 @@ def burn(
 
     token_units = parse_newton_value_representation(amount_str)
     from_addr = from_address_from_argument(from_str, keyfile)
-    account = to_checksum_address(account_str) if account_str else from_addr
+    account = Web3.to_checksum_address(account_str) if account_str else from_addr
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
