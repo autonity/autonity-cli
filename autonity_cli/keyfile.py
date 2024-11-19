@@ -8,9 +8,9 @@ import json
 from typing import Any, Dict, NewType, cast
 
 from eth_account import Account
-from eth_keyfile import create_keyfile_json, decode_keyfile_json
+from eth_keyfile.keyfile import create_keyfile_json, decode_keyfile_json
+from eth_typing import ChecksumAddress
 from web3 import Web3
-from web3.types import ChecksumAddress
 
 EncryptedKeyData = Dict[str, Any]
 
