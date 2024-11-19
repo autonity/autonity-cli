@@ -9,8 +9,9 @@ from urllib import parse as urlparse
 
 from autonity import Autonity, LiquidLogic
 from click import argument, command, echo, group, option
+from eth_typing import ChecksumAddress
+from hexbytes import HexBytes
 from web3 import Web3
-from web3.types import ChecksumAddress, HexBytes
 from web3.exceptions import ContractLogicError
 
 from .protocol import protocol_group

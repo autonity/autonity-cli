@@ -10,8 +10,8 @@ from getpass import getpass
 from typing import Optional
 
 from click import ClickException
+from eth_typing import ChecksumAddress
 from web3 import Web3
-from web3.types import ChecksumAddress
 
 from .config_file import CONFIG_FILE_NAME, get_config_file
 from .logging import log

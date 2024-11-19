@@ -8,9 +8,10 @@ from typing import Optional
 
 from autonity import ERC20
 from click import ClickException, Path, argument, command, group, option
-from eth_account.account import SignedTransaction
+from eth_account.datastructures import SignedTransaction
+from eth_typing import HexStr
+from hexbytes import HexBytes
 from web3 import Web3
-from web3.types import HexBytes, HexStr
 
 from .account import signtx
 from ..logging import log

@@ -45,8 +45,6 @@ def info(rpc_endpoint: Optional[str]) -> None:
         "eth_accounts": w3.eth.accounts,
         "eth_blockNumber": w3.eth.block_number,
         "eth_gasPrice": w3.eth.gas_price,
-        "eth_hashrate": w3.eth.hashrate,
-        "eth_mining": w3.eth.mining,
         "eth_syncing": eth_syncing,
         "eth_chainId": w3.eth.chain_id,
         "net_listening": w3.net.listening,

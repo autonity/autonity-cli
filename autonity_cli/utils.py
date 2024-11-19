@@ -15,14 +15,13 @@ from autonity import Autonity
 from autonity.contracts import autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
 from click import ClickException
+from eth_typing import ABI, ChecksumAddress
+from hexbytes import HexBytes
 from web3 import HTTPProvider, IPCProvider, LegacyWebSocketProvider, Web3
 from web3.contract.contract import ContractFunction
 from web3.providers import BaseProvider
 from web3.types import (
-    ABI,
     BlockIdentifier,
-    ChecksumAddress,
-    HexBytes,
     Nonce,
     TxParams,
     Wei,
@@ -165,7 +164,8 @@ def create_tx_from_args(
         w3 = web3_from_endpoint_arg(w3, rpc_endpoint)
         block_number = w3.eth.block_number
         block_data = w3.eth.get_block(block_number)
-        max_fee_per_gas = str(Wei(int(float(block_data["baseFeePerGas"]) * fee_factor)))
+        if base_fee_per_gas := block_data.get("baseFeePerGas"):
+            max_fee_per_gas = str(Wei(int(float(base_fee_per_gas) * fee_factor)))
 
     try:
         return (
@@ -238,11 +238,10 @@ def create_contract_tx_from_args(
         block_data = w3.eth.get_block(block_number)
         # Note, keep this in units of whole Auton.  It will be
         # converted to Wei below.
-        max_fee_per_gas = str(
-            Decimal(block_data["baseFeePerGas"])
-            * Decimal(fee_factor)
-            / Decimal(pow(10, 18))
-        )
+        if base_fee_per_gas := block_data.get("baseFeePerGas"):
+            max_fee_per_gas = str(
+                Decimal(base_fee_per_gas) * Decimal(fee_factor) / Decimal(pow(10, 18))
+            )
 
     try:
         tx = create_contract_function_transaction(

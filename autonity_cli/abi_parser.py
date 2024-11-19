@@ -10,10 +10,10 @@ import json
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Union, cast
 
 from web3 import Web3
-from web3.types import (
+from eth_typing.abi import (
     ABI,
     ABIFunction,
-    ABIFunctionParams,
+    ABIComponent,
 )
 
 
@@ -48,12 +48,15 @@ def parse_arguments(abi_function: ABIFunction, arguments: List[str]) -> List[Any
     contract with the given ABI.
     """
 
-    inputs = abi_function["inputs"]
-    parsers = _argument_parsers_for_params(inputs)
-    if len(parsers) != len(arguments):
-        raise ValueError(f"function requires {len(parsers)}, received {len(arguments)}")
+    if inputs := abi_function.get("inputs"):
+        parsers = _argument_parsers_for_params(inputs)
+        if len(parsers) != len(arguments):
+            raise ValueError(
+                f"function requires {len(parsers)}, received {len(arguments)}"
+            )
 
-    return [parse(arg) for parse, arg in zip(parsers, arguments)]
+        return [parse(arg) for parse, arg in zip(parsers, arguments)]
+    return []
 
 
 def parse_return_value(abi_function: ABIFunction, return_value: Any) -> Any:
@@ -64,8 +67,8 @@ def parse_return_value(abi_function: ABIFunction, return_value: Any) -> Any:
     Supports void types, and flattening a one-element tuple to a raw type.
     """
 
-    outputs = abi_function["outputs"]
-    if len(outputs) == 0:
+    outputs = abi_function.get("outputs")
+    if not outputs:
         return None
 
     if len(outputs) == 1:
@@ -134,7 +137,7 @@ def _string_to_argument_fn_for_type(arg_type: str) -> ParamParser:
 
 
 def _argument_parsers_for_params(
-    outputs: Sequence[ABIFunctionParams],
+    outputs: Sequence[ABIComponent],
 ) -> List[ParamParser]:
     """
     Given the ABIFunctionParams object representing the output types
@@ -150,7 +153,7 @@ def _argument_parsers_for_params(
 
 
 def _parse_return_value_from_type(
-    type_name: str, output: ABIFunctionParams, value: Any
+    type_name: str, output: ABIComponent, value: Any
 ) -> Any:
     """
     Parse a single value from an ABIFunctionParams.
@@ -172,7 +175,7 @@ def _parse_return_value_from_type(
 
 
 def _parse_return_value_as_anonymous_tuple(
-    outputs: Sequence[ABIFunctionParams], values: Tuple
+    outputs: Sequence[ABIComponent], values: Tuple
 ) -> Tuple:
     """
     Parse a list of unnamed ABIFunctionParams and a tuple, to a tuple.
@@ -185,7 +188,7 @@ def _parse_return_value_as_anonymous_tuple(
 
 
 def _parse_return_value_as_named_tuple(
-    outputs: Sequence[ABIFunctionParams], values: Tuple
+    outputs: Sequence[ABIComponent], values: Tuple
 ) -> Dict[str, Any]:
     """
     Parse a list of named ABIFunctionParams and a tuple, to a dict.
@@ -194,20 +197,19 @@ def _parse_return_value_as_named_tuple(
     assert len(values) == len(outputs)
     value_dict: Dict[str, Any] = {}
     for val, out in zip(values, outputs):
-        value_dict[out["name"]] = _parse_return_value_from_type(out["type"], out, val)
+        if name := out.get("name"):
+            value_dict[name] = _parse_return_value_from_type(out["type"], out, val)
 
     return value_dict
 
 
-def _parse_return_value_tuple(
-    outputs: Sequence[ABIFunctionParams], values: Tuple
-) -> Any:
+def _parse_return_value_tuple(outputs: Sequence[ABIComponent], values: Tuple) -> Any:
     """
     Anonymous tuples to tuples, named tuples to dictionaries.
     """
 
     assert len(values) == len(outputs)
-    if outputs[0]["name"] == "":
+    if outputs[0].get("name") == "":
         return _parse_return_value_as_anonymous_tuple(outputs, values)
 
     return _parse_return_value_as_named_tuple(outputs, values)
