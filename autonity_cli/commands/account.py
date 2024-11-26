@@ -7,7 +7,7 @@ import json
 from typing import Dict, List, Optional
 
 import eth_account
-from autonity import Autonity, ERC20
+from autonity import Autonity
 from click import ClickException, Path, argument, command, group, option
 from eth_account import Account
 from eth_account.messages import encode_defunct
@@ -16,6 +16,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
+from ..erc20 import ERC20
 from ..logging import log
 from ..denominations import (
     format_auton_quantity,

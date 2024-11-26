@@ -6,7 +6,6 @@ import asyncio
 import json
 from typing import Optional
 
-from autonity import ERC20
 from click import ClickException, Path, argument, command, group, option
 from eth_account.datastructures import SignedTransaction
 from eth_typing import HexStr
@@ -14,6 +13,7 @@ from hexbytes import HexBytes
 from web3 import Web3
 
 from .account import signtx
+from ..erc20 import ERC20
 from ..logging import log
 from ..options import (
     from_option,
