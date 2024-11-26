@@ -6,6 +6,7 @@ import json
 import os
 import re
 import sys
+from dataclasses import asdict, is_dataclass
 from datetime import datetime, timezone
 from decimal import Decimal
 from getpass import getpass
@@ -26,6 +27,7 @@ from web3.types import (
     TxParams,
     Wei,
 )
+from web3._utils.encoding import Web3JsonEncoder
 
 from . import config
 from .constants import AutonDenoms, COMMISSION_RATE_PRECISION
@@ -44,6 +46,13 @@ from .tx import (
 
 # Intended to represent "value" types
 V = TypeVar("V")
+
+
+class JSONEncoder(Web3JsonEncoder):
+    def default(self, obj: Any) -> Any:
+        if is_dataclass(obj):
+            return asdict(obj)  # type: ignore
+        return super().default(obj)
 
 
 def web3_from_endpoint_arg(w3: Optional[Web3], endpoint_arg: Optional[str]) -> Web3:
@@ -360,10 +369,9 @@ def to_json(data: Union[Mapping[str, V], Sequence[V]], pretty: bool = False) -> 
     Note, the `Mapping[K, V]` type allows all `TypedDict` types
     (`TxParams`, `SignedTx`, etc) to be passed in.
     """
-    if pretty:
-        return json.dumps(cast(Dict[Any, Any], data), indent=2)
-
-    return Web3.to_json(cast(Dict[Any, Any], data))
+    return json.dumps(
+        cast(Dict[Any, Any], data), indent=(2 if pretty else None), cls=JSONEncoder
+    )
 
 
 def string_is_32byte_hash(hash_str: str) -> bool:
