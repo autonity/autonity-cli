@@ -122,7 +122,7 @@ def bond(
     amount_str: str,
 ) -> None:
     """
-    Create transaction to bond Newton to a validator.
+    Bond Newton to a validator.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -170,7 +170,7 @@ def unbond(
     amount_str: str,
 ) -> None:
     """
-    Create transaction to unbond Newton from a validator.
+    Unbond Newton from a validator.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -222,7 +222,7 @@ def register(
     proof: str,
 ) -> None:
     """
-    Create transaction to register a validator
+    Register a validator.
     """
 
     consensus_key_bytes = HexBytes(consensus_key)
@@ -271,7 +271,7 @@ def pause(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to pause the given validator.
+    Pause the given validator.
 
     See `pauseValidator` on the Autonity contract.
     """
@@ -318,7 +318,7 @@ def activate(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to activate a paused validator.
+    Activate a paused validator.
 
     See `activateValidator` on the Autonity contract.
     """
@@ -367,7 +367,7 @@ def change_commission_rate(
     rate: str,
 ) -> None:
     """
-    Create transaction to change the commission rate for the given validator.
+    Change the commission rate for the given validator.
 
     The rate is given as a decimal, and must be no greater than 1 e.g. 3% would be 0.03.
     """
@@ -446,7 +446,7 @@ def claim_rewards(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to claim rewards from a validator.
+    Claim rewards from a validator.
     """
 
     validator_addr = get_node_address(validator_addr_str)
