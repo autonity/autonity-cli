@@ -6,7 +6,7 @@ from typing import Any, Optional, Sequence
 
 from autonity import Autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
-from click import argument, command, echo, group
+from click import argument, command, group
 
 from ..options import rpc_endpoint_option
 from ..utils import autonity_from_endpoint_arg, to_json, web3_from_endpoint_arg
@@ -276,7 +276,7 @@ def contract_address() -> None:
     Address of the Autonity Contract
     """
 
-    echo(AUTONITY_CONTRACT_ADDRESS, nl=False)
+    print(AUTONITY_CONTRACT_ADDRESS)
 
 
 protocol_group.add_command(contract_address)
