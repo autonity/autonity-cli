@@ -271,8 +271,9 @@ def pause(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to pause the given validator.  See
-    `pauseValidator` on the Autonity contract.
+    Create transaction to pause the given validator.
+
+    See `pauseValidator` on the Autonity contract.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -317,8 +318,9 @@ def activate(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to activate a paused validator.  See
-    `activateValidator` on the Autonity contract.
+    Create transaction to activate a paused validator.
+
+    See `activateValidator` on the Autonity contract.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -365,9 +367,9 @@ def change_commission_rate(
     rate: str,
 ) -> None:
     """
-    Create transaction to change the commission rate for the given
-    Validator.  The rate is given as a decimal, and must be no greater
-    than 1 e.g. 3% would be 0.03.
+    Create transaction to change the commission rate for the given validator.
+
+    The rate is given as a decimal, and must be no greater than 1 e.g. 3% would be 0.03.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -444,7 +446,7 @@ def claim_rewards(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to claim rewards from a Validator.
+    Create transaction to claim rewards from a validator.
     """
 
     validator_addr = get_node_address(validator_addr_str)

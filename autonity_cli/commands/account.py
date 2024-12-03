@@ -95,8 +95,9 @@ def info(
     asof: Optional[BlockIdentifier],
 ) -> None:
     """
-    Print some information about the given account (falling back to
-    the default keyfile account if no accounts specified).
+    Print some information about the given account.
+
+    Falls back to the default keyfile account if no accounts specified.
     """
 
     if len(accounts) == 0:
@@ -217,8 +218,9 @@ def new(
     show_password: bool,
 ) -> None:
     """
-    Create a new key and write it to a keyfile.  If no keyfile is
-    specified, a default name is used (consistent with GETH keyfiles)
+    Create a new key and write it to a keyfile.
+
+    If no keyfile is specified, a default name is used (consistent with GETH keyfiles)
     in the keystore.
     """
 
@@ -276,10 +278,11 @@ def import_private_key(
     private_key_file: str,
 ) -> None:
     """
-    Read a plaintext private key file (as hex), and create a new
-    encrypted keystore file for it.  Use - to read private key from
-    stdin.  If no keyfile is specified, a default name is used
-    (consistent with GETH keyfiles) in the keystore.
+    Read a plaintext private key file (as hex), and create a new encrypted keystore
+    file for it.
+
+    Use - to read private key from stdin. If no keyfile is specified, a default name
+    is used (consistent with GETH keyfiles) in the keystore.
     """
 
     private_key = HexBytes.fromhex(load_from_file_or_stdin_line(private_key_file))
@@ -313,8 +316,9 @@ account_group.add_command(import_private_key)
 )
 def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> None:
     """
-    Sign a transaction using the given keyfile.  Use '-' to read from
-    stdin instead of a file.
+    Sign a transaction using the given keyfile.
+
+    Use '-' to read from stdin instead of a file.
 
     If password is not given, the env variable 'KEYFILEPWD' is used.
     If that is not set, the user is prompted.
@@ -363,8 +367,9 @@ def sign_message(
 ) -> None:
     """
     Use the private key in the given keyfile to sign the string
-    MESSAGE (or the contents of a file; see --use-message-file).  The
-    signature is always written to stdout (which can be piped to a
+    MESSAGE (or the contents of a file; see --use-message-file).
+
+    The signature is always written to stdout (which can be piped to a
     file). The signature is also written to SIGNATURE_FILE, if given.
     """
 
@@ -428,6 +433,7 @@ def verify_signature(
     """
     Verify that the signature in `SIGNATURE_FILE` is valid for the
     message MESSAGE, signed by the owner of the FROM address.
+
     Signature must be contained in a file.
     """
 

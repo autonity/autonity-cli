@@ -45,8 +45,10 @@ def set_minimum_base_fee(
     base_fee_str: str,
 ) -> None:
     """
-    Set the minimum gas price. Restricted to the operator account.
-    See `setMinimumBaseFee` on the Autonity contract.
+    Set the minimum base fee.
+
+    Restricted to the operator account.
+    See `setMinimumBaseFee` on Autonity contract.
     """
 
     base_fee = parse_wei_representation(base_fee_str)
@@ -90,8 +92,9 @@ def set_committee_size(
     committee_size: int,
 ) -> None:
     """
-    Set the maximum size of the consensus committee. Restricted to the
-    Operator account.  See `setCommitteeSize` on Autonity contract.
+    Set the maximum size of the consensus committee.
+
+    Restricted to the Operator account. See `setCommitteeSize` on Autonity contract.
     """
 
     from_addr = from_address_from_argument(from_str, keyfile)
@@ -134,8 +137,9 @@ def set_unbonding_period(
     unbonding_period: int,
 ) -> None:
     """
-    Set the unbonding period. Restricted to the Operator account.  See
-    `setUnbondingPeriod` on Autonity contract.
+    Set the unbonding period.
+
+    Restricted to the Operator account. See `setUnbondingPeriod` on Autonity contract.
     """
 
     from_addr = from_address_from_argument(from_str, keyfile)
@@ -178,8 +182,9 @@ def set_epoch_period(
     epoch_period: int,
 ) -> None:
     """
-    Set the epoch period. Restricted to the Operator account.  See
-    `setEpochPeriod` on Autonity contract.
+    Set the epoch period.
+
+    Restricted to the Operator account. See `setEpochPeriod` on Autonity contract.
     """
 
     from_addr = from_address_from_argument(from_str, keyfile)
@@ -222,8 +227,9 @@ def set_operator_account(
     operator_address_str: str,
 ) -> None:
     """
-    Set the Operator account. Restricted to the Operator account.  See
-    `setOperatorAccount` on Autonity contract.
+    Set the Operator account.
+
+    Restricted to the Operator account. See `setOperatorAccount` on Autonity contract.
     """
 
     operator_address = Web3.to_checksum_address(operator_address_str)
@@ -267,8 +273,9 @@ def set_treasury_account(
     treasury_address_str: str,
 ) -> None:
     """
-    Set the global treasury account. Restricted to the Operator
-    account.  See `setTreasuryAccount` on Autonity contract.
+    Set the global treasury account.
+
+    Restricted to the Operator account. See `setTreasuryAccount` on Autonity contract.
     """
 
     treasury_address = Web3.to_checksum_address(treasury_address_str)
@@ -312,8 +319,9 @@ def set_treasury_fee(
     treasury_fee_str: str,
 ) -> None:
     """
-    Set the treasury fee. Restricted to the Operator account.  See
-    `setTreasuryFee` on Autonity contract.
+    Set the treasury fee.
+
+    Restricted to the Operator account. See `setTreasuryFee` on Autonity contract.
     """
 
     treasury_fee = parse_wei_representation(treasury_fee_str)
@@ -357,8 +365,10 @@ def set_accountability_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Accountability Contract address. Restricted to the Operator account.  See
-    `setAccountabilityContract` on Autonity contract.
+    Set the Accountability Contract address.
+
+    Restricted to the Operator account.
+    See `setAccountabilityContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -402,8 +412,9 @@ def set_oracle_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Oracle Contract address. Restricted to the Operator account.  See
-    `setOracleContract` on Autonity contract.
+    Set the Oracle Contract address.
+
+    Restricted to the Operator account. See `setOracleContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -447,8 +458,9 @@ def set_acu_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the ACU Contract address. Restricted to the Operator account.  See
-    `setAcuContract` on Autonity contract.
+    Set the ACU Contract address.
+
+    Restricted to the Operator account. See `setAcuContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -492,8 +504,10 @@ def set_supply_control_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Supply Control Contract address. Restricted to the Operator account.  See
-    `setSupplyControlContract` on Autonity contract.
+    Set the Supply Control Contract address.
+
+    Restricted to the Operator account.
+    See `setSupplyControlContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -537,8 +551,10 @@ def set_stabilization_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Supply Control Contract address. Restricted to the Operator account.  See
-    `setSupplyControlContract` on Autonity contract.
+    Set the Supply Control Contract address.
+
+    Restricted to the Operator account.
+    See `setSupplyControlContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -582,8 +598,10 @@ def set_inflation_controller_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the inflation controller contract address. Restricted to the Operator
-    account. See `setInflationControllerContract` on Autonity contract.
+    Set the inflation controller contract address.
+
+    Restricted to the Operator account.
+    See `setInflationControllerContract` on Autonity contract.
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
@@ -627,7 +645,9 @@ def set_upgrade_manager_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the upgrade manager contract address. Restricted to the Operator account.
+    Set the upgrade manager contract address.
+
+    Restricted to the Operator account.
     See `setUpgradeManagerContract` on Autonity contract.
     """
 
@@ -674,10 +694,10 @@ def mint(
     recipient_str: Optional[str],
 ) -> None:
     """
-    Mint new stake token (NTN) and add it to the recipient balance. If
-    recipient is not specified, the caller's address is used.
-    Restricted to the Operator account.  See `mint` on Autonity
-    contract.
+    Mint new stake token (NTN) and add it to the recipient balance.
+
+    If recipient is not specified, the caller's address is used.
+    Restricted to the Operator account. See `mint` on Autonity contract.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -725,10 +745,11 @@ def burn(
     account_str: Optional[str],
 ) -> None:
     """
-    Burn the specified amount of NTN stake token from an account.  If
-    account is not specified, the caller's address is used. Restricted
-    to the Operator account.  This won't burn associated Liquid
-    tokens.  See `burn` on Autonity contract.
+    Burn the specified amount of NTN stake token from an account.
+
+    If account is not specified, the caller's address is used.
+    This won't burn associated Liquid tokens.
+    Restricted to the Operator account. See `burn` on Autonity contract.
     """
 
     token_units = parse_newton_value_representation(amount_str)
