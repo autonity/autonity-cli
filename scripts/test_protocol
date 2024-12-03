@@ -28,6 +28,7 @@ aut protocol committee-enodes
 aut protocol minimum-base-fee
 aut protocol operator
 aut protocol contract-address
+aut protocol contract-abi
 aut protocol epoch-from-block 1
 
 set +e
