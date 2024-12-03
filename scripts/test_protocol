@@ -30,6 +30,17 @@ aut protocol operator
 aut protocol contract-address
 aut protocol contract-abi
 aut protocol epoch-from-block 1
+aut protocol max-schedule-duration
+aut protocol total-schedules 0x0000000000000000000000000000000000000000
+aut protocol epoch-info
+aut protocol epoch-by-height 0
+aut protocol is-unbonding-released 0
+
+# Reverts if there is no unbonding
+aut protocol unbonding-share --help >/dev/null
+
+# Reverts if there is no schedule
+aut protocol schedule --help >/dev/null
 
 set +e
 set +x
