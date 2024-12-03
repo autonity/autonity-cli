@@ -172,7 +172,7 @@ As an example, assuming that the RPC URL has been set in the `.autrc` file,
 calling the `getProposer` function of the Autonity contract is
 
 ```console
-$ aut  contract call --abi $(aut protocol contract-abi-path) --address $(aut protocol contract-address) \
+$ aut contract call --abi <((aut protocol contract-abi)) --address $(aut protocol contract-address) \
   getProposer 10000 1
 "0x31870f96212787D181B3B2771F58AF2BeD0019Aa"
 ```

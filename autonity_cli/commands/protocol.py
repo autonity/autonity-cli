@@ -6,6 +6,7 @@ from typing import Any, Optional, Sequence
 
 from autonity import Autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
+from autonity.contracts.autonity import ABI
 from click import argument, command, group
 
 from ..options import rpc_endpoint_option
@@ -29,7 +30,6 @@ def _show_sequence(value: Sequence[Any]) -> str:
 
 
 def _show_json(value: Any) -> str:
-
     return to_json(value, pretty=True)
 
 
@@ -305,3 +305,15 @@ def contract_address() -> None:
 
 
 protocol_group.add_command(contract_address)
+
+
+@command()
+def contract_abi() -> None:
+    """
+    ABI of the Autonity Contract.
+    """
+
+    print(_show_json(ABI))
+
+
+protocol_group.add_command(contract_abi)
