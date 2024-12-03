@@ -8,6 +8,7 @@ from autonity import Autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
 from autonity.contracts.autonity import ABI
 from click import argument, command, group
+from web3 import Web3
 
 from ..options import rpc_endpoint_option
 from ..utils import autonity_from_endpoint_arg, to_json, web3_from_endpoint_arg
@@ -178,6 +179,20 @@ protocol_group.add_command(version)
 
 @command()
 @rpc_endpoint_option
+def epoch_info(rpc_endpoint: Optional[str]):
+    """
+    Information about the current epoch.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(_show_json(aut.get_epoch_info()))
+
+
+protocol_group.add_command(epoch_info)
+
+
+@command()
+@rpc_endpoint_option
 def committee(rpc_endpoint: Optional[str]) -> None:
     """
     Get current committee.
@@ -269,6 +284,20 @@ protocol_group.add_command(minimum_base_fee)
 
 @command()
 @rpc_endpoint_option
+def max_schedule_duration(rpc_endpoint: Optional[str]) -> None:
+    """
+    The max allowed duration of any schedule or contract.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(aut.get_max_schedule_duration())
+
+
+protocol_group.add_command(max_schedule_duration)
+
+
+@command()
+@rpc_endpoint_option
 def operator(rpc_endpoint: Optional[str]) -> None:
     """
     The governance operator.
@@ -282,10 +311,25 @@ protocol_group.add_command(operator)
 
 @command()
 @rpc_endpoint_option
-@argument("block", type=int, nargs=1)
+@argument("block-height", type=int)
+def epoch_by_height(rpc_endpoint: Optional[str], block_height: int):
+    """
+    Information about the epoch at the given block height.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(_show_json(aut.get_epoch_by_height(block_height)))
+
+
+protocol_group.add_command(epoch_by_height)
+
+
+@command()
+@rpc_endpoint_option
+@argument("block", type=int)
 def epoch_from_block(rpc_endpoint: Optional[str], block: int) -> None:
     """
-    Get the epoch of the given block.
+    The ID of the epoch of the given block.
     """
 
     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
@@ -293,6 +337,71 @@ def epoch_from_block(rpc_endpoint: Optional[str], block: int) -> None:
 
 
 protocol_group.add_command(epoch_from_block)
+
+
+@command()
+@rpc_endpoint_option
+@argument("unbonding-id", type=int)
+def is_unbonding_released(rpc_endpoint: Optional[str], unbonding_id: int):
+    """
+    Checks if unbonding with the given ID is released or not.
+
+    Prints 1 if the unbonding is released and 0 otherwise.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(int(aut.is_unbonding_released(unbonding_id)))
+
+
+protocol_group.add_command(is_unbonding_released)
+
+
+@command()
+@rpc_endpoint_option
+@argument("unbonding-id", type=int)
+def unbonding_share(rpc_endpoint: Optional[str], unbonding_id: int):
+    """
+    The share for unbonding with the given ID.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(aut.get_unbonding_share(unbonding_id))
+
+
+protocol_group.add_command(unbonding_share)
+
+
+@command()
+@rpc_endpoint_option
+@argument("vault-address-str", metavar="VAULT-ADDRESS")
+@argument("index", type=int)
+def schedule(rpc_endpoint: Optional[str], vault_address_str: str, index: int):
+    """
+    The schedule for the given vault at the given index.
+    """
+
+    vault_address = Web3.to_checksum_address(vault_address_str)
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(_show_json(aut.get_schedule(vault_address, index)))
+
+
+protocol_group.add_command(schedule)
+
+
+@command()
+@rpc_endpoint_option
+@argument("vault-address-str", metavar="VAULT-ADDRESS")
+def total_schedules(rpc_endpoint: Optional[str], vault_address_str: str):
+    """
+    The total number of schedules for the given vault.
+    """
+
+    vault_address = Web3.to_checksum_address(vault_address_str)
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    print(aut.get_total_schedules(vault_address))
+
+
+protocol_group.add_command(total_schedules)
 
 
 @command()

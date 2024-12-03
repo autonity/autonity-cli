@@ -30,6 +30,58 @@ def governance_group() -> None:
 @keyfile_option()
 @from_option
 @tx_aux_options
+@argument("schedule-vault", metavar="ADDRESS")
+@argument("amount", type=int)
+@argument("start-time", type=int)
+@argument("total-duration", type=int)
+def create_schedule(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    schedule_vault: str,
+    amount: int,
+    start_time: int,
+    duration: int,
+) -> None:
+    """
+    Create a new schedule.
+
+    Restricted to the Operator account. See `createSchedule` on Autonity contract.
+    """
+
+    vault_address = Web3.to_checksum_address(schedule_vault)
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.create_schedule(vault_address, amount, start_time, duration),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(create_schedule)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
 @argument("base-fee-str", metavar="base-fee", nargs=1)
 def set_minimum_base_fee(
     rpc_endpoint: Optional[str],
@@ -70,6 +122,52 @@ def set_minimum_base_fee(
 
 
 governance_group.add_command(set_minimum_base_fee)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("duration", type=int, nargs=1)
+def set_max_schedule_duration(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    duration: int,
+) -> None:
+    """
+    Set the max allowed duration of any schedule or contract.
+
+    Restricted to the operator account.
+    See `setMaxScheduleDuration` on Autonity contract.
+    """
+
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_max_schedule_duration(duration),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_max_schedule_duration)
 
 
 @command()
@@ -160,6 +258,190 @@ def set_unbonding_period(
 
 
 governance_group.add_command(set_unbonding_period)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("proposer-reward-rate", type=int)
+def set_proposer_reward_rate(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    proposer_reward_rate: int,
+):
+    """
+    Set the proposer reward rate for the policy configuration.
+
+    Restricted to the Operator account.
+    See `setProposerRewardRate` on Autonity contract.
+    """
+
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_proposer_reward_rate(proposer_reward_rate),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_proposer_reward_rate)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("oracle-reward-rate", type=int)
+def set_oracle_reward_rate(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    oracle_reward_rate: int,
+):
+    """
+    Set the unbonding period.
+
+    Restricted to the Operator account. See `setOracleRewardRate` on Autonity contract.
+    """
+
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_oracle_reward_rate(oracle_reward_rate),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_oracle_reward_rate)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("withholding_threshold", type=int)
+def set_withholding_threshold(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    withholding_threshold: int,
+):
+    """
+    Set the withholding threshold for the policy configuration.
+
+    Restricted to the Operator account.
+    See `setWithholdingThreshold` on Autonity contract.
+    """
+
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_withholding_threshold(withholding_threshold),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_withholding_threshold)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("pool-address-str", type=int)
+def set_withheld_rewards_pool(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    pool_address_str: str,
+):
+    """
+    Set the address of the pool to which withheld rewards will be sent.
+
+    Restricted to the Operator account.
+    See `setWithheldRewardsPool` on Autonity contract.
+    """
+
+    pool_address = Web3.to_checksum_address(pool_address_str)
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_withheld_rewards_pool(pool_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_withheld_rewards_pool)
 
 
 @command()
@@ -677,6 +959,100 @@ governance_group.add_command(set_upgrade_manager_contract)
 @keyfile_option()
 @from_option
 @tx_aux_options
+@argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
+def set_omission_accountability_contract(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    contract_address_str: str,
+) -> None:
+    """
+    Set the Omission Accountability contract address.
+
+    Restricted to the Operator account.
+    See `setOmissionAccountabilityContract` on Autonity contract.
+    """
+
+    contract_address = Web3.to_checksum_address(contract_address_str)
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_omission_accountability_contract(contract_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_omission_accountability_contract)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
+def set_liquid_logic_contract(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    contract_address_str: str,
+) -> None:
+    """
+    Set the Liquid Logic contract address.
+
+    Restricted to the Operator account.
+    See `setAccountabilityContract` on Autonity contract.
+    """
+
+    contract_address = Web3.to_checksum_address(contract_address_str)
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_liquid_logic_contract(contract_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_liquid_logic_contract)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 @argument("recipient-str", metavar="RECIPIENT", required=False)
 def mint(
@@ -772,3 +1148,48 @@ def burn(
 
 
 governance_group.add_command(burn)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@from_option
+@tx_aux_options
+@argument("slasher-address-str", metavar="SLASHER-ADDRESS")
+def set_slasher(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    slasher_address_str: str,
+):
+    """
+    Set the slasher account.
+
+    Restricted to the Operator account. See `setSlasher` on Autonity contract.
+    """
+    slasher_address = Web3.to_checksum_address(slasher_address_str)
+    from_addr = from_address_from_argument(from_str, keyfile)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_slasher(slasher_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+governance_group.add_command(set_slasher)
