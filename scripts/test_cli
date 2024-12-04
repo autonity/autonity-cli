@@ -5,7 +5,7 @@ set -e
 
 # Test assumes a live testnet, and relies on Alice having some funds.
 # Got to: https://faucet.autonity.org/ to recharge.
-export WEB3_ENDPOINT="https://rpc1.piccadilly.autonity.org/"
+export WEB3_ENDPOINT="${RPC_URL:-https://rpc1.piccadilly.autonity.org/}"
 
 # We use these dummy Dummy keys:
 ALICE=0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf
