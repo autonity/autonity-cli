@@ -1,5 +1,12 @@
 # Changelog
 
+## TBD
+
+### Changed
+
+- Support the Autonity Tiber protocol ([#176](https://github.com/autonity/autonity-cli/pull/176))
+- Support Python 3.13 & drop Python 3.8 support ([`e8766e3`](https://github.com/autonity/autonity-cli/commit/e8766e3))
+
 ## [v0.6.0] - 2024-10-23
 
 ### Changed
