@@ -8,69 +8,27 @@ pushd _test_protocol_cli
 
 ../scripts/setup_config_file.sh
 
-echo "aut protocol config"
 aut protocol config
-
-echo "aut protocol epoch-id"
 aut protocol epoch-id
-
-echo "aut protocol last-epoch-time"
 aut protocol last-epoch-time
-
-echo "aut protocol epoch-total-bonded-stake"
 aut protocol epoch-total-bonded-stake
-
-echo "aut protocol inflation-reserve"
 aut protocol inflation-reserve
-
-echo "aut protocol deployer"
 aut protocol deployer
-
-echo "aut protocol epoch-period"
 aut protocol epoch-period
-
-echo "aut protocol block-period"
 aut protocol block-period
-
-echo "aut protocol unbonding-period"
 aut protocol unbonding-period
-
-echo "aut protocol last-epoch-block"
 aut protocol last-epoch-block
-
-echo "aut protocol version"
 aut protocol version
-
-echo "aut protocol committee"
 aut protocol committee
-
-echo "aut protocol validators"
 aut protocol validators
-
-echo "aut protocol treasury-account"
 aut protocol treasury-account
-
-echo "aut protocol treasury-fee"
 aut protocol treasury-fee
-
-echo "aut protocol max-committee-size"
 aut protocol max-committee-size
-
-echo "aut protocol committee-enodes"
 aut protocol committee-enodes
-
-echo "aut protocol minimum-base-fee"
 aut protocol minimum-base-fee
-
-echo "aut protocol operator"
 aut protocol operator
-
-echo "aut protocol contract-address"
 aut protocol contract-address
-
-# Test help text (does some parameter validation)
-# aut protocol get-unbonding-release-state --help >/dev/null
-aut protocol epoch-from-block --help >/dev/null
+aut protocol epoch-from-block 1
 
 set +e
 set +x

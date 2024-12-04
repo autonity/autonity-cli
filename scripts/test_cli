@@ -19,71 +19,71 @@ CAROL=0x6813Eb9362372EEF6200f3b1dbC3f819671cBA69
 mkdir -p _test_data
 pushd _test_data
 
-    # Some basic calls
+# Some basic calls
 
-    aut node info
-    aut block get
+aut node info
+aut block get
 
-    # Basic key handling
+# Basic key handling
 
-    mkdir -p keystore
-    cp ../tests/data/alice.key keystore
-    cp ../tests/data/bob.key keystore
-    aut account list --keystore keystore > accounts
-    [ 2 == $(wc -l < accounts) ] || (echo "unexpected number of accounts"; exit 1)
+mkdir -p keystore
+cp ../tests/data/alice.key keystore
+cp ../tests/data/bob.key keystore
+aut account list --keystore keystore > accounts
+[ 2 == $(wc -l < accounts) ] || (echo "unexpected number of accounts"; exit 1)
 
-    # List account info
-    aut account info $(cat accounts)
+# List account info
+aut account info $(cat accounts)
 
-    # Remove WEB3_ENDPOINT env var and set up a configuration file instead
-    unset WEB3_ENDPOINT
-    ../scripts/setup_config_file.sh
+# Remove WEB3_ENDPOINT env var and set up a configuration file instead
+unset WEB3_ENDPOINT
+../scripts/setup_config_file.sh
 
-    # Get Alice and Bob's balances
-    alice_balance_orig=`aut account balance $ALICE`
-    bob_balance_orig=`aut account balance $BOB`
+# Get Alice and Bob's balances
+alice_balance_orig=`aut account balance $ALICE`
+bob_balance_orig=`aut account balance $BOB`
 
-    # Fake NTN transfer transaction.  Specify everything, to avoid
-    # web3.py querying the node (which fails if ALICE has insufficient
-    # NTN).
-    aut --verbose tx make \
-        --ntn \
-        --from ${BOB} \
-        --to ${ALICE} \
-        --value 2.345 \
-        --gas 1000000 \
-        --gas-price 1gwei \
-        --nonce 12 > test_ntn_tx
+# Fake NTN transfer transaction.  Specify everything, to avoid
+# web3.py querying the node (which fails if ALICE has insufficient
+# NTN).
+aut --verbose tx make \
+    --ntn \
+    --from ${BOB} \
+    --to ${ALICE} \
+    --value 2.345 \
+    --gas 1000000 \
+    --gas-price 1gwei \
+    --nonce 12 > test_ntn_tx
 
-    # Sign the tx using Bobs private key.  Intentionally use piping to
-    # test this code-path.
-    cat test_ntn_tx | (KEYFILEPWD=bob aut --verbose tx sign --keyfile keystore/bob.key -) > test_ntn_tx.signed
+# Sign the tx using Bobs private key.  Intentionally use piping to
+# test this code-path.
+cat test_ntn_tx | (KEYFILEPWD=bob aut --verbose tx sign --keyfile keystore/bob.key -) > test_ntn_tx.signed
 
-    # TODO: Send the above when we can fund dummy accounts with NTN
+# TODO: Send the above when we can fund dummy accounts with NTN
 
-    # Tiny send tx from Alice to Bob.  Extract Alice's address from
-    # the keyfile given in .autrc
-    aut --verbose tx make \
-        --to ${BOB} \
-        --value '0.001kwei' \
-        --gas-price 1gwei > test_tx
+# Tiny send tx from Alice to Bob.  Extract Alice's address from
+# the keyfile given in .autrc
+aut --verbose tx make \
+    --to ${BOB} \
+    --value '0.001kwei' \
+    --gas-price 1gwei > test_tx
 
-    # Sign the tx using Alices private key (taken from the .autrc file)
-    KEYFILEPWD=alice aut --verbose tx sign test_tx > test_tx.signed
+# Sign the tx using Alices private key (taken from the .autrc file)
+KEYFILEPWD=alice aut --verbose tx sign test_tx > test_tx.signed
 
-    # Send the transaction
-    aut tx send test_tx.signed > test_tx.hash
+# Send the transaction
+aut tx send test_tx.signed > test_tx.hash
 
-    # Wait for transaction
-    aut tx wait `cat test_tx.hash`
+# Wait for transaction
+aut tx wait `cat test_tx.hash`
 
-    # Check Bob's new balances is 1 greater than the starting balance
-    bob_balance_new=`aut account balance $BOB`
-    bob_balance_new_expect=`cat ${bob_balance_orig} + 0.000000000000000001 | bc`
-    [ "${bob_balance_new}" == "${bob_balance_new_expect}" ] || (
-        echo "Unexpected balance change"; exit 1)
+# Check Bob's new balances is 1 greater than the starting balance
+bob_balance_new=`aut account balance $BOB`
+bob_balance_new_expect=`cat ${bob_balance_orig} + 0.000000000000000001 | bc`
+[ "${bob_balance_new}" == "${bob_balance_new_expect}" ] || (
+    echo "Unexpected balance change"; exit 1)
 
-    popd
+popd
 
 set +e
 set +x
