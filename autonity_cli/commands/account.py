@@ -2,6 +2,7 @@
 The `account` command group.
 """
 
+import getpass
 import json
 from typing import Dict, List, Optional
 
@@ -302,6 +303,41 @@ def import_private_key(
 
 
 account_group.add_command(import_private_key)
+
+
+@command()
+@argument("keyfile-path", required=False, type=Path(exists=True))
+def reveal_private_key(
+    keyfile_path: Optional[str],
+) -> None:
+    """
+    Print the private key from the specified keyfile to standard output in hex-string
+    format.
+
+    The keyfile path is taken from the config file if not specified.
+    """
+
+    confirmation = input(
+        "WARNING! This command exposes an account's private key.\n"
+        "Type 'yes' to continue: "
+    )
+    if confirmation.lower() != "yes":
+        raise ClickException("Interrupted")
+
+    password = getpass.getpass("Keyfile password: ")
+
+    with open(config.get_keyfile(keyfile_path), encoding="utf-8") as f:
+        encrypted_key = f.read()
+
+    try:
+        key = Web3().eth.account.decrypt(encrypted_key, password)
+    except ValueError as e:
+        raise ClickException(str(e))
+
+    print(key.hex())
+
+
+account_group.add_command(reveal_private_key)
 
 
 @command()
