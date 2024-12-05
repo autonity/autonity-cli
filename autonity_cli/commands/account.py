@@ -318,7 +318,7 @@ def reveal_private_key(
     """
 
     confirmation = input(
-        "WARNING! This command exposes an account's private key.\n"
+        "⚠️ WARNING! This command exposes an account's private key.\n"
         "Type 'yes' to continue: "
     )
     if confirmation.lower() != "yes":
