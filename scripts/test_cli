@@ -66,6 +66,7 @@ cat test_ntn_tx | (KEYFILEPWD=bob aut --verbose tx sign --keyfile keystore/bob.k
 aut --verbose tx make \
     --to ${BOB} \
     --value '0.001kwei' \
+    --gas 1000000 \
     --gas-price 1gwei > test_tx
 
 # Sign the tx using Alices private key (taken from the .autrc file)

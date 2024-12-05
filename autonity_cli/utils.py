@@ -183,7 +183,7 @@ def create_tx_from_args(
                 to_addr=to_addr,
                 value=parse_wei_representation(value) if value else None,
                 data=HexBytes(data) if data else None,
-                gas=parse_wei_representation(gas) if gas else None,
+                gas=int(gas) if gas else None,
                 gas_price=parse_wei_representation(gas_price) if gas_price else None,
                 max_fee_per_gas=(
                     parse_wei_representation(max_fee_per_gas)
@@ -257,7 +257,7 @@ def create_contract_tx_from_args(
             function=function,
             from_addr=from_addr,
             value=parse_wei_representation(value) if value else None,
-            gas=parse_wei_representation(gas) if gas else None,
+            gas=int(gas) if gas else None,
             gas_price=parse_wei_representation(gas_price) if gas_price else None,
             max_fee_per_gas=(
                 parse_wei_representation(max_fee_per_gas) if max_fee_per_gas else None
