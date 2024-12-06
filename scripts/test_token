@@ -17,7 +17,7 @@ aut validator list > validators
 v1=$(head -n1 validators)
 
 treasury=`aut validator info --validator ${v1} | jq -r '.treasury'`
-token=`aut validator info --validator ${v1} | jq -r '.liquid_contract'`
+token=`aut validator info --validator ${v1} | jq -r '.liquid_state_contract'`
 
 # Queries
 

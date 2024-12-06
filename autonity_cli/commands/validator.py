@@ -3,19 +3,21 @@ The `validator` command group.
 """
 
 import sys
+from dataclasses import asdict
 from typing import Optional
 from urllib import parse as urlparse
 
-from autonity.autonity import Autonity
-from autonity.utils.denominations import format_auton_quantity, format_newton_quantity
-from autonity.validator import OracleAddress, Validator
+from autonity import Autonity, LiquidLogic
 from click import argument, command, echo, group, option
+from eth_typing import ChecksumAddress
+from hexbytes import HexBytes
 from web3 import Web3
-from web3.types import HexBytes
+from web3.exceptions import ContractLogicError
 
 from .protocol import protocol_group
 from ..config import get_node_address
 from ..constants import UnixExitStatus
+from ..denominations import format_auton_quantity
 from ..options import (
     from_option,
     keyfile_option,
@@ -66,17 +68,15 @@ def info(rpc_endpoint: Optional[str], validator_addr_str: str) -> None:
 
     validator_addr = get_node_address(validator_addr_str)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
-    validator_data = aut.get_validator(validator_addr)
-    if (
-        validator_data is None
-        or validator_data.get("node_address", "") != validator_addr
-    ):
+    try:
+        validator_data = aut.get_validator(validator_addr)
+    except ContractLogicError:
         echo(
             f"The address {validator_addr} is not registered as a validator.",
             err=True,
         )
         sys.exit(UnixExitStatus.WEB3_RESOURCE_NOT_FOUND)
-    echo(to_json(aut.get_validator(validator_addr), pretty=True))
+    echo(to_json(asdict(validator_data), pretty=True))
 
 
 validator.add_command(info)
@@ -122,7 +122,7 @@ def bond(
     amount_str: str,
 ) -> None:
     """
-    Create transaction to bond Newton to a validator.
+    Bond Newton to a validator.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -170,7 +170,7 @@ def unbond(
     amount_str: str,
 ) -> None:
     """
-    Create transaction to unbond Newton from a validator.
+    Unbond Newton from a validator.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -217,12 +217,12 @@ def register(
     nonce: Optional[int],
     chain_id: Optional[int],
     enode: str,
-    oracle: OracleAddress,
+    oracle: ChecksumAddress,
     consensus_key: str,
     proof: str,
 ) -> None:
     """
-    Create transaction to register a validator
+    Register a validator.
     """
 
     consensus_key_bytes = HexBytes(consensus_key)
@@ -271,8 +271,9 @@ def pause(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to pause the given validator.  See
-    `pauseValidator` on the Autonity contract.
+    Pause the given validator.
+
+    See `pauseValidator` on the Autonity contract.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -317,8 +318,9 @@ def activate(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to activate a paused validator.  See
-    `activateValidator` on the Autonity contract.
+    Activate a paused validator.
+
+    See `activateValidator` on the Autonity contract.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -365,9 +367,9 @@ def change_commission_rate(
     rate: str,
 ) -> None:
     """
-    Create transaction to change the commission rate for the given
-    Validator.  The rate is given as a decimal, and must be no greater
-    than 1 e.g. 3% would be 0.03.
+    Change the commission rate for the given validator.
+
+    The rate is given as a decimal, and must be no greater than 1 e.g. 3% would be 0.03.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -375,8 +377,7 @@ def change_commission_rate(
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
-    rate_precision = aut.commission_rate_precision()
-    rate_int = parse_commission_rate(rate, rate_precision)
+    rate_int = parse_commission_rate(rate)
 
     tx = create_contract_tx_from_args(
         function=aut.change_commission_rate(validator_addr, rate_int),
@@ -399,12 +400,10 @@ validator.add_command(change_commission_rate)
 @rpc_endpoint_option
 @keyfile_option()
 @validator_option
-@option("--ntn", is_flag=True, help="Check Newton (NTN) instead of Auton")
 @option("--account", help="Delegator account to check")
 def unclaimed_rewards(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
-    ntn: bool,
     validator_addr_str: Optional[str],
     account: Optional[str],
 ) -> None:
@@ -415,15 +414,13 @@ def unclaimed_rewards(
     validator_addr = get_node_address(validator_addr_str)
     account = from_address_from_argument(account, keyfile)
 
-    aut = autonity_from_endpoint_arg(rpc_endpoint)
-    vdesc = aut.get_validator(validator_addr)
-    val = Validator(aut.contract.w3, vdesc)
-    unclaimed_atn, unclaimed_ntn = val.unclaimed_rewards(account)
-    print(
-        format_newton_quantity(unclaimed_ntn)
-        if ntn
-        else format_auton_quantity(unclaimed_atn)
-    )
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
+    unclaimed_atn = liquid_newton.unclaimed_rewards(account)
+    print(format_auton_quantity(unclaimed_atn))
 
 
 validator.add_command(unclaimed_rewards)
@@ -449,7 +446,7 @@ def claim_rewards(
     validator_addr_str: Optional[str],
 ) -> None:
     """
-    Create transaction to claim rewards from a Validator.
+    Claim rewards from a validator.
     """
 
     validator_addr = get_node_address(validator_addr_str)
@@ -457,11 +454,11 @@ def claim_rewards(
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     aut = Autonity(w3)
-    vdesc = aut.get_validator(validator_addr)
-    val = Validator(w3, vdesc)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
 
     tx = create_contract_tx_from_args(
-        function=val.claim_rewards(),
+        function=liquid_newton.claim_rewards(),
         from_addr=from_addr,
         gas=gas,
         gas_price=gas_price,

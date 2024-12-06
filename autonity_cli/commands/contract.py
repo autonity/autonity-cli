@@ -5,15 +5,15 @@ The `contract` command group
 import json
 from typing import List, Optional, Tuple, cast
 
-from autonity.abi_parser import (
+from click import ClickException, Path, argument, command, group, option
+from web3.contract.contract import ContractFunction
+
+from ..abi_parser import (
     find_abi_constructor,
     find_abi_function,
     parse_arguments,
     parse_return_value,
 )
-from click import ClickException, Path, argument, command, group, option
-from web3.contract.contract import ContractFunction
-
 from ..logging import log
 from ..options import (
     contract_options,
@@ -52,10 +52,10 @@ def function_call_from_args(
     parameters: List[str],
 ) -> Tuple:
     """
-    Take command line arguments and construct a ContractFunction
-    (i.e. a function call).  Returns the ContractFunction object, the
-    ABIFunction for the method, and the Web3 object created in the
-    process.
+    Take command line arguments and construct a ContractFunction (i.e. a function call).
+
+    Returns the ContractFunction object, the ABIFunction for the method,
+    and the Web3 object created in the process.
     """
 
     log(f"method: {method}")
@@ -108,8 +108,9 @@ def deploy_cmd(
     parameters: List[str],
 ) -> None:
     """
-    Deploy a contract, given the compiled JSON file.  Note that the
-    contract's address will appear in the 'contractAddress' field of
+    Deploy a contract, given the compiled JSON file.
+
+    Note that the contract's address will appear in the 'contractAddress' field of
     the transaction receipt (see aut tx wait).
     """
 
@@ -211,9 +212,9 @@ def tx_cmd(
     chain_id: Optional[int],
 ) -> None:
     """
-    Create a transaction which calls the given contract method,
-    passing any parameters.  The parameters must match those required
-    by the contract.
+    Create a transaction which calls the given contract method, passing any parameters.
+
+    The parameters must match those required by the contract.
     """
 
     function, _, w3 = function_call_from_args(

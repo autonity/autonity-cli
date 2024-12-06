@@ -8,97 +8,39 @@ pushd _test_protocol_cli
 
 ../scripts/setup_config_file.sh
 
-echo "aut protocol commission-rate-precision"
-aut protocol commission-rate-precision
-
-echo "aut protocol max-bond-applied-gas"
-aut protocol max-bond-applied-gas
-
-echo "aut protocol max-unbond-applied-gas"
-aut protocol max-unbond-applied-gas
-
-echo "aut protocol max-unbond-released-gas"
-aut protocol max-unbond-released-gas
-
-echo "aut protocol max-rewards-distribution-gas"
-aut protocol max-rewards-distribution-gas
-
-echo "aut protocol config"
 aut protocol config
-
-echo "aut protocol epoch-id"
 aut protocol epoch-id
-
-echo "aut protocol last-epoch-time"
 aut protocol last-epoch-time
-
-echo "aut protocol epoch-total-bonded-stake"
 aut protocol epoch-total-bonded-stake
-
-echo "aut protocol atn-total-redistributed"
-aut protocol atn-total-redistributed
-
-echo "aut protocol epoch-reward"
-aut protocol epoch-reward
-
-echo "aut protocol staking-gas-price"
-aut protocol staking-gas-price
-
-echo "aut protocol inflation-reserve"
 aut protocol inflation-reserve
-
-echo "aut protocol deployer"
 aut protocol deployer
-
-echo "aut protocol epoch-period"
 aut protocol epoch-period
-
-echo "aut protocol block-period"
 aut protocol block-period
-
-echo "aut protocol unbonding-period"
 aut protocol unbonding-period
-
-echo "aut protocol last-epoch-block"
 aut protocol last-epoch-block
-
-echo "aut protocol version"
 aut protocol version
-
-echo "aut protocol committee"
 aut protocol committee
-
-echo "aut protocol validators"
 aut protocol validators
-
-echo "aut protocol treasury-account"
 aut protocol treasury-account
-
-echo "aut protocol treasury-fee"
 aut protocol treasury-fee
-
-echo "aut protocol max-committee-size"
 aut protocol max-committee-size
-
-echo "aut protocol committee-enodes"
 aut protocol committee-enodes
-
-echo "aut protocol minimum-base-fee"
 aut protocol minimum-base-fee
-
-echo "aut protocol operator"
 aut protocol operator
-
-echo "aut protocol proposer"
-aut protocol proposer 1 1
-
-echo "aut protocol contract-address"
 aut protocol contract-address
+aut protocol contract-abi
+aut protocol epoch-from-block 1
+aut protocol max-schedule-duration
+aut protocol total-schedules 0x0000000000000000000000000000000000000000
+aut protocol epoch-info
+aut protocol epoch-by-height 0
+aut protocol is-unbonding-released 0
 
-# Test help text (does some parameter validation)
-# aut protocol get-unbonding-release-state --help >/dev/null
-aut protocol reverting-amount --help >/dev/null
-aut protocol epoch-from-block --help >/dev/null
+# Reverts if there is no unbonding
+aut protocol unbonding-share --help >/dev/null
+
+# Reverts if there is no schedule
+aut protocol schedule --help >/dev/null
 
 set +e
 set +x

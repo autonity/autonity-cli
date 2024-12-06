@@ -2,6 +2,8 @@
 Constants
 """
 
+COMMISSION_RATE_PRECISION = 10000
+
 
 class AutonDenoms:
     """

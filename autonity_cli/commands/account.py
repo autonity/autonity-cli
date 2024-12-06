@@ -7,20 +7,7 @@ import json
 from typing import Dict, List, Optional
 
 import eth_account
-from autonity.autonity import Autonity
-from autonity.erc20 import ERC20
-from autonity.utils.denominations import (
-    format_auton_quantity,
-    format_newton_quantity,
-    format_quantity,
-)
-from autonity.utils.keyfile import (
-    PrivateKey,
-    create_keyfile_from_private_key,
-    decrypt_keyfile,
-    get_address_from_keyfile,
-)
-from autonity.utils.tx import sign_tx
+from autonity import Autonity
 from click import ClickException, Path, argument, command, group, option
 from eth_account import Account
 from eth_account.messages import encode_defunct
@@ -29,7 +16,19 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
+from ..erc20 import ERC20
 from ..logging import log
+from ..denominations import (
+    format_auton_quantity,
+    format_newton_quantity,
+    format_quantity,
+)
+from ..keyfile import (
+    PrivateKey,
+    create_keyfile_from_private_key,
+    decrypt_keyfile,
+    get_address_from_keyfile,
+)
 from ..options import (
     from_option,
     keyfile_and_password_options,
@@ -38,6 +37,7 @@ from ..options import (
     newton_or_token_option,
     rpc_endpoint_option,
 )
+from ..tx import sign_tx
 from ..user import get_account_stats
 from ..utils import (
     address_keyfile_dict,
@@ -96,8 +96,9 @@ def info(
     asof: Optional[BlockIdentifier],
 ) -> None:
     """
-    Print some information about the given account (falling back to
-    the default keyfile account if no accounts specified).
+    Print some information about the given account.
+
+    Falls back to the default keyfile account if no accounts specified.
     """
 
     if len(accounts) == 0:
@@ -186,11 +187,11 @@ def lntn_balances(
 
     balances: Dict[str, str] = {}
     for validator in validators:
-        log(f"computing holdings for validators {validator['node_address']}")
-        lntn = ERC20(w3, validator["liquid_contract"])
+        log(f"computing holdings for validators {validator.node_address}")
+        lntn = ERC20(w3, validator.liquid_state_contract)
         bal = lntn.balance_of(account_addr)
         if bal:
-            balances[validator["node_address"]] = format_newton_quantity(bal)
+            balances[validator.node_address] = format_newton_quantity(bal)
 
     print(to_json(balances, pretty=True))
 
@@ -218,8 +219,9 @@ def new(
     show_password: bool,
 ) -> None:
     """
-    Create a new key and write it to a keyfile.  If no keyfile is
-    specified, a default name is used (consistent with GETH keyfiles)
+    Create a new key and write it to a keyfile.
+
+    If no keyfile is specified, a default name is used (consistent with GETH keyfiles)
     in the keystore.
     """
 
@@ -277,10 +279,11 @@ def import_private_key(
     private_key_file: str,
 ) -> None:
     """
-    Read a plaintext private key file (as hex), and create a new
-    encrypted keystore file for it.  Use - to read private key from
-    stdin.  If no keyfile is specified, a default name is used
-    (consistent with GETH keyfiles) in the keystore.
+    Read a plaintext private key file (as hex), and create a new encrypted keystore
+    file for it.
+
+    Use - to read private key from stdin. If no keyfile is specified, a default name
+    is used (consistent with GETH keyfiles) in the keystore.
     """
 
     private_key = HexBytes.fromhex(load_from_file_or_stdin_line(private_key_file))
@@ -349,8 +352,9 @@ account_group.add_command(reveal_private_key)
 )
 def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> None:
     """
-    Sign a transaction using the given keyfile.  Use '-' to read from
-    stdin instead of a file.
+    Sign a transaction using the given keyfile.
+
+    Use '-' to read from stdin instead of a file.
 
     If password is not given, the env variable 'KEYFILEPWD' is used.
     If that is not set, the user is prompted.
@@ -399,8 +403,9 @@ def sign_message(
 ) -> None:
     """
     Use the private key in the given keyfile to sign the string
-    MESSAGE (or the contents of a file; see --use-message-file).  The
-    signature is always written to stdout (which can be piped to a
+    MESSAGE (or the contents of a file; see --use-message-file).
+
+    The signature is always written to stdout (which can be piped to a
     file). The signature is also written to SIGNATURE_FILE, if given.
     """
 
@@ -464,6 +469,7 @@ def verify_signature(
     """
     Verify that the signature in `SIGNATURE_FILE` is valid for the
     message MESSAGE, signed by the owner of the FROM address.
+
     Signature must be contained in a file.
     """
 

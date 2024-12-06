@@ -9,10 +9,12 @@ pushd _test_contract_cli
 ../scripts/setup_config_file.sh
 
 AUTONITY_ADDRESS=$(aut protocol contract-address)
-AUTONITY_ABI="$(pip show autonity | grep ^Location: | sed s'/^Location: //')/autonity/abi/Autonity.abi"
+AUTONITY_ABI="$(mktemp -d)/Autonity.abi"
 
 ALICE=0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf
 BOB=0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF
+
+aut protocol contract-abi >"${AUTONITY_ABI}"
 
 # Trivial contract call to Autonity.totalSupply
 aut contract call \

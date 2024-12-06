@@ -77,18 +77,18 @@ class TestUtils(TestCase):
         Test parse_commission_rate.
         """
 
-        self.assertEqual(100, parse_commission_rate("100", 10000))
-        self.assertEqual(9000, parse_commission_rate("0.9", 10000))
-        self.assertEqual(9000, parse_commission_rate("90%", 10000))
-        self.assertEqual(300, parse_commission_rate("0.03", 10000))
-        self.assertEqual(1, parse_commission_rate("0.0001", 10000))
+        self.assertEqual(100, parse_commission_rate("100"))
+        self.assertEqual(9000, parse_commission_rate("0.9"))
+        self.assertEqual(9000, parse_commission_rate("90%"))
+        self.assertEqual(300, parse_commission_rate("0.03"))
+        self.assertEqual(1, parse_commission_rate("0.0001"))
 
         with self.assertRaises(ClickException):
-            self.assertEqual(1, parse_commission_rate("1", 10000))
+            self.assertEqual(1, parse_commission_rate("1"))
         with self.assertRaises(ClickException):
-            self.assertEqual(1, parse_commission_rate("1.0", 10000))
+            self.assertEqual(1, parse_commission_rate("1.0"))
         with self.assertRaises(ClickException):
-            self.assertEqual(1, parse_commission_rate("100.01", 10000))
+            self.assertEqual(1, parse_commission_rate("100.01"))
 
     def test_geth_keyfile_name(self) -> None:
         """

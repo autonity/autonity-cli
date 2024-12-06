@@ -23,8 +23,9 @@ def block_group() -> None:
 @argument("identifier", default="latest")
 def get(rpc_endpoint: Optional[str], identifier: str) -> None:
     """
-    Print information for block, where <identifier> is a block number
-    or hash.  If no argument is given, "latest" is used.
+    Print information for block.
+
+    <identifier> is a block number or hash. If no argument is given, "latest" is used.
     """
 
     block_id = validate_block_identifier(identifier)

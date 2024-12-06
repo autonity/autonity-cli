@@ -20,7 +20,7 @@ After installing, run `aut --help` for a list of all commands and options.
 
 Requirements:
 
-- **Python 3.8 or greater** (Install using the package manager for your OS or
+- **Python 3.9 or greater** (Install using the package manager for your OS or
   [pyenv](https://github.com/pyenv/pyenv) ).
   - (Note that websocket connections are not supported for Python 3.10+ due to
     an issue in the latest stable version of the `web3.py` dependency)
@@ -172,7 +172,7 @@ As an example, assuming that the RPC URL has been set in the `.autrc` file,
 calling the `getProposer` function of the Autonity contract is
 
 ```console
-$ aut  contract call --abi $(aut protocol contract-abi-path) --address $(aut protocol contract-address) \
+$ aut contract call --abi <((aut protocol contract-abi)) --address $(aut protocol contract-address) \
   getProposer 10000 1
 "0x31870f96212787D181B3B2771F58AF2BeD0019Aa"
 ```
