@@ -1,11 +1,24 @@
 # Changelog
 
-## TBD
+## [v1.0.0] - 2024-12-12
 
 ### Changed
 
 - Support the Autonity Tiber protocol ([#176](https://github.com/autonity/autonity-cli/pull/176))
-- Support Python 3.13 & drop Python 3.8 support ([`e8766e3`](https://github.com/autonity/autonity-cli/commit/e8766e3))
+
+### Added
+
+- Add `account` command `reveal-private-key` ([`c5c65e4`](https://github.com/autonity/autonity-cli/commit/c5c65e4))
+- Add `protocol` command `contract-abi` ([`631cd36`](https://github.com/autonity/autonity-cli/commit/631cd36))
+- Support Python 3.13 ([`4ae7370`](https://github.com/autonity/autonity-cli/commit/4ae7370))
+
+### Removed
+
+- Drop support for Python 3.8 ([`4ae7370`](https://github.com/autonity/autonity-cli/commit/4ae7370))
+
+### Fixed
+
+- Resolve clashing `-f` option in `verify-signature` ([#170](https://github.com/autonity/autonity-cli/issues/170))
 
 ## [v0.6.0] - 2024-10-23
 
@@ -54,6 +67,7 @@
 - Fix potential crash when listing accounts ([`1886121`](https://github.com/autonity/autonity-cli/commit/1886121))
 - Fix startup crash due to `ModuleNotFoundError` from eth_rlp ([#137](https://github.com/autonity/autonity-cli/issues/137))
 
+[v1.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v1.0.0
 [v0.6.0]: https://github.com/autonity/autonity-cli/releases/tag/v0.6.0
 [v0.5.0]: https://github.com/autonity/autonity-cli/releases/tag/v0.5.0
 [v0.4.0]: https://github.com/autonity/autonity-cli/releases/tag/v0.4.0
