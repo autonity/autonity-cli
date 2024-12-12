@@ -1,5 +1,3 @@
-# Copyright (C) 2015-2022 Clearmatics Technologies Ltd - All Rights Reserved.
-
 """
 Utilities related to formatting token and Auton balances.
 Constants related to known token precisions.

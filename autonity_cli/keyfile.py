@@ -1,5 +1,3 @@
-# Copyright (C) 2015-2022 Clearmatics Technologies Ltd - All Rights Reserved.
-
 """
 Keyfile utility functions
 """
