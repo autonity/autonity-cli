@@ -337,7 +337,7 @@ def reveal_private_key(
     except ValueError as e:
         raise ClickException(str(e))
 
-    print(key.hex())
+    print(Web3.to_hex(key))
 
 
 account_group.add_command(reveal_private_key)
