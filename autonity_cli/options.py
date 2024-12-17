@@ -84,7 +84,7 @@ def newton_or_token_option(fn: Func) -> Func:
     Adds the --ntn and --token flags, allowing the user to specify
     that a transfer should use an ERC20 token.
     """
-    fn = option("--ntn", is_flag=True, help="use Newton (NTN) instead of Auton")(fn)
+    fn = option("--ntn", is_flag=True, help="use Newton (NTN) as token")(fn)
     fn = option(
         "--token",
         "-t",
