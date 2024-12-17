@@ -96,15 +96,15 @@ def info(
     asof: Optional[BlockIdentifier],
 ) -> None:
     """
-    Print some information about the given account.
+    Print information about the given account.
 
-    Falls back to the default keyfile account if no accounts specified.
+    Falls back to the default keyfile account if no account is specified.
     """
 
     if len(accounts) == 0:
         account = from_address_from_argument_optional(None, keyfile)
         if not account:
-            raise ClickException("No accounts specified")
+            raise ClickException("No account specified")
         accounts = [account]
 
     addresses = [Web3.to_checksum_address(act) for act in accounts]
@@ -177,7 +177,7 @@ def lntn_balances(
     account_addr = from_address_from_argument_optional(account_str, keyfile)
     if not account_addr:
         raise ClickException(
-            "could not determine account address from argument or keyfile"
+            "Could not determine account address from argument or keyfile"
         )
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
@@ -205,12 +205,12 @@ account_group.add_command(lntn_balances)
 @option(
     "--extra-entropy",
     type=Path(),
-    help="File containing extra entropy.  Use '-' to prompt for keyboard input.",
+    help="file containing extra entropy. Use '-' to prompt for keyboard input.",
 )
 @option(
     "--show-password",
     is_flag=True,
-    help="Echo password input to the terminal",
+    help="echo password input to the terminal.",
 )
 def new(
     keystore: Optional[str],
@@ -246,7 +246,7 @@ def new(
     keyfile_addr = get_address_from_keyfile(keyfile_data)
     if account.address != keyfile_addr:
         raise ClickException(
-            f"internal error (address-mismatch) {account.address} != {keyfile_addr}"
+            f"Internal error (address-mismatch) {account.address} != {keyfile_addr}"
         )
 
     # If keyfile was not given, generate a new keyfile based on
@@ -269,7 +269,7 @@ account_group.add_command(new)
 @option(
     "--show-password",
     is_flag=True,
-    help="Echo password input to the terminal",
+    help="echo password input to the terminal.",
 )
 @argument("private_key_file", type=Path(exists=False))
 def import_private_key(
@@ -279,16 +279,16 @@ def import_private_key(
     private_key_file: str,
 ) -> None:
     """
-    Read a plaintext private key file (as hex), and create a new encrypted keystore
-    file for it.
+    Read a plaintext private key file (as hex-string), and create a new encrypted
+    keystore file for it.
 
-    Use - to read private key from stdin. If no keyfile is specified, a default name
-    is used (consistent with GETH keyfiles) in the keystore.
+    Use '-' to read private key from standard input. If no keyfile is specified,
+    a default name is used (consistent with GETH keyfiles) in the keystore.
     """
 
     private_key = HexBytes.fromhex(load_from_file_or_stdin_line(private_key_file))
     if len(private_key) != 32:
-        raise ClickException("invalid private key length")
+        raise ClickException("Invalid private key length")
 
     password = prompt_for_new_password(show_password)
 
@@ -354,9 +354,9 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
     """
     Sign a transaction using the given keyfile.
 
-    Use '-' to read from stdin instead of a file.
+    Use '-' to read from standard input instead of a file.
 
-    If password is not given, the env variable 'KEYFILEPWD' is used.
+    If password is not given, the environment variable 'KEYFILEPWD' is used.
     If that is not set, the user is prompted.
     """
 
@@ -387,7 +387,7 @@ account_group.add_command(signtx)
     "--use-message-file",
     "-f",
     is_flag=True,
-    help="Interpret MESSAGE as a filename where - means stdin",
+    help="interpret MESSAGE as a filename where '-' means standard input.",
 )
 @argument(
     "message",
@@ -405,7 +405,7 @@ def sign_message(
     Use the private key in the given keyfile to sign the string
     MESSAGE (or the contents of a file; see --use-message-file).
 
-    The signature is always written to stdout (which can be piped to a
+    The signature is always written to standard output (which can be piped to a
     file). The signature is also written to SIGNATURE_FILE, if given.
     """
 
@@ -447,7 +447,7 @@ account_group.add_command(sign_message)
     "--use-message-file",
     "-m",
     is_flag=True,
-    help="Interpret MESSAGE as a filename where - means stdin",
+    help="interpret MESSAGE as a filename where '-' means standard input.",
 )
 @argument(
     "message",

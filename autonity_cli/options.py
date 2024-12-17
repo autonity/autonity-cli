@@ -16,7 +16,10 @@ rpc_endpoint_option: Decorator = option(
     "--rpc-endpoint",
     "-r",
     metavar="URL",
-    help="RPC endpoint (defaults to WEB3_ENDPOINT env var if set)",
+    help=(
+        "RPC endpoint (falls back to 'rpc_endpoint' in config file or the "
+        "WEB3_ENDPOINT environment variable)."
+    ),
 )
 
 
@@ -30,7 +33,10 @@ def keystore_option() -> Decorator:
             "--keystore",
             "-s",
             type=Path(exists=True),
-            help="keystore directory (falls back to config file or ~/.autonity/keystore).",
+            help=(
+                "keystore directory (falls back to 'keystore' in config file, "
+                "defaults to ~/.autonity/keystore)."
+            ),
         )(fn)
 
     return decorator
@@ -48,7 +54,7 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator:
             "-k",
             required=required,
             type=Path(exists=not output),
-            help="Encrypted private key file",
+            help="encrypted private key file (falls back to 'keyfile' in config file).",
         )(fn)
         return fn
 
@@ -66,7 +72,7 @@ def keyfile_and_password_options(required: bool = False) -> Decorator:
         fn = option(
             "--password",
             "-p",
-            help="Password for key file (or use env var 'KEYFILEPWD')",
+            help="password for keyfile (falls back to KEYFILEPWD environment variable).",
         )(fn)
         return fn
 
@@ -78,12 +84,12 @@ def newton_or_token_option(fn: Func) -> Func:
     Adds the --ntn and --token flags, allowing the user to specify
     that a transfer should use an ERC20 token.
     """
-    fn = option("--ntn", is_flag=True, help="Use Newton (NTN) instead of Auton")(fn)
+    fn = option("--ntn", is_flag=True, help="use Newton (NTN) instead of Auton")(fn)
     fn = option(
         "--token",
         "-t",
         metavar="TOKEN-ADDR",
-        help="Use the ERC20 token at the given address",
+        help="use the ERC20 token at the given address.",
     )(fn)
     return fn
 
@@ -98,7 +104,7 @@ def from_option(fn: Func) -> Func:
         "-f",
         "from_str",
         metavar="FROM",
-        help="The from address (extracted from keyfile if not given).",
+        help="the sender address (extracted from keyfile if not given).",
     )(fn)
 
 
@@ -113,7 +119,10 @@ def tx_value_option(required: bool = False) -> Decorator:
             "--value",
             "-v",
             required=required,
-            help="value in Auton or whole tokens (e.g. '0.000000007' and '7gwei' are identical).",
+            help=(
+                "value in Auton or whole tokens "
+                "(e.g. '0.000000007' and '7gwei' are identical)."
+            ),
         )(fn)
         return fn
 
@@ -158,13 +167,13 @@ def tx_aux_options(fn: Callable) -> Callable:
         "--nonce",
         "-n",
         type=int,
-        help="tx nonce; query chain for account tx count if not given.",
+        help="transaction nonce; query chain for account transaction count if not given.",
     )(fn)
     fn = option(
         "--chain-id",
         "-I",
         type=int,
-        help="integer representing EIP155 chainId.",
+        help="integer representing EIP155 chain ID.",
     )(fn)
 
     return fn
@@ -179,7 +188,7 @@ def validator_option(fn: Func) -> Func:
         "--validator",
         "-V",
         "validator_addr_str",
-        help="Validator address (falls back to 'validator' in config file)",
+        help="validator address (falls back to 'validator' in config file).",
     )(fn)
 
 
@@ -191,12 +200,12 @@ def contract_options(fn: Func) -> Func:
     fn = option(
         "--address",
         "contract_address_str",
-        help="Contract address (falls back to 'address' in config file)",
+        help="contract address (falls back to 'address' in config file).",
     )(fn)
     fn = option(
         "--abi",
         "contract_abi_path",
         type=Path(exists=True),
-        help="Contract ABI file (falls back to 'abi' in config file)",
+        help="contract ABI file (falls back to 'abi' in config file).",
     )(fn)
     return fn
