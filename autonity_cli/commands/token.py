@@ -41,7 +41,7 @@ def token_group() -> None:
 @newton_or_token_option
 def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     """
-    Returns the token name (if available).
+    The token's name (if available).
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
@@ -49,7 +49,7 @@ def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     erc = ERC20(w3, token_addresss)
     token_name = erc.name()
     if token_name is None:
-        raise ValueError("Token does not implement the name call")
+        raise ClickException("Token does not implement the `name` function")
     print(token_name)
 
 
@@ -61,7 +61,7 @@ token_group.add_command(name)
 @newton_or_token_option
 def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     """
-    Returns the token symbol (if available).
+    The token's symbol (if available).
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
@@ -69,7 +69,7 @@ def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None
     erc = ERC20(w3, token_addresss)
     token_symbol = erc.symbol()
     if token_symbol is None:
-        raise ClickException("Token does not implement the symbol call")
+        raise ClickException("Token does not implement the `symbol` function")
     print(token_symbol)
 
 
@@ -81,7 +81,7 @@ token_group.add_command(symbol)
 @newton_or_token_option
 def decimals(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     """
-    Returns the number of decimals used in the token balances.
+    The number of decimals used in the token balances.
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
@@ -125,7 +125,7 @@ def balance_of(
     account_str: Optional[str],
 ) -> None:
     """
-    Returns the balance in tokens of ACCOUNT.
+    The balance of ACCOUNT in tokens.
 
     If ACCOUNT is not specified, the default keyfile is used.
     """
@@ -158,8 +158,8 @@ def allowance(
     owner: str,
 ) -> None:
     """
-    Returns the quantity in tokens that OWNER has granted the caller
-    (the "from" address) permission to spend.
+    The quantity of tokens that OWNER has granted the caller (`--from` address)
+    permission to spend.
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
@@ -261,7 +261,7 @@ def approve(
 ) -> None:
     """
     Create a transaction granting SPENDER permission to spend
-    AMOUNT of tokens owned by `from_addr`.
+    AMOUNT of tokens owned by the caller (`--from` address).
 
     AMOUNT may be fractional if the token supports it.
     """
@@ -326,7 +326,7 @@ def transfer_from(
     to RECIPIENT.
 
     SPENDER must previously have granted the caller
-    (`from_addr`) permission to spend these tokens, via an `approve`
+    (`--from` address) permission to spend these tokens, via an `approve`
     transaction. AMOUNT can be fractional if the token supports it.
     """
 

@@ -144,7 +144,7 @@ def set_max_schedule_duration(
     duration: int,
 ) -> None:
     """
-    Set the max allowed duration of any schedule or contract.
+    Set the maximum allowed duration of any schedule or contract.
 
     Restricted to the operator account.
     See `setMaxScheduleDuration` on Autonity contract.
@@ -647,7 +647,7 @@ def set_accountability_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Accountability Contract address.
+    Set the Accountability contract address.
 
     Restricted to the Operator account.
     See `setAccountabilityContract` on Autonity contract.
@@ -694,7 +694,7 @@ def set_oracle_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Oracle Contract address.
+    Set the Oracle contract address.
 
     Restricted to the Operator account. See `setOracleContract` on Autonity contract.
     """
@@ -740,7 +740,7 @@ def set_acu_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the ACU Contract address.
+    Set the ACU contract address.
 
     Restricted to the Operator account. See `setAcuContract` on Autonity contract.
     """
@@ -786,7 +786,7 @@ def set_supply_control_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Supply Control Contract address.
+    Set the Supply Control contract address.
 
     Restricted to the Operator account.
     See `setSupplyControlContract` on Autonity contract.
@@ -833,7 +833,7 @@ def set_stabilization_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the Supply Control Contract address.
+    Set the Stabilization contract address.
 
     Restricted to the Operator account.
     See `setSupplyControlContract` on Autonity contract.
@@ -880,7 +880,7 @@ def set_inflation_controller_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the inflation controller contract address.
+    Set the Inflation Controller contract address.
 
     Restricted to the Operator account.
     See `setInflationControllerContract` on Autonity contract.
@@ -927,7 +927,7 @@ def set_upgrade_manager_contract(
     contract_address_str: str,
 ) -> None:
     """
-    Set the upgrade manager contract address.
+    Set the Upgrade Manager contract address.
 
     Restricted to the Operator account.
     See `setUpgradeManagerContract` on Autonity contract.
@@ -1070,7 +1070,7 @@ def mint(
     recipient_str: Optional[str],
 ) -> None:
     """
-    Mint new stake token (NTN) and add it to the recipient balance.
+    Mint new stake token (NTN) and add it to the recipient's balance.
 
     If recipient is not specified, the caller's address is used.
     Restricted to the Operator account. See `mint` on Autonity contract.
