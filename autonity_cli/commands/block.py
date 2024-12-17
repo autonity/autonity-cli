@@ -23,7 +23,7 @@ def block_group() -> None:
 @argument("identifier", default="latest")
 def get(rpc_endpoint: Optional[str], identifier: str) -> None:
     """
-    Print information for block.
+    Print information about the given block.
 
     <identifier> is a block number or hash. If no argument is given, "latest" is used.
     """

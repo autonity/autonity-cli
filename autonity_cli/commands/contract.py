@@ -40,7 +40,7 @@ from ..utils import (
 @group(name="contract")
 def contract_group() -> None:
     """
-    Command for interacting with arbitrary contracts.
+    Commands for interacting with arbitrary contracts.
     """
 
 
@@ -52,7 +52,7 @@ def function_call_from_args(
     parameters: List[str],
 ) -> Tuple:
     """
-    Take command line arguments and construct a ContractFunction (i.e. a function call).
+    Construct a function call from command line arguments.
 
     Returns the ContractFunction object, the ABIFunction for the method,
     and the Web3 object created in the process.
@@ -73,7 +73,7 @@ def function_call_from_args(
     contract = w3.eth.contract(address, abi=abi)
     contract_fn = getattr(contract.functions, method, None)
     if contract_fn is None:
-        raise ClickException(f"method '{method}' not found on contract abi")
+        raise ClickException(f"Method '{method}' not found on contract ABI")
 
     return contract_fn(*fn_params), abi_fn, w3
 
@@ -89,7 +89,7 @@ def function_call_from_args(
     "contract_path",
     required=True,
     type=Path(),
-    help="Path to JSON file holding contact abi and bytecode",
+    help="path to JSON file holding the contact ABI and bytecode.",
 )
 @argument("parameters", nargs=-1)
 def deploy_cmd(
@@ -111,7 +111,7 @@ def deploy_cmd(
     Deploy a contract, given the compiled JSON file.
 
     Note that the contract's address will appear in the 'contractAddress' field of
-    the transaction receipt (see aut tx wait).
+    the transaction receipt (see `aut tx wait`).
     """
 
     log(f"parameters: {list(parameters)}")

@@ -38,7 +38,7 @@ def _show_json(value: Any) -> str:
 @rpc_endpoint_option
 def config(rpc_endpoint: Optional[str]) -> None:
     """
-    Print the Autonity contract config.
+    The Autonity contract configuration.
     """
 
     print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).config()))
@@ -195,7 +195,7 @@ protocol_group.add_command(epoch_info)
 @rpc_endpoint_option
 def committee(rpc_endpoint: Optional[str]) -> None:
     """
-    Get current committee.
+    The current committee.
     """
 
     print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).get_committee()))
@@ -208,7 +208,7 @@ protocol_group.add_command(committee)
 @rpc_endpoint_option
 def validators(rpc_endpoint: Optional[str]) -> None:
     """
-    Get current validators.
+    The current validators.
     """
 
     print(_show_sequence(autonity_from_endpoint_arg(rpc_endpoint).get_validators()))
@@ -286,7 +286,7 @@ protocol_group.add_command(minimum_base_fee)
 @rpc_endpoint_option
 def max_schedule_duration(rpc_endpoint: Optional[str]) -> None:
     """
-    The max allowed duration of any schedule or contract.
+    The maximum allowed duration of any schedule or contract.
     """
 
     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
