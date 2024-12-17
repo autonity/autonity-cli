@@ -4,7 +4,7 @@ import typing
 
 import eth_typing
 import web3
-from web3.contract import base_contract, contract
+from web3.contract import contract
 
 
 class ERC20:
@@ -30,12 +30,12 @@ class ERC20:
         )
 
     @property
-    def Approval(self) -> typing.Type[base_contract.BaseContractEvent]:
+    def Approval(self) -> contract.ContractEvent:
         """Binding for `event Approval` on the ERC20 contract."""
         return self._contract.events.Approval
 
     @property
-    def Transfer(self) -> typing.Type[base_contract.BaseContractEvent]:
+    def Transfer(self) -> contract.ContractEvent:
         """Binding for `event Transfer` on the ERC20 contract."""
         return self._contract.events.Transfer
 
