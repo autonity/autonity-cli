@@ -4,6 +4,7 @@ Autonity RPC Client
 
 import sys
 
+from autonity.contracts.autonity import __version__ as protocol_version
 from click import group, option, version_option
 
 from .commands import (
@@ -22,7 +23,9 @@ from .logging import enable_logging
 
 @group(context_settings=dict(help_option_names=["-h", "--help"]))
 @option("--verbose", "-v", is_flag=True, help="Enable additional output (to stderr)")
-@version_option()
+@version_option(
+    message=f"%(prog)s, version %(version)s\nprotocol version {protocol_version}"
+)
 def aut(verbose: bool) -> None:
     """
     Command line interface to interact with Autonity.
