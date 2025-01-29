@@ -402,7 +402,7 @@ governance_group.add_command(set_withholding_threshold)
 @keyfile_option()
 @from_option
 @tx_aux_options
-@argument("pool-address-str", type=int)
+@argument("pool-address-str", metavar="POOL-ADDRESS")
 def set_withheld_rewards_pool(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
