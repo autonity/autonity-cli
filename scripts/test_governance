@@ -22,7 +22,6 @@ aut governance set-acu-contract --help > /dev/null
 aut governance set-supply-control-contract --help > /dev/null
 aut governance set-stabilization-contract --help > /dev/null
 aut governance set-inflation-controller-contract --help > /dev/null
-aut governance set-upgrade-manager-contract --help > /dev/null
 aut governance set-omission-accountability-contract --help > /dev/null
 aut governance set-liquid-logic-contract --help > /dev/null
 aut governance set-max-schedule-duration --help > /dev/null
