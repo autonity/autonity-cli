@@ -237,3 +237,25 @@ def wait(
 
 
 tx_group.add_command(wait)
+
+
+@command()
+@rpc_endpoint_option
+@argument("tx-hash", required=True)
+def trace(rpc_endpoint: Optional[str], tx_hash: str) -> None:
+    """
+    Trace a transaction with the default tracer.
+
+    Replays the transaction in the exact same manner as it was executed on the
+    network and prints debug data.
+
+    This command only works if the RPC node allows the `debug` API.
+    """
+
+    hash_bytes = HexBytes(validate_32byte_hash_string(tx_hash))
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+    trace = w3.geth.debug.trace_transaction(hash_bytes)
+    print(to_json(trace))  # type: ignore
+
+
+tx_group.add_command(trace)
