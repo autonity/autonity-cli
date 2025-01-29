@@ -17,7 +17,7 @@ from web3.exceptions import ContractLogicError
 from .protocol import protocol_group
 from ..config import get_node_address
 from ..constants import UnixExitStatus
-from ..denominations import format_auton_quantity
+from ..denominations import format_auton_quantity, format_newton_quantity
 from ..options import (
     from_option,
     keyfile_option,
@@ -523,3 +523,65 @@ def update_enode(
 
 
 validator.add_command(update_enode)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@validator_option
+@option("--account", help="Account to check")
+def locked_balance_of(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    validator_addr_str: Optional[str],
+    account: Optional[str],
+) -> None:
+    """
+    The amount of locked Liquid Newtons held by the account in the
+    given validator's Liquid Newton contract.
+    """
+
+    validator_addr = get_node_address(validator_addr_str)
+    account = from_address_from_argument(account, keyfile)
+
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
+    locked_balance = liquid_newton.locked_balance_of(account)
+    print(format_newton_quantity(locked_balance))
+
+
+validator.add_command(locked_balance_of)
+
+
+@command()
+@rpc_endpoint_option
+@keyfile_option()
+@validator_option
+@option("--account", help="Account to check")
+def unlocked_balance_of(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    validator_addr_str: Optional[str],
+    account: Optional[str],
+) -> None:
+    """
+    The amount of unlocked Liquid Newtons held by the account in the
+    given validator's Liquid Newton contract.
+    """
+
+    validator_addr = get_node_address(validator_addr_str)
+    account = from_address_from_argument(account, keyfile)
+
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
+    unlocked_balance = liquid_newton.unlocked_balance_of(account)
+    print(format_newton_quantity(unlocked_balance))
+
+
+validator.add_command(unlocked_balance_of)
