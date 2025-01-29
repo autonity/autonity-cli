@@ -913,53 +913,6 @@ governance_group.add_command(set_inflation_controller_contract)
 @from_option
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
-def set_upgrade_manager_contract(
-    rpc_endpoint: Optional[str],
-    keyfile: Optional[str],
-    from_str: Optional[str],
-    gas: Optional[str],
-    gas_price: Optional[str],
-    max_priority_fee_per_gas: Optional[str],
-    max_fee_per_gas: Optional[str],
-    fee_factor: Optional[float],
-    nonce: Optional[int],
-    chain_id: Optional[int],
-    contract_address_str: str,
-) -> None:
-    """
-    Set the Upgrade Manager contract address.
-
-    Restricted to the Operator account.
-    See `setUpgradeManagerContract` on Autonity contract.
-    """
-
-    contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
-    aut = autonity_from_endpoint_arg(rpc_endpoint)
-
-    tx = create_contract_tx_from_args(
-        function=aut.set_upgrade_manager_contract(contract_address),
-        from_addr=from_addr,
-        gas=gas,
-        gas_price=gas_price,
-        max_fee_per_gas=max_fee_per_gas,
-        max_priority_fee_per_gas=max_priority_fee_per_gas,
-        fee_factor=fee_factor,
-        nonce=nonce,
-        chain_id=chain_id,
-    )
-    print(to_json(tx))
-
-
-governance_group.add_command(set_upgrade_manager_contract)
-
-
-@command()
-@rpc_endpoint_option
-@keyfile_option()
-@from_option
-@tx_aux_options
-@argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_omission_accountability_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
