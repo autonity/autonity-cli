@@ -1,0 +1,45 @@
+name: Upstream Trigger
+
+on:
+  repository_dispatch:
+    types:
+      - new_autonity_bindings
+
+env:
+  PYTHON_VERSION: 3.13
+
+jobs:
+  check-compatibility:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log triggering event
+        run: echo '${{ toJSON(github.event) }}'
+
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Hatch
+        run: pip install --upgrade hatch
+
+      - name: Lint with autonity.py development version
+        run: hatch run lint:all
+        env:
+          AUTPY_VERSION: '@git+https://github.com/autonity/autonity.py@${{ github.event.client_payload.sha }}'
+
+      - name: Send Slack notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: '#pydev-alerts'
+          SLACK_USERNAME: GitHub Actions Bot
+          SLACK_ICON_EMOJI: ':github:'
+          SLACK_MESSAGE: |
+            :warning: Workflow run failed.
+
+            [Upstream commit](https://github.com/autonity/autonity.py/commit/${{ github.event.client_payload.sha }})
