@@ -1,4 +1,4 @@
-name: Upstream Trigger
+name: Check Compatibility
 
 on:
   repository_dispatch:
