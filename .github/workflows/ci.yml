@@ -2,6 +2,9 @@ name: CI
 
 on:
   push:
+    branches:
+      - master
+  pull_request:
 
 env:
   HOMEBREW_PACKAGES: "pidof"
@@ -26,7 +29,7 @@ jobs:
         run: |
           brew install ${HOMEBREW_PACKAGES}
       - name: Install hatch
-        run: | 
+        run: |
           pip install --upgrade hatch
       - name: Lint
         run: hatch run lint:all
