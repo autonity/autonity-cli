@@ -1,10 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   packages = [
     pkgs.hatch
     pkgs.taplo
   ];
+
+  env.HATCH_PYTHON = "${config.env.DEVENV_PROFILE}/bin/python";
 
   languages.python = {
     enable = true;
