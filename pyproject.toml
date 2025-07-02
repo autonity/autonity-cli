@@ -11,14 +11,14 @@ keywords = ["autonity", "web3", "rpc", "cli"]
 dynamic = ["version"]
 requires-python = ">=3.9"
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 dependencies = ["autonity{env:AUTPY_VERSION:==5.1.0.post0}", "click==8.1.3"]
 
@@ -47,13 +47,13 @@ description = "The standard dev, build, and test environment"
 test = ["unit-tests", "script-tests"]
 unit-tests = "python -m unittest discover {args:tests}"
 script-tests = [
-    "rm -rf test_*",
-    "hatch run ./scripts/test_contract",
-    "hatch run ./scripts/test_protocol",
-    "hatch run ./scripts/test_governance",
-    "hatch run ./scripts/test_validator",
-    "hatch run ./scripts/test_account",
-    "hatch run ./scripts/test_token",
+  "rm -rf test_*",
+  "hatch run ./scripts/test_contract",
+  "hatch run ./scripts/test_protocol",
+  "hatch run ./scripts/test_governance",
+  "hatch run ./scripts/test_validator",
+  "hatch run ./scripts/test_account",
+  "hatch run ./scripts/test_token",
 ]
 
 [tool.hatch.envs.github]
@@ -68,7 +68,7 @@ AUTPY_VERSION = " @ git+https://github.com/autonity/autonity.py@{env:AUTPY_GIT_C
 [tool.hatch.envs.local]
 description = "Develop against a local checkout of autonity.py"
 post-install-commands = [
-    "python -m pip install -q -e {env:AUTPY_LOCAL_PATH:{root:uri}/autonity.py}",
+  "python -m pip install -q -e {env:AUTPY_LOCAL_PATH:{root:uri}/autonity.py}",
 ]
 
 [tool.hatch.envs.lint]
@@ -79,11 +79,15 @@ dependencies = ["black", "check-wheel-contents", "ruff", "pyright"]
 all = ["check-code", "check-wheel", "check-type"]
 check-code = ["ruff check {args:.}", "black --check {args:.}"]
 check-wheel = [
-    "hatch build",
-    "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
+  "hatch build",
+  "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
 ]
 check-type = "pyright {args}"
-format = ["black {args:.}", "ruff check --fix --select I {args:.}", "taplo fmt pyproject.toml"]
+format = [
+  "black {args:.}",
+  "ruff check --fix --select I {args:.}",
+  "RUST_LOG=warn taplo fmt pyproject.toml",
+]
 
 [tool.pyright]
 include = ["autonity_cli", "tests"]
