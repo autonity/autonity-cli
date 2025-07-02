@@ -91,3 +91,4 @@ format = [
 
 [tool.pyright]
 include = ["autonity_cli", "tests"]
+typeCheckingMode = "strict"
