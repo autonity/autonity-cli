@@ -12,7 +12,7 @@ Decorator = Callable[[Func], Func]
 
 
 # an --rpc-endpoint, -r <url> option
-rpc_endpoint_option: Decorator = option(
+rpc_endpoint_option = option(
     "--rpc-endpoint",
     "-r",
     metavar="URL",
@@ -23,7 +23,7 @@ rpc_endpoint_option: Decorator = option(
 )
 
 
-def keystore_option() -> Decorator:
+def keystore_option() -> Decorator[Func]:
     """
     Option: --keystore <directory>.
     """
@@ -42,7 +42,7 @@ def keystore_option() -> Decorator:
     return decorator
 
 
-def keyfile_option(required: bool = False, output: bool = False) -> Decorator:
+def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Func]:
     """
     Options: --keyfile.  If `required` is True, --keyfile is
     required.  If `output` is True, the file does not need to exist.
@@ -61,7 +61,7 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator:
     return decorator
 
 
-def keyfile_and_password_options(required: bool = False) -> Decorator:
+def keyfile_and_password_options(required: bool = False) -> Decorator[Func]:
     """
     Options: --keyfile and --password.  If `required` is True,
     --keyfile is required.
@@ -108,7 +108,7 @@ def from_option(fn: Func) -> Func:
     )(fn)
 
 
-def tx_value_option(required: bool = False) -> Decorator:
+def tx_value_option(required: bool = False) -> Decorator[Func]:
     """
     Adds the --value, -v option to specify tx value field.  If `required` is True, the
     value must be provided.
@@ -129,7 +129,7 @@ def tx_value_option(required: bool = False) -> Decorator:
     return decorator
 
 
-def tx_aux_options(fn: Callable) -> Callable:
+def tx_aux_options(fn: Func) -> Func:
     """
     Remaining options which may be specified for any transaction.
       --gas
