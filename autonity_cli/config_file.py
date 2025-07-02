@@ -45,13 +45,13 @@ class ConfigFile:
 
             # If an absolute path was given, return as-is.  Else make
             # the path relative to the config file location
-            # CONFIG_FILE_DIR (which is set when the config file is
+            # `config_file_dir` (which is set when the config file is
             # first discovered).
 
             if os.path.isabs(attr_path):
                 return os.path.normpath(attr_path)
 
-            return os.path.normpath(os.path.join(CONFIG_FILE_DIR, attr_path))
+            return os.path.normpath(os.path.join(config_file_dir, attr_path))
 
         return None
 
@@ -68,11 +68,11 @@ Check for this file in the ~/.config/aut directory.
 
 CONFIG_FILE_SECTION_NAME = "aut"
 
-CONFIG_FILE_DATA: ConfigFile = ConfigFile({})
+config_file_data: ConfigFile = ConfigFile({})
 
-CONFIG_FILE_DIR: str = "."
+config_file_dir: str = "."
 
-CONFIG_FILE_CACHED = False
+config_file_cached = False
 
 
 def _find_config_file() -> str | None:
@@ -117,18 +117,18 @@ def get_config_file() -> ConfigFile:
     config file is found, the empty dictionary is returned.
     """
 
-    global CONFIG_FILE_DIR
-    global CONFIG_FILE_DATA
-    global CONFIG_FILE_CACHED
+    global config_file_dir
+    global config_file_data
+    global config_file_cached
 
-    if not CONFIG_FILE_CACHED:
+    if not config_file_cached:
         config_file_path = _find_config_file()
         if config_file_path:
             config = ConfigParser()
             config.read(config_file_path)
-            CONFIG_FILE_DIR = os.path.dirname(config_file_path)
-            CONFIG_FILE_DATA = ConfigFile(config[CONFIG_FILE_SECTION_NAME])
+            config_file_dir = os.path.dirname(config_file_path)
+            config_file_data = ConfigFile(config[CONFIG_FILE_SECTION_NAME])
 
-        CONFIG_FILE_CACHED = True
+        config_file_cached = True
 
-    return CONFIG_FILE_DATA
+    return config_file_data
