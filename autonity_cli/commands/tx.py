@@ -12,7 +12,6 @@ from eth_typing import HexStr
 from hexbytes import HexBytes
 from web3 import Web3
 
-from .account import signtx
 from ..erc20 import ERC20
 from ..logging import log
 from ..options import (
@@ -36,6 +35,7 @@ from ..utils import (
     validate_32byte_hash_string,
     web3_from_endpoint_arg,
 )
+from .account import signtx
 
 # pylint: disable=too-many-locals
 # pylint: disable=too-many-arguments

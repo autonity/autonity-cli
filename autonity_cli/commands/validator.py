@@ -14,7 +14,6 @@ from hexbytes import HexBytes
 from web3 import Web3
 from web3.exceptions import ContractLogicError
 
-from .protocol import protocol_group
 from ..config import get_node_address
 from ..constants import UnixExitStatus
 from ..denominations import format_auton_quantity, format_newton_quantity
@@ -34,6 +33,7 @@ from ..utils import (
     to_json,
     web3_from_endpoint_arg,
 )
+from .protocol import protocol_group
 
 # Disable pylint warning about imports outside top-level.  We do this
 # intentionally to try and keep startup times of the CLI low.

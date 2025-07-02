@@ -7,12 +7,12 @@ from __future__ import annotations
 import json
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Union, cast
 
-from web3 import Web3
 from eth_typing.abi import (
     ABI,
-    ABIFunction,
     ABIComponent,
+    ABIFunction,
 )
+from web3 import Web3
 
 
 def find_abi_constructor(abi: ABI) -> ABIFunction:

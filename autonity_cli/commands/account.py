@@ -16,19 +16,19 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
-from ..erc20 import ERC20
-from ..logging import log
 from ..denominations import (
     format_auton_quantity,
     format_newton_quantity,
     format_quantity,
 )
+from ..erc20 import ERC20
 from ..keyfile import (
     PrivateKey,
     create_keyfile_from_private_key,
     decrypt_keyfile,
     get_address_from_keyfile,
 )
+from ..logging import log
 from ..options import (
     from_option,
     keyfile_and_password_options,

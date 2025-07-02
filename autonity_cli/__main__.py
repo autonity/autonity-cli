@@ -23,9 +23,7 @@ from .logging import enable_logging
 
 @group(context_settings=dict(help_option_names=["-h", "--help"]))
 @option("--verbose", "-v", is_flag=True, help="Enable additional output (to stderr)")
-@version_option(
-    message=f"Autonity CLI v%(version)s (Protocol {protocol_version})"
-)
+@version_option(message=f"Autonity CLI v%(version)s (Protocol {protocol_version})")
 def aut(verbose: bool) -> None:
     """
     Command line interface to interact with Autonity.

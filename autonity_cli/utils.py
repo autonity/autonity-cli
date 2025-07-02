@@ -13,12 +13,13 @@ from getpass import getpass
 from typing import Any, Dict, Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 from autonity import Autonity
-from autonity.contracts import autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
+from autonity.contracts import autonity
 from click import ClickException
 from eth_typing import ABI, ChecksumAddress
 from hexbytes import HexBytes
 from web3 import HTTPProvider, IPCProvider, LegacyWebSocketProvider, Web3
+from web3._utils.encoding import Web3JsonEncoder
 from web3.contract.contract import ContractFunction
 from web3.providers import BaseProvider
 from web3.types import (
@@ -27,10 +28,9 @@ from web3.types import (
     TxParams,
     Wei,
 )
-from web3._utils.encoding import Web3JsonEncoder
 
 from . import config
-from .constants import AutonDenoms, COMMISSION_RATE_PRECISION
+from .constants import COMMISSION_RATE_PRECISION, AutonDenoms
 from .denominations import NEWTON_DECIMALS
 from .keyfile import get_address_from_keyfile, load_keyfile
 from .logging import log
