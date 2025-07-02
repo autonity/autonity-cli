@@ -102,7 +102,7 @@ def get_rpc_endpoint(endpoint: Optional[str]) -> str:
             endpoint = get_config_file().get("rpc_endpoint")
             if endpoint is None:
                 raise ClickException(
-                    f"No RPC endpoint given (use --rpc-endpoint, {WEB3_ENDPOINT_ENV_VAR}"
+                    f"No RPC endpoint given (use --rpc-endpoint, {WEB3_ENDPOINT_ENV_VAR} "
                     f"env var or {CONFIG_FILE_NAME})"
                 )
 
