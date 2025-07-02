@@ -408,18 +408,15 @@ def validate_block_identifier(block_id: Union[str, int]) -> BlockIdentifier:
     if isinstance(block_id, int):
         return block_id
 
-    if isinstance(block_id, str):
-        if block_id in ["latest", "earliest", "pending"]:
-            return cast(BlockIdentifier, block_id)
+    if block_id in ["latest", "earliest", "pending"]:
+        return cast(BlockIdentifier, block_id)
 
-        try:
-            return int(block_id)
-        except ValueError:
-            pass
+    try:
+        return int(block_id)
+    except ValueError:
+        pass
 
-        return HexBytes(block_id)
-
-    raise ClickException(f"failed parsing block identifier: {block_id}")
+    return HexBytes(block_id)
 
 
 def load_from_file_or_stdin(filename: str) -> str:
