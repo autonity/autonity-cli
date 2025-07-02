@@ -34,7 +34,7 @@ def find_abi_function(abi: ABI, function_name: str) -> ABIFunction:
 
     for element in abi:
         if element["type"] == "function" and element["name"] == function_name:
-            return cast(ABIFunction, element)
+            return element
 
     raise ValueError(f"function {function_name} not found in ABI")
 
@@ -161,20 +161,25 @@ def _parse_return_value_from_type(
     if type_name.endswith("[]"):
         assert isinstance(value, list)
         element_type = type_name[:-2]
-        return [_parse_return_value_from_type(element_type, output, v) for v in value]
+        return [
+            _parse_return_value_from_type(element_type, output, v)
+            for v in cast(List[Any], value)
+        ]
 
     # Check for tuples
     if type_name == "tuple":
         assert isinstance(value, tuple)
         assert "components" in output
-        return _parse_return_value_tuple(output["components"], value)
+        return _parse_return_value_tuple(
+            output["components"], cast(Tuple[Any, ...], value)
+        )
 
     return value
 
 
 def _parse_return_value_as_anonymous_tuple(
-    outputs: Sequence[ABIComponent], values: Tuple
-) -> Tuple:
+    outputs: Sequence[ABIComponent], values: Tuple[Any, ...]
+) -> Tuple[Any, ...]:
     """
     Parse a list of unnamed ABIFunctionParams and a tuple, to a tuple.
     """
@@ -186,7 +191,7 @@ def _parse_return_value_as_anonymous_tuple(
 
 
 def _parse_return_value_as_named_tuple(
-    outputs: Sequence[ABIComponent], values: Tuple
+    outputs: Sequence[ABIComponent], values: Tuple[Any, ...]
 ) -> Dict[str, Any]:
     """
     Parse a list of named ABIFunctionParams and a tuple, to a dict.
@@ -201,7 +206,9 @@ def _parse_return_value_as_named_tuple(
     return value_dict
 
 
-def _parse_return_value_tuple(outputs: Sequence[ABIComponent], values: Tuple) -> Any:
+def _parse_return_value_tuple(
+    outputs: Sequence[ABIComponent], values: Tuple[Any, ...]
+) -> Any:
     """
     Anonymous tuples to tuples, named tuples to dictionaries.
     """
