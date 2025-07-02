@@ -2,6 +2,7 @@ from typing import Optional
 
 from click import ClickException, argument, command, group
 from web3 import Web3
+from web3.exceptions import ContractLogicError
 
 from ..denominations import format_quantity
 from ..erc20 import ERC20
@@ -40,9 +41,12 @@ def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     token_addresss = newton_or_token_to_address_require(ntn, token)
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     erc = ERC20(w3, token_addresss)
-    token_name = erc.name()
-    if token_name is None:
-        raise ClickException("Token does not implement the `name` function")
+    try:
+        token_name = erc.name()
+    except ContractLogicError as exc:
+        raise ClickException(
+            "Token does not implement the ERC20 `name` function"
+        ) from exc
     print(token_name)
 
 
@@ -60,9 +64,12 @@ def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None
     token_addresss = newton_or_token_to_address_require(ntn, token)
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     erc = ERC20(w3, token_addresss)
-    token_symbol = erc.symbol()
-    if token_symbol is None:
-        raise ClickException("Token does not implement the `symbol` function")
+    try:
+        token_symbol = erc.symbol()
+    except ContractLogicError as exc:
+        raise ClickException(
+            "Token does not implement the ERC20 `symbol` function"
+        ) from exc
     print(token_symbol)
 
 
