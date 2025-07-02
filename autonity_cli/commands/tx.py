@@ -1,7 +1,3 @@
-"""
-The `tx` command group.
-"""
-
 import asyncio
 import json
 from typing import Optional

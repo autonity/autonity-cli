@@ -1,7 +1,3 @@
-"""
-The `protocol` command group.
-"""
-
 from typing import Any, Optional, Sequence
 
 from autonity import Autonity

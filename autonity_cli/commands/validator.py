@@ -1,7 +1,3 @@
-"""
-The `validator` command group.
-"""
-
 import sys
 from dataclasses import asdict
 from typing import Optional

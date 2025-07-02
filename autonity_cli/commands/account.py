@@ -1,7 +1,3 @@
-"""
-The `account` command group.
-"""
-
 import getpass
 import json
 from typing import Dict, List, Optional

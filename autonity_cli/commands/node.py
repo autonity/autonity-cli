@@ -1,7 +1,3 @@
-"""
-Implementation of `node` subcommands
-"""
-
 from typing import Optional, Union
 
 from click import command, group

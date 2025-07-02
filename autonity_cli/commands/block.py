@@ -1,7 +1,3 @@
-"""
-The "block" command group
-"""
-
 from typing import Optional
 
 from click import argument, command, group

@@ -1,7 +1,3 @@
-"""
-The `contract` command group
-"""
-
 import json
 from typing import List, Optional, Tuple, cast
 

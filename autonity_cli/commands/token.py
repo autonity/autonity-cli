@@ -1,7 +1,3 @@
-"""
-The `token` command group.
-"""
-
 from typing import Optional
 
 from click import ClickException, argument, command, group
