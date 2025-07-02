@@ -3,6 +3,7 @@
 {
   packages = [
     pkgs.hatch
+    pkgs.taplo
   ];
 
   languages.python = {

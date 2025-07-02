@@ -83,7 +83,7 @@ check-wheel = [
     "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
 ]
 check-type = "pyright {args}"
-format = ["black {args:.}", "ruff check --fix --select I {args:.}"]
+format = ["black {args:.}", "ruff check --fix --select I {args:.}", "taplo fmt pyproject.toml"]
 
 [tool.pyright]
 include = ["autonity_cli", "tests"]
