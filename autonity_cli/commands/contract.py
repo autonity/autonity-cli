@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional, Tuple, cast
+from typing import Any, List, Optional, Tuple, cast
 
 from click import ClickException, Path, argument, command, group, option
 from web3.contract.contract import ContractFunction
@@ -42,7 +42,7 @@ def function_call_from_args(
     contract_abi_path: Optional[str],
     method: str,
     parameters: List[str],
-) -> Tuple:
+) -> Tuple[Any, ...]:
     """
     Construct a function call from command line arguments.
 

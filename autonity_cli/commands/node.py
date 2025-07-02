@@ -34,7 +34,7 @@ def info(rpc_endpoint: Optional[str]) -> None:
 
     # Handle eth_syncing as an AttributeDict or boolean
     syncing: Union[SyncStatus, bool] = w3.eth.syncing
-    eth_syncing: Union[dict, bool] = (
+    eth_syncing: Union[dict[str, int], bool] = (
         dict(syncing) if isinstance(syncing, AttributeDict) else False
     )
     node_info = {
