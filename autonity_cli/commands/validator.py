@@ -35,13 +35,6 @@ from ..utils import (
 )
 from .protocol import protocol_group
 
-# Disable pylint warning about imports outside top-level.  We do this
-# intentionally to try and keep startup times of the CLI low.
-
-# pylint: disable=import-outside-toplevel
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-locals
-
 # TODO: consider caching the LNTN addresses of Validators
 
 

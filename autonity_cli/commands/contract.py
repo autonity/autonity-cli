@@ -32,10 +32,6 @@ from ..utils import (
     web3_from_endpoint_arg,
 )
 
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-locals
-# pylint: disable=import-outside-toplevel
-
 
 @group(name="contract")
 def contract_group() -> None:

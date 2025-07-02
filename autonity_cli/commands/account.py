@@ -51,8 +51,6 @@ from ..utils import (
     web3_from_endpoint_arg,
 )
 
-# pylint: disable=too-many-locals
-
 
 @group(name="account")
 def account_group() -> None:

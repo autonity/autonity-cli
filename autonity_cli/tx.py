@@ -18,9 +18,6 @@ from .keyfile import (
     decrypt_keyfile,
 )
 
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-branches
-
 
 def create_transaction(
     from_addr: Optional[ChecksumAddress] = None,
@@ -166,9 +163,7 @@ def sign_tx_with_private_key(
     general, for signing single transactions `sign_tx` is
     recommended.)
     """
-    return Account.sign_transaction(  # pylint: disable=no-value-for-parameter
-        tx, private_key
-    )
+    return Account.sign_transaction(tx, private_key)
 
 
 def sign_tx(

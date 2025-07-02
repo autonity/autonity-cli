@@ -4,8 +4,6 @@ Logging-related functions.
 
 import sys
 
-# pylint: disable=global-statement
-
 logging_enabled = False
 
 

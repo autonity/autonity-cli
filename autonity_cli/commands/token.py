@@ -25,9 +25,6 @@ from ..utils import (
     web3_from_endpoint_arg,
 )
 
-# pylint: disable=too-many-locals
-# pylint: disable=too-many-arguments
-
 
 @group(name="token")
 def token_group() -> None:

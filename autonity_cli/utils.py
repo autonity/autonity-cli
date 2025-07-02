@@ -40,10 +40,6 @@ from .tx import (
     finalize_transaction,
 )
 
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-locals
-
-
 # Intended to represent "value" types
 V = TypeVar("V")
 
@@ -386,7 +382,7 @@ def string_is_32byte_hash(hash_str: str) -> bool:
     try:
         int(hash_str, 16)
         return True
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         return False
 
 
@@ -592,7 +588,7 @@ def parse_commission_rate(rate_str: str) -> int:
     try:
         rate_int = int(rate_str)
     except ValueError:
-        raise ClickException(  # pylint: disable=raise-missing-from
+        raise ClickException(
             f"Expected integer instead of {rate_str}.  See --help text."
         )
 

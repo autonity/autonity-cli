@@ -29,7 +29,7 @@ def get_address_from_private_key(private_key: PrivateKey) -> ChecksumAddress:
     """
     Return the address associated with a given private key.
     """
-    account = Account.from_key(private_key)  # pylint: disable=no-value-for-parameter
+    account = Account.from_key(private_key)
     return account.address
 
 

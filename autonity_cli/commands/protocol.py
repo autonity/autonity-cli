@@ -13,9 +13,6 @@ from web3 import Web3
 from ..options import rpc_endpoint_option
 from ..utils import autonity_from_endpoint_arg, to_json, web3_from_endpoint_arg
 
-# pylint: disable=too-many-arguments
-# pylint: disable=too-many-locals
-
 
 @group(name="protocol")
 def protocol_group() -> None:

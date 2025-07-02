@@ -37,9 +37,6 @@ from ..utils import (
 )
 from .account import signtx
 
-# pylint: disable=too-many-locals
-# pylint: disable=too-many-arguments
-
 
 @group(name="tx")
 def tx_group() -> None:
@@ -231,9 +228,7 @@ def wait(
             raise ClickException("Transaction failed")
 
     except asyncio.TimeoutError:
-        raise ClickException(  # pylint: disable=raise-missing-from
-            f"Transaction {tx_hash} timed out"
-        )
+        raise ClickException(f"Transaction {tx_hash} timed out")
 
 
 tx_group.add_command(wait)

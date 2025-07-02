@@ -11,8 +11,6 @@ from typing import Any, Mapping, Optional
 
 from .logging import log
 
-# pylint: disable=global-statement
-
 
 class ConfigFile:
     """
