@@ -76,13 +76,13 @@ description = "Run code linters"
 dependencies = ["black", "check-wheel-contents", "ruff", "pyright"]
 
 [tool.hatch.envs.lint.scripts]
-all = ["check-code", "check-wheel", "check-type"]
+all = ["check-code", "check-wheel", "check-types"]
 check-code = ["ruff check {args:.}", "black --check {args:.}"]
 check-wheel = [
   "hatch build",
   "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
 ]
-check-type = "pyright {args}"
+check-types = "pyright {args}"
 format = [
   "black {args:.}",
   "ruff check --fix --select I {args:.}",
