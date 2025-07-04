@@ -4,7 +4,8 @@ Command line option sets used by multiple commands.
 
 from typing import Any, Callable, TypeVar
 
-from click import Path, option
+import click
+from click import Path
 
 Func = TypeVar("Func", bound=Callable[..., Any])
 
@@ -12,7 +13,7 @@ Decorator = Callable[[Func], Func]
 
 
 # an --rpc-endpoint, -r <url> option
-rpc_endpoint_option = option(
+rpc_endpoint_option = click.option(
     "--rpc-endpoint",
     "-r",
     metavar="URL",
@@ -29,7 +30,7 @@ def keystore_option() -> Decorator[Func]:
     """
 
     def decorator(fn: Func) -> Func:
-        return option(
+        return click.option(
             "--keystore",
             "-s",
             type=Path(exists=True),
@@ -49,14 +50,13 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Fu
     """
 
     def decorator(fn: Func) -> Func:
-        fn = option(
+        return click.option(
             "--keyfile",
             "-k",
             required=required,
             type=Path(exists=not output),
             help="encrypted private key file (falls back to 'keyfile' in config file).",
         )(fn)
-        return fn
 
     return decorator
 
@@ -68,12 +68,17 @@ def keyfile_and_password_options(required: bool = False) -> Decorator[Func]:
     """
 
     def decorator(fn: Func) -> Func:
-        fn = keyfile_option(required)(fn)
-        fn = option(
-            "--password",
-            "-p",
-            help="password for keyfile (falls back to KEYFILEPWD environment variable).",
-        )(fn)
+        for option in reversed(
+            [
+                keyfile_option(required),
+                click.option(
+                    "--password",
+                    "-p",
+                    help="password for keyfile (falls back to KEYFILEPWD environment variable).",
+                ),
+            ]
+        ):
+            fn = option(fn)
         return fn
 
     return decorator
@@ -84,13 +89,18 @@ def newton_or_token_option(fn: Func) -> Func:
     Adds the --ntn and --token flags, allowing the user to specify
     that a transfer should use an ERC20 token.
     """
-    fn = option("--ntn", is_flag=True, help="use Newton (NTN) as token")(fn)
-    fn = option(
-        "--token",
-        "-t",
-        metavar="TOKEN-ADDR",
-        help="use the ERC20 token at the given address.",
-    )(fn)
+    for option in reversed(
+        [
+            click.option("--ntn", is_flag=True, help="use Newton (NTN) as token"),
+            click.option(
+                "--token",
+                "-t",
+                metavar="TOKEN-ADDR",
+                help="use the ERC20 token at the given address.",
+            ),
+        ]
+    ):
+        fn = option(fn)
     return fn
 
 
@@ -99,7 +109,7 @@ def from_option(fn: Func) -> Func:
     Adds the --from, -f option to specify the from field of a
     transaction.  Passed to the from_str parameter.
     """
-    return option(
+    return click.option(
         "--from",
         "-f",
         "from_str",
@@ -115,7 +125,7 @@ def tx_value_option(required: bool = False) -> Decorator[Func]:
     """
 
     def decorator(fn: Func) -> Func:
-        fn = option(
+        return click.option(
             "--value",
             "-v",
             required=required,
@@ -124,7 +134,6 @@ def tx_value_option(required: bool = False) -> Decorator[Func]:
                 "(e.g. '0.000000007' and '7gwei' are identical)."
             ),
         )(fn)
-        return fn
 
     return decorator
 
@@ -140,42 +149,46 @@ def tx_aux_options(fn: Func) -> Func:
       --nonce
       --chain-id
     """
-    fn = option(
-        "--gas", "-g", help="maximum gas units that can be consumed by the tx."
-    )(fn)
-    fn = option(
-        "--gas-price",
-        "-p",
-        help="value per gas in Auton (legacy, use -F and -P instead).",
-    )(fn)
-    fn = option(
-        "--max-fee-per-gas",
-        "-F",
-        help="maximum to pay (in Auton) per gas for the total fee of the tx.",
-    )(fn)
-    fn = option(
-        "--max-priority-fee-per-gas",
-        "-P",
-        help="maximum to pay (in Auton) per gas as tip to block proposer.",
-    )(fn)
-    fn = option(
-        "--fee-factor",
-        type=float,
-        help="set maxFeePerGas to <last-basefee> x <fee-factor> [default: 2].",
-    )(fn)
-    fn = option(
-        "--nonce",
-        "-n",
-        type=int,
-        help="transaction nonce; query chain for account transaction count if not given.",
-    )(fn)
-    fn = option(
-        "--chain-id",
-        "-I",
-        type=int,
-        help="integer representing EIP155 chain ID.",
-    )(fn)
-
+    for option in reversed(
+        [
+            click.option(
+                "--gas", "-g", help="maximum gas units that can be consumed by the tx."
+            ),
+            click.option(
+                "--gas-price",
+                "-p",
+                help="value per gas in Auton (legacy, use -F and -P instead).",
+            ),
+            click.option(
+                "--max-fee-per-gas",
+                "-F",
+                help="maximum to pay (in Auton) per gas for the total fee of the tx.",
+            ),
+            click.option(
+                "--max-priority-fee-per-gas",
+                "-P",
+                help="maximum to pay (in Auton) per gas as tip to block proposer.",
+            ),
+            click.option(
+                "--fee-factor",
+                type=float,
+                help="set maxFeePerGas to <last-basefee> x <fee-factor> [default: 2].",
+            ),
+            click.option(
+                "--nonce",
+                "-n",
+                type=int,
+                help="transaction nonce; query chain for account transaction count if not given.",
+            ),
+            click.option(
+                "--chain-id",
+                "-I",
+                type=int,
+                help="integer representing EIP155 chain ID.",
+            ),
+        ]
+    ):
+        fn = option(fn)
     return fn
 
 
@@ -184,7 +197,7 @@ def validator_option(fn: Func) -> Func:
     Add the --validator <address> option to specify a validator.  Uses
     the "validator_addr_str" argument.
     """
-    return option(
+    return click.option(
         "--validator",
         "-V",
         "validator_addr_str",
@@ -197,15 +210,20 @@ def contract_options(fn: Func) -> Func:
     add the `--abi <contract_abi>` and `--address <contract_address>`
     options.
     """
-    fn = option(
-        "--address",
-        "contract_address_str",
-        help="contract address (falls back to 'address' in config file).",
-    )(fn)
-    fn = option(
-        "--abi",
-        "contract_abi_path",
-        type=Path(exists=True),
-        help="contract ABI file (falls back to 'abi' in config file).",
-    )(fn)
+    for option in reversed(
+        [
+            click.option(
+                "--address",
+                "contract_address_str",
+                help="contract address (falls back to 'address' in config file).",
+            ),
+            click.option(
+                "--abi",
+                "contract_abi_path",
+                type=Path(exists=True),
+                help="contract ABI file (falls back to 'abi' in config file).",
+            ),
+        ]
+    ):
+        fn = option(fn)
     return fn
