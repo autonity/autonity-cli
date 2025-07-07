@@ -1,7 +1,7 @@
 import json
 from typing import Any, List, Optional, Tuple, cast
 
-from click import ClickException, Path, argument, command, group, option
+from click import ClickException, Path, argument, group, option
 from web3.contract.contract import ContractFunction
 
 from ..abi_parser import (
@@ -70,7 +70,7 @@ def function_call_from_args(
     return contract_fn(*fn_params), abi_fn, w3
 
 
-@command(name="deploy")
+@contract_group.command(name="deploy")
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -145,7 +145,7 @@ def deploy_cmd(
 contract_group.add_command(deploy_cmd)
 
 
-@command(name="call")
+@contract_group.command(name="call")
 @rpc_endpoint_option
 @contract_options
 @argument("method")
@@ -177,7 +177,7 @@ def call_cmd(
 contract_group.add_command(call_cmd)
 
 
-@command(name="tx")
+@contract_group.command(name="tx")
 @rpc_endpoint_option
 @keyfile_option()
 @from_option

@@ -2,7 +2,7 @@ import asyncio
 import json
 from typing import Optional
 
-from click import ClickException, Path, argument, command, group, option
+from click import ClickException, Path, argument, group, option
 from eth_account.datastructures import SignedTransaction
 from eth_typing import HexStr
 from hexbytes import HexBytes
@@ -45,7 +45,7 @@ def tx_group() -> None:
 tx_group.add_command(signtx, name="sign")
 
 
-@command()
+@tx_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -170,7 +170,7 @@ def make(
 tx_group.add_command(make)
 
 
-@command()
+@tx_group.command()
 @rpc_endpoint_option
 @argument("tx-file", type=Path())
 def send(rpc_endpoint: Optional[str], tx_file: str) -> None:
@@ -190,7 +190,7 @@ def send(rpc_endpoint: Optional[str], tx_file: str) -> None:
 tx_group.add_command(send)
 
 
-@command()
+@tx_group.command()
 @rpc_endpoint_option
 @option("--quiet", "-q", is_flag=True, help="do not print the transaction receipt.")
 @option(

@@ -3,7 +3,7 @@ from typing import Any, Optional, Sequence
 from autonity import Autonity
 from autonity.constants import AUTONITY_CONTRACT_ADDRESS
 from autonity.contracts.autonity import ABI
-from click import argument, command, group
+from click import argument, group
 from web3 import Web3
 
 from ..options import rpc_endpoint_option
@@ -27,7 +27,7 @@ def _show_json(value: Any) -> str:
     return to_json(value, pretty=True)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def config(rpc_endpoint: Optional[str]) -> None:
     """
@@ -40,7 +40,7 @@ def config(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(config)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def epoch_id(rpc_endpoint: Optional[str]) -> None:
     """
@@ -53,7 +53,7 @@ def epoch_id(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(epoch_id)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def last_epoch_time(rpc_endpoint: Optional[str]) -> None:
     """
@@ -66,7 +66,7 @@ def last_epoch_time(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(last_epoch_time)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def epoch_total_bonded_stake(rpc_endpoint: Optional[str]) -> None:
     """
@@ -79,7 +79,7 @@ def epoch_total_bonded_stake(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(epoch_total_bonded_stake)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
     """
@@ -92,7 +92,7 @@ def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(inflation_reserve)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def deployer(rpc_endpoint: Optional[str]) -> None:
     """
@@ -105,7 +105,7 @@ def deployer(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(deployer)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def epoch_period(rpc_endpoint: Optional[str]) -> None:
     """
@@ -118,7 +118,7 @@ def epoch_period(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(epoch_period)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def block_period(rpc_endpoint: Optional[str]) -> None:
     """
@@ -131,7 +131,7 @@ def block_period(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(block_period)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def unbonding_period(rpc_endpoint: Optional[str]) -> None:
     """
@@ -144,7 +144,7 @@ def unbonding_period(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(unbonding_period)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def last_epoch_block(rpc_endpoint: Optional[str]) -> None:
     """
@@ -157,7 +157,7 @@ def last_epoch_block(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(last_epoch_block)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def version(rpc_endpoint: Optional[str]) -> None:
     """
@@ -170,7 +170,7 @@ def version(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(version)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def epoch_info(rpc_endpoint: Optional[str]):
     """
@@ -184,7 +184,7 @@ def epoch_info(rpc_endpoint: Optional[str]):
 protocol_group.add_command(epoch_info)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def committee(rpc_endpoint: Optional[str]) -> None:
     """
@@ -197,7 +197,7 @@ def committee(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(committee)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def validators(rpc_endpoint: Optional[str]) -> None:
     """
@@ -210,7 +210,7 @@ def validators(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(validators)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def treasury_account(rpc_endpoint: Optional[str]) -> None:
     """
@@ -223,7 +223,7 @@ def treasury_account(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(treasury_account)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def treasury_fee(rpc_endpoint: Optional[str]) -> None:
     """
@@ -236,7 +236,7 @@ def treasury_fee(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(treasury_fee)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def max_committee_size(rpc_endpoint: Optional[str]) -> None:
     """
@@ -249,7 +249,7 @@ def max_committee_size(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(max_committee_size)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def committee_enodes(rpc_endpoint: Optional[str]) -> None:
     """
@@ -262,7 +262,7 @@ def committee_enodes(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(committee_enodes)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def minimum_base_fee(rpc_endpoint: Optional[str]) -> None:
     """
@@ -275,7 +275,7 @@ def minimum_base_fee(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(minimum_base_fee)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def max_schedule_duration(rpc_endpoint: Optional[str]) -> None:
     """
@@ -289,7 +289,7 @@ def max_schedule_duration(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(max_schedule_duration)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 def operator(rpc_endpoint: Optional[str]) -> None:
     """
@@ -302,7 +302,7 @@ def operator(rpc_endpoint: Optional[str]) -> None:
 protocol_group.add_command(operator)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("block-height", type=int)
 def epoch_by_height(rpc_endpoint: Optional[str], block_height: int):
@@ -317,7 +317,7 @@ def epoch_by_height(rpc_endpoint: Optional[str], block_height: int):
 protocol_group.add_command(epoch_by_height)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("block", type=int)
 def epoch_from_block(rpc_endpoint: Optional[str], block: int) -> None:
@@ -332,7 +332,7 @@ def epoch_from_block(rpc_endpoint: Optional[str], block: int) -> None:
 protocol_group.add_command(epoch_from_block)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("unbonding-id", type=int)
 def is_unbonding_released(rpc_endpoint: Optional[str], unbonding_id: int):
@@ -349,7 +349,7 @@ def is_unbonding_released(rpc_endpoint: Optional[str], unbonding_id: int):
 protocol_group.add_command(is_unbonding_released)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("unbonding-id", type=int)
 def unbonding_share(rpc_endpoint: Optional[str], unbonding_id: int):
@@ -364,7 +364,7 @@ def unbonding_share(rpc_endpoint: Optional[str], unbonding_id: int):
 protocol_group.add_command(unbonding_share)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("vault-address-str", metavar="VAULT-ADDRESS")
 @argument("index", type=int)
@@ -381,7 +381,7 @@ def schedule(rpc_endpoint: Optional[str], vault_address_str: str, index: int):
 protocol_group.add_command(schedule)
 
 
-@command()
+@protocol_group.command()
 @rpc_endpoint_option
 @argument("vault-address-str", metavar="VAULT-ADDRESS")
 def total_schedules(rpc_endpoint: Optional[str], vault_address_str: str):
@@ -397,7 +397,7 @@ def total_schedules(rpc_endpoint: Optional[str], vault_address_str: str):
 protocol_group.add_command(total_schedules)
 
 
-@command()
+@protocol_group.command()
 def contract_address() -> None:
     """
     Address of the Autonity Contract.
@@ -409,7 +409,7 @@ def contract_address() -> None:
 protocol_group.add_command(contract_address)
 
 
-@command()
+@protocol_group.command()
 def contract_abi() -> None:
     """
     ABI of the Autonity Contract.

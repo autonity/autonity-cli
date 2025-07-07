@@ -1,6 +1,6 @@
 from typing import Optional
 
-from click import argument, command, group
+from click import argument, group
 
 from ..options import rpc_endpoint_option
 from ..user import get_block
@@ -14,7 +14,7 @@ def block_group() -> None:
     """
 
 
-@command()
+@block_group.command()
 @rpc_endpoint_option
 @argument("identifier", default="latest")
 def get(rpc_endpoint: Optional[str], identifier: str) -> None:
@@ -33,7 +33,7 @@ def get(rpc_endpoint: Optional[str], identifier: str) -> None:
 block_group.add_command(get)
 
 
-@command()
+@block_group.command()
 @rpc_endpoint_option
 def height(rpc_endpoint: Optional[str]) -> None:
     """

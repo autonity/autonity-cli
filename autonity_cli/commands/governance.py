@@ -1,6 +1,6 @@
 from typing import Optional
 
-from click import argument, command, group
+from click import argument, group
 from web3 import Web3
 
 from ..options import from_option, keyfile_option, rpc_endpoint_option, tx_aux_options
@@ -21,7 +21,7 @@ def governance_group() -> None:
     """
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -73,7 +73,7 @@ def create_schedule(
 governance_group.add_command(create_schedule)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -120,7 +120,7 @@ def set_minimum_base_fee(
 governance_group.add_command(set_minimum_base_fee)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -166,7 +166,7 @@ def set_max_schedule_duration(
 governance_group.add_command(set_max_schedule_duration)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -211,7 +211,7 @@ def set_committee_size(
 governance_group.add_command(set_committee_size)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -256,7 +256,7 @@ def set_unbonding_period(
 governance_group.add_command(set_unbonding_period)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -302,7 +302,7 @@ def set_proposer_reward_rate(
 governance_group.add_command(set_proposer_reward_rate)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -347,7 +347,7 @@ def set_oracle_reward_rate(
 governance_group.add_command(set_oracle_reward_rate)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -393,7 +393,7 @@ def set_withholding_threshold(
 governance_group.add_command(set_withholding_threshold)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -440,7 +440,7 @@ def set_withheld_rewards_pool(
 governance_group.add_command(set_withheld_rewards_pool)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -485,7 +485,7 @@ def set_epoch_period(
 governance_group.add_command(set_epoch_period)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -531,7 +531,7 @@ def set_operator_account(
 governance_group.add_command(set_operator_account)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -577,7 +577,7 @@ def set_treasury_account(
 governance_group.add_command(set_treasury_account)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -623,7 +623,7 @@ def set_treasury_fee(
 governance_group.add_command(set_treasury_fee)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -670,7 +670,7 @@ def set_accountability_contract(
 governance_group.add_command(set_accountability_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -716,7 +716,7 @@ def set_oracle_contract(
 governance_group.add_command(set_oracle_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -762,7 +762,7 @@ def set_acu_contract(
 governance_group.add_command(set_acu_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -809,7 +809,7 @@ def set_supply_control_contract(
 governance_group.add_command(set_supply_control_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -856,7 +856,7 @@ def set_stabilization_contract(
 governance_group.add_command(set_stabilization_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -903,7 +903,7 @@ def set_inflation_controller_contract(
 governance_group.add_command(set_inflation_controller_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -950,7 +950,7 @@ def set_omission_accountability_contract(
 governance_group.add_command(set_omission_accountability_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -997,7 +997,7 @@ def set_liquid_logic_contract(
 governance_group.add_command(set_liquid_logic_contract)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -1048,7 +1048,7 @@ def mint(
 governance_group.add_command(mint)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -1099,7 +1099,7 @@ def burn(
 governance_group.add_command(burn)
 
 
-@command()
+@governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option

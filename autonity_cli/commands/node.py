@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from click import command, group
+from click import group
 from web3.datastructures import AttributeDict
 from web3.exceptions import MethodUnavailable
 from web3.types import SyncStatus
@@ -16,7 +16,7 @@ def node_group() -> None:
     """
 
 
-@command()
+@node_group.command()
 @rpc_endpoint_option
 def info(rpc_endpoint: Optional[str]) -> None:
     """

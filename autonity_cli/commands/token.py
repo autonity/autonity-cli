@@ -1,6 +1,6 @@
 from typing import Optional
 
-from click import ClickException, argument, command, group
+from click import ClickException, argument, group
 from web3 import Web3
 from web3.exceptions import ContractLogicError
 
@@ -30,7 +30,7 @@ def token_group() -> None:
     """
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
@@ -53,7 +53,7 @@ def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
 token_group.add_command(name)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
@@ -76,7 +76,7 @@ def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None
 token_group.add_command(symbol)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 def decimals(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
@@ -93,7 +93,7 @@ def decimals(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> No
 token_group.add_command(decimals)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 def total_supply(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
@@ -112,7 +112,7 @@ def total_supply(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -
 token_group.add_command(total_supply)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -143,7 +143,7 @@ def balance_of(
 token_group.add_command(balance_of)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -176,7 +176,7 @@ def allowance(
 token_group.add_command(allowance)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -235,7 +235,7 @@ def transfer(
 token_group.add_command(transfer)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -295,7 +295,7 @@ def approve(
 token_group.add_command(approve)
 
 
-@command()
+@token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()

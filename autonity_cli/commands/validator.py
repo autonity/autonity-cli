@@ -4,7 +4,7 @@ from typing import Optional
 from urllib import parse as urlparse
 
 from autonity import Autonity, LiquidLogic
-from click import argument, command, echo, group, option
+from click import argument, echo, group, option
 from eth_typing import ChecksumAddress
 from hexbytes import HexBytes
 from web3 import Web3
@@ -47,7 +47,7 @@ validator.add_command(
 )
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @validator_option
 def info(rpc_endpoint: Optional[str], validator_addr_str: str) -> None:
@@ -71,7 +71,7 @@ def info(rpc_endpoint: Optional[str], validator_addr_str: str) -> None:
 validator.add_command(info)
 
 
-@command()
+@validator.command()
 @argument("enode")
 def compute_address(
     enode: str,
@@ -89,7 +89,7 @@ def compute_address(
 validator.add_command(compute_address)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -137,7 +137,7 @@ def bond(
 validator.add_command(bond)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -185,7 +185,7 @@ def unbond(
 validator.add_command(unbond)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -240,7 +240,7 @@ def register(
 validator.add_command(register)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -287,7 +287,7 @@ def pause(
 validator.add_command(pause)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -334,7 +334,7 @@ def activate(
 validator.add_command(activate)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -385,7 +385,7 @@ def change_commission_rate(
 validator.add_command(change_commission_rate)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @validator_option
@@ -415,7 +415,7 @@ def unclaimed_rewards(
 validator.add_command(unclaimed_rewards)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -463,7 +463,7 @@ def claim_rewards(
 validator.add_command(claim_rewards)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @from_option
@@ -514,7 +514,7 @@ def update_enode(
 validator.add_command(update_enode)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @validator_option
@@ -545,7 +545,7 @@ def locked_balance_of(
 validator.add_command(locked_balance_of)
 
 
-@command()
+@validator.command()
 @rpc_endpoint_option
 @keyfile_option()
 @validator_option

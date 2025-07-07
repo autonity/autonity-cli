@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 
 import eth_account
 from autonity import Autonity
-from click import ClickException, Path, argument, command, group, option
+from click import ClickException, Path, argument, group, option
 from eth_account import Account
 from eth_account.messages import encode_defunct
 from hexbytes import HexBytes
@@ -55,7 +55,7 @@ def account_group() -> None:
     """
 
 
-@command(name="list")
+@account_group.command(name="list")
 @option("--with-files", is_flag=True, help="also show keyfile names.")
 @keystore_option()
 def list_cmd(keystore: Optional[str], with_files: bool) -> None:
@@ -75,7 +75,7 @@ def list_cmd(keystore: Optional[str], with_files: bool) -> None:
 account_group.add_command(list_cmd)
 
 
-@command()
+@account_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @option(
@@ -111,7 +111,7 @@ def info(
 account_group.add_command(info)
 
 
-@command()
+@account_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
 @keyfile_option()
@@ -157,7 +157,7 @@ def balance(
 account_group.add_command(balance)
 
 
-@command()
+@account_group.command()
 @rpc_endpoint_option
 @keyfile_option()
 @argument("account_str", metavar="ACCOUNT", default="")
@@ -193,7 +193,7 @@ def lntn_balances(
 account_group.add_command(lntn_balances)
 
 
-@command()
+@account_group.command()
 @keystore_option()
 @keyfile_option(required=False, output=True)
 @option(
@@ -257,7 +257,7 @@ def new(
 account_group.add_command(new)
 
 
-@command()
+@account_group.command()
 @keystore_option()
 @keyfile_option(output=True)
 @option(
@@ -302,7 +302,7 @@ def import_private_key(
 account_group.add_command(import_private_key)
 
 
-@command()
+@account_group.command()
 @argument("keyfile-path", required=False, type=Path(exists=True))
 def reveal_private_key(
     keyfile_path: Optional[str],
@@ -337,7 +337,7 @@ def reveal_private_key(
 account_group.add_command(reveal_private_key)
 
 
-@command()
+@account_group.command()
 @keyfile_and_password_options()
 @argument(
     "tx-file",
@@ -375,7 +375,7 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
 account_group.add_command(signtx)
 
 
-@command()
+@account_group.command()
 @keyfile_and_password_options()
 @option(
     "--use-message-file",
@@ -434,7 +434,7 @@ def sign_message(
 account_group.add_command(sign_message)
 
 
-@command()
+@account_group.command()
 @keyfile_option()
 @from_option
 @option(
