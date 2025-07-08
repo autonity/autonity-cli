@@ -20,7 +20,11 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
 ]
-dependencies = ["autonity{env:AUTPY_VERSION:==5.1.0.post0}", "click==8.1.3"]
+dependencies = [
+  "autonity{env:AUTPY_VERSION:==5.1.0.post0}",
+  "click==8.1.3",
+  "trezor[ethereum]>=0.13.10",
+]
 
 [project.urls]
 Homepage = "https://github.com/autonity/autonity-cli"
