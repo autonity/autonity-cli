@@ -12,7 +12,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
-from ..auth import get_authenticator
+from ..auth import validate_authenticator
 from ..denominations import (
     format_auton_quantity,
     format_newton_quantity,
@@ -289,7 +289,7 @@ def reveal_private_key(
     type=Path(),
     required=True,
 )
-def signtx(keyfile: Optional[str], tx_file: str) -> None:
+def signtx(keyfile: Optional[str], trezor: Optional[str], tx_file: str) -> None:
     """
     Sign a transaction using the given keyfile.
 
@@ -303,7 +303,7 @@ def signtx(keyfile: Optional[str], tx_file: str) -> None:
     tx = json.loads(load_from_file_or_stdin(tx_file))
 
     # Get auth
-    auth = get_authenticator(keyfile)
+    auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
 
     # Sign the tx:
     signed_tx = auth.sign_transaction(tx)
@@ -326,6 +326,7 @@ def signtx(keyfile: Optional[str], tx_file: str) -> None:
 @argument("signature-file", type=Path(), required=False)
 def sign_message(
     keyfile: Optional[str],
+    trezor: Optional[str],
     use_message_file: bool,
     message: str,
     signature_file: Optional[str],
@@ -343,7 +344,7 @@ def sign_message(
         message = load_from_file_or_stdin(message)
 
     # Get auth
-    auth = get_authenticator(keyfile)
+    auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
 
     # Sign the message
     signature = auth.sign_message(message).hex()

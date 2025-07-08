@@ -63,13 +63,19 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Fu
 
 def authentication_options(required: bool = False) -> Decorator[Func]:
     """
-    Options: --keyfile.  If `required` is True, --keyfile is required.
+    Options: --keyfile and --trezor.  If `required` is True, --keyfile is
+    required.
     """
 
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
                 keyfile_option(required),
+                click.option(
+                    "--trezor",
+                    metavar="ACCOUNT",
+                    help="Trezor account index or full BIP32 derivation path",
+                ),
             ]
         ):
             fn = option(fn)

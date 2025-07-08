@@ -12,5 +12,6 @@
     enable = true;
     version = "3.12";
     venv.enable = false;
+    libraries = [ pkgs.libusb1 ];
   };
 }
