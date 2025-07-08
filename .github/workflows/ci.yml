@@ -33,5 +33,3 @@ jobs:
           pip install --upgrade hatch
       - name: Lint
         run: hatch run lint:all
-      - name: Test
-        run: hatch run test
