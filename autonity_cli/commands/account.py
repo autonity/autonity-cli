@@ -12,6 +12,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
+from ..auth import get_authenticator
 from ..denominations import (
     format_auton_quantity,
     format_newton_quantity,
@@ -21,7 +22,6 @@ from ..erc20 import ERC20
 from ..keyfile import (
     PrivateKey,
     create_keyfile_from_private_key,
-    decrypt_keyfile,
     get_address_from_keyfile,
 )
 from ..logging import log
@@ -33,7 +33,6 @@ from ..options import (
     newton_or_token_option,
     rpc_endpoint_option,
 )
-from ..tx import sign_tx
 from ..user import get_account_stats
 from ..utils import (
     address_keyfile_dict,
@@ -303,17 +302,11 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
     # Read tx
     tx = json.loads(load_from_file_or_stdin(tx_file))
 
-    # Read keyfile
-    keyfile = config.get_keyfile(keyfile)
-    log(f"using key file: {keyfile}")
-    with open(keyfile, encoding="ascii") as key_f:
-        encrypted_key = json.load(key_f)
-
-    # Read password
-    password = config.get_keyfile_password(password)
+    # Get auth
+    auth = get_authenticator(keyfile, password)
 
     # Sign the tx:
-    signed_tx = sign_tx(tx, encrypted_key, password)
+    signed_tx = auth.sign_transaction(tx)
 
     print(to_json(signed_tx._asdict()))
 
@@ -350,21 +343,11 @@ def sign_message(
     if use_message_file:
         message = load_from_file_or_stdin(message)
 
-    # Read keyfile
-    keyfile = config.get_keyfile(keyfile)
-    log(f"using key file: {keyfile}")
-    with open(keyfile, encoding="ascii") as key_f:
-        encrypted_key = json.load(key_f)
-
-    # Read password
-    password = config.get_keyfile_password(password)
-    private_key = decrypt_keyfile(encrypted_key, password)
+    # Get auth
+    auth = get_authenticator(keyfile, password)
 
     # Sign the message
-    signature_data = Account().sign_message(
-        signable_message=encode_defunct(text=message), private_key=private_key
-    )
-    signature = signature_data["signature"].hex()
+    signature = auth.sign_message(message).hex()
 
     # Optionally write to the output file
     if signature_file:
