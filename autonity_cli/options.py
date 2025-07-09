@@ -61,7 +61,7 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Fu
     return decorator
 
 
-def keyfile_and_password_options(required: bool = False) -> Decorator[Func]:
+def authentication_options(required: bool = False) -> Decorator[Func]:
     """
     Options: --keyfile and --password.  If `required` is True,
     --keyfile is required.

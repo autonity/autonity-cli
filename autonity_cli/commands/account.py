@@ -26,8 +26,8 @@ from ..keyfile import (
 )
 from ..logging import log
 from ..options import (
+    authentication_options,
     from_option,
-    keyfile_and_password_options,
     keyfile_option,
     keystore_option,
     newton_or_token_option,
@@ -283,7 +283,7 @@ def reveal_private_key(
 
 
 @account_group.command()
-@keyfile_and_password_options()
+@authentication_options()
 @argument(
     "tx-file",
     type=Path(),
@@ -312,7 +312,7 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
 
 
 @account_group.command()
-@keyfile_and_password_options()
+@authentication_options()
 @option(
     "--use-message-file",
     "-f",
