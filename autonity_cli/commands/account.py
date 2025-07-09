@@ -347,6 +347,7 @@ def sign_message(
     auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
 
     # Sign the message
+    log(f'Signing message: "{message}" (len={len(message)})')
     signature = auth.sign_message(message).hex()
 
     # Optionally write to the output file
