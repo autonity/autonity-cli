@@ -63,19 +63,13 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Fu
 
 def authentication_options(required: bool = False) -> Decorator[Func]:
     """
-    Options: --keyfile and --password.  If `required` is True,
-    --keyfile is required.
+    Options: --keyfile.  If `required` is True, --keyfile is required.
     """
 
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
                 keyfile_option(required),
-                click.option(
-                    "--password",
-                    "-p",
-                    help="password for keyfile (falls back to KEYFILEPWD environment variable).",
-                ),
             ]
         ):
             fn = option(fn)
