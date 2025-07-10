@@ -289,21 +289,21 @@ def reveal_private_key(
     type=Path(),
     required=True,
 )
-def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> None:
+def signtx(keyfile: Optional[str], tx_file: str) -> None:
     """
     Sign a transaction using the given keyfile.
 
     Use '-' to read from standard input instead of a file.
 
-    If password is not given, the environment variable 'KEYFILEPWD' is used.
-    If that is not set, the user is prompted.
+    If the environment variable 'KEYFILEPWD' is set, this keyfile password will
+    be used used. If this is not set, the user is prompted.
     """
 
     # Read tx
     tx = json.loads(load_from_file_or_stdin(tx_file))
 
     # Get auth
-    auth = get_authenticator(keyfile, password)
+    auth = get_authenticator(keyfile)
 
     # Sign the tx:
     signed_tx = auth.sign_transaction(tx)
@@ -326,7 +326,6 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
 @argument("signature-file", type=Path(), required=False)
 def sign_message(
     keyfile: Optional[str],
-    password: Optional[str],
     use_message_file: bool,
     message: str,
     signature_file: Optional[str],
@@ -344,7 +343,7 @@ def sign_message(
         message = load_from_file_or_stdin(message)
 
     # Get auth
-    auth = get_authenticator(keyfile, password)
+    auth = get_authenticator(keyfile)
 
     # Sign the message
     signature = auth.sign_message(message).hex()

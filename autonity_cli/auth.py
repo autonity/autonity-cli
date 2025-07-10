@@ -24,9 +24,8 @@ class Authenticator(Protocol):
 
 
 class KeyfileAuthenticator:
-    def __init__(self, keyfile: str, password: Optional[str]):
+    def __init__(self, keyfile: str):
         self.keyfile = keyfile
-        self.password = password
 
         with click.open_file(self.keyfile, "rb") as kf:
             self.keydata = json.load(kf)
@@ -39,7 +38,7 @@ class KeyfileAuthenticator:
     @property
     def account(self) -> LocalAccount:
         if self._account is None:
-            password = config.get_keyfile_password(self.password, self.keyfile)
+            password = config.get_keyfile_password(None, self.keyfile)
             privkey = Account.decrypt(self.keydata, password=password)
             self._account = cast(LocalAccount, Account.from_key(privkey))
         return self._account
@@ -52,10 +51,7 @@ class KeyfileAuthenticator:
         return self.account.sign_message(signable)["signature"]
 
 
-def get_authenticator(
-    keyfile: Optional[str],
-    password: Optional[str],
-) -> Authenticator:
+def get_authenticator(keyfile: Optional[str]) -> Authenticator:
     keyfile = config.get_keyfile(keyfile)
     log(f"using key file: {keyfile}")
-    return KeyfileAuthenticator(keyfile, password)
+    return KeyfileAuthenticator(keyfile)
