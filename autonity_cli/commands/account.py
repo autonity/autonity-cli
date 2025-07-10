@@ -1,6 +1,6 @@
 import getpass
 import json
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import eth_account
 from autonity import Autonity
@@ -146,39 +146,6 @@ def balance(
 
     else:
         print(format_auton_quantity(w3.eth.get_balance(account_addr)))
-
-
-@account_group.command()
-@rpc_endpoint_option
-@keyfile_option()
-@argument("account_str", metavar="ACCOUNT", default="")
-def lntn_balances(
-    rpc_endpoint: Optional[str], account_str: Optional[str], keyfile: Optional[str]
-) -> None:
-    """
-    Print all Liquid Newton balances of the given account.
-    """
-
-    account_addr = from_address_from_argument_optional(account_str, keyfile)
-    if not account_addr:
-        raise ClickException(
-            "Could not determine account address from argument or keyfile"
-        )
-
-    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
-    aut = Autonity(w3)
-    validator_addrs = aut.get_validators()
-    validators = [aut.get_validator(vaddr) for vaddr in validator_addrs]
-
-    balances: Dict[str, str] = {}
-    for validator in validators:
-        log(f"computing holdings for validators {validator.node_address}")
-        lntn = ERC20(w3, validator.liquid_state_contract)
-        bal = lntn.balance_of(account_addr)
-        if bal:
-            balances[validator.node_address] = format_newton_quantity(bal)
-
-    print(to_json(balances, pretty=True))
 
 
 @account_group.command()
