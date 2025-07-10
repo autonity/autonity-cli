@@ -58,6 +58,3 @@ def info(rpc_endpoint: Optional[str]) -> None:
         )
 
     print(to_json(node_info, pretty=True))
-
-
-node_group.add_command(info)

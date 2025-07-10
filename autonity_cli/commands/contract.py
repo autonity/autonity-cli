@@ -142,9 +142,6 @@ def deploy_cmd(
     print(to_json(tx))
 
 
-contract_group.add_command(deploy_cmd)
-
-
 @contract_group.command(name="call")
 @rpc_endpoint_option
 @contract_options
@@ -172,9 +169,6 @@ def call_cmd(
     result = function.call()
     parsed_result = parse_return_value(abi_fn, result)
     print(to_json(parsed_result))
-
-
-contract_group.add_command(call_cmd)
 
 
 @contract_group.command(name="tx")
@@ -237,6 +231,3 @@ def tx_cmd(
 
     tx = finalize_tx_from_args(w3, rpc_endpoint, tx, from_addr)
     print(to_json(tx))
-
-
-contract_group.add_command(tx_cmd)

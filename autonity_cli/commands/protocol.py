@@ -37,9 +37,6 @@ def config(rpc_endpoint: Optional[str]) -> None:
     print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).config()))
 
 
-protocol_group.add_command(config)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def epoch_id(rpc_endpoint: Optional[str]) -> None:
@@ -48,9 +45,6 @@ def epoch_id(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).epoch_id())
-
-
-protocol_group.add_command(epoch_id)
 
 
 @protocol_group.command()
@@ -63,9 +57,6 @@ def last_epoch_time(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).last_epoch_time())
 
 
-protocol_group.add_command(last_epoch_time)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def epoch_total_bonded_stake(rpc_endpoint: Optional[str]) -> None:
@@ -74,9 +65,6 @@ def epoch_total_bonded_stake(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).epoch_total_bonded_stake())
-
-
-protocol_group.add_command(epoch_total_bonded_stake)
 
 
 @protocol_group.command()
@@ -89,9 +77,6 @@ def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).inflation_reserve())
 
 
-protocol_group.add_command(inflation_reserve)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def deployer(rpc_endpoint: Optional[str]) -> None:
@@ -100,9 +85,6 @@ def deployer(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).deployer())
-
-
-protocol_group.add_command(deployer)
 
 
 @protocol_group.command()
@@ -115,9 +97,6 @@ def epoch_period(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).get_epoch_period())
 
 
-protocol_group.add_command(epoch_period)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def block_period(rpc_endpoint: Optional[str]) -> None:
@@ -126,9 +105,6 @@ def block_period(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_block_period())
-
-
-protocol_group.add_command(block_period)
 
 
 @protocol_group.command()
@@ -141,9 +117,6 @@ def unbonding_period(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).get_unbonding_period())
 
 
-protocol_group.add_command(unbonding_period)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def last_epoch_block(rpc_endpoint: Optional[str]) -> None:
@@ -154,9 +127,6 @@ def last_epoch_block(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).get_last_epoch_block())
 
 
-protocol_group.add_command(last_epoch_block)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def version(rpc_endpoint: Optional[str]) -> None:
@@ -165,9 +135,6 @@ def version(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_version())
-
-
-protocol_group.add_command(version)
 
 
 @protocol_group.command()
@@ -181,9 +148,6 @@ def epoch_info(rpc_endpoint: Optional[str]):
     print(_show_json(aut.get_epoch_info()))
 
 
-protocol_group.add_command(epoch_info)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def committee(rpc_endpoint: Optional[str]) -> None:
@@ -192,9 +156,6 @@ def committee(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).get_committee()))
-
-
-protocol_group.add_command(committee)
 
 
 @protocol_group.command()
@@ -207,9 +168,6 @@ def validators(rpc_endpoint: Optional[str]) -> None:
     print(_show_sequence(autonity_from_endpoint_arg(rpc_endpoint).get_validators()))
 
 
-protocol_group.add_command(validators)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def treasury_account(rpc_endpoint: Optional[str]) -> None:
@@ -218,9 +176,6 @@ def treasury_account(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_treasury_account())
-
-
-protocol_group.add_command(treasury_account)
 
 
 @protocol_group.command()
@@ -233,9 +188,6 @@ def treasury_fee(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).get_treasury_fee())
 
 
-protocol_group.add_command(treasury_fee)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def max_committee_size(rpc_endpoint: Optional[str]) -> None:
@@ -244,9 +196,6 @@ def max_committee_size(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_max_committee_size())
-
-
-protocol_group.add_command(max_committee_size)
 
 
 @protocol_group.command()
@@ -259,9 +208,6 @@ def committee_enodes(rpc_endpoint: Optional[str]) -> None:
     print(autonity_from_endpoint_arg(rpc_endpoint).get_committee_enodes())
 
 
-protocol_group.add_command(committee_enodes)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def minimum_base_fee(rpc_endpoint: Optional[str]) -> None:
@@ -270,9 +216,6 @@ def minimum_base_fee(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_minimum_base_fee())
-
-
-protocol_group.add_command(minimum_base_fee)
 
 
 @protocol_group.command()
@@ -286,9 +229,6 @@ def max_schedule_duration(rpc_endpoint: Optional[str]) -> None:
     print(aut.get_max_schedule_duration())
 
 
-protocol_group.add_command(max_schedule_duration)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 def operator(rpc_endpoint: Optional[str]) -> None:
@@ -297,9 +237,6 @@ def operator(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_operator())
-
-
-protocol_group.add_command(operator)
 
 
 @protocol_group.command()
@@ -314,9 +251,6 @@ def epoch_by_height(rpc_endpoint: Optional[str], block_height: int):
     print(_show_json(aut.get_epoch_by_height(block_height)))
 
 
-protocol_group.add_command(epoch_by_height)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 @argument("block", type=int)
@@ -327,9 +261,6 @@ def epoch_from_block(rpc_endpoint: Optional[str], block: int) -> None:
 
     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
     print(aut.get_epoch_from_block(block))
-
-
-protocol_group.add_command(epoch_from_block)
 
 
 @protocol_group.command()
@@ -346,9 +277,6 @@ def is_unbonding_released(rpc_endpoint: Optional[str], unbonding_id: int):
     print(int(aut.is_unbonding_released(unbonding_id)))
 
 
-protocol_group.add_command(is_unbonding_released)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 @argument("unbonding-id", type=int)
@@ -359,9 +287,6 @@ def unbonding_share(rpc_endpoint: Optional[str], unbonding_id: int):
 
     aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
     print(aut.get_unbonding_share(unbonding_id))
-
-
-protocol_group.add_command(unbonding_share)
 
 
 @protocol_group.command()
@@ -378,9 +303,6 @@ def schedule(rpc_endpoint: Optional[str], vault_address_str: str, index: int):
     print(_show_json(aut.get_schedule(vault_address, index)))
 
 
-protocol_group.add_command(schedule)
-
-
 @protocol_group.command()
 @rpc_endpoint_option
 @argument("vault-address-str", metavar="VAULT-ADDRESS")
@@ -394,9 +316,6 @@ def total_schedules(rpc_endpoint: Optional[str], vault_address_str: str):
     print(aut.get_total_schedules(vault_address))
 
 
-protocol_group.add_command(total_schedules)
-
-
 @protocol_group.command()
 def contract_address() -> None:
     """
@@ -406,9 +325,6 @@ def contract_address() -> None:
     print(AUTONITY_CONTRACT_ADDRESS)
 
 
-protocol_group.add_command(contract_address)
-
-
 @protocol_group.command()
 def contract_abi() -> None:
     """
@@ -416,6 +332,3 @@ def contract_abi() -> None:
     """
 
     print(_show_json(ABI))
-
-
-protocol_group.add_command(contract_abi)

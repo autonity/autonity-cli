@@ -68,9 +68,6 @@ def info(rpc_endpoint: Optional[str], validator_addr_str: str) -> None:
     echo(to_json(asdict(validator_data), pretty=True))
 
 
-validator.add_command(info)
-
-
 @validator.command()
 @argument("enode")
 def compute_address(
@@ -84,9 +81,6 @@ def compute_address(
     pubkey, _ = key_at_ip_port.split("@")
     addr_bytes = Web3.keccak(bytes(HexBytes(pubkey)))[-20:]
     print(Web3.to_checksum_address(addr_bytes.hex()))
-
-
-validator.add_command(compute_address)
 
 
 @validator.command()
@@ -134,9 +128,6 @@ def bond(
     print(to_json(tx))
 
 
-validator.add_command(bond)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -180,9 +171,6 @@ def unbond(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-validator.add_command(unbond)
 
 
 @validator.command()
@@ -237,9 +225,6 @@ def register(
     print(to_json(tx))
 
 
-validator.add_command(register)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -284,9 +269,6 @@ def pause(
     print(to_json(tx))
 
 
-validator.add_command(pause)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -329,9 +311,6 @@ def activate(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-validator.add_command(activate)
 
 
 @validator.command()
@@ -382,9 +361,6 @@ def change_commission_rate(
     print(to_json(tx))
 
 
-validator.add_command(change_commission_rate)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -410,9 +386,6 @@ def unclaimed_rewards(
     liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
     unclaimed_atn = liquid_newton.unclaimed_rewards(account)
     print(format_auton_quantity(unclaimed_atn))
-
-
-validator.add_command(unclaimed_rewards)
 
 
 @validator.command()
@@ -458,9 +431,6 @@ def claim_rewards(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-validator.add_command(claim_rewards)
 
 
 @validator.command()
@@ -511,9 +481,6 @@ def update_enode(
     print(to_json(tx))
 
 
-validator.add_command(update_enode)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -542,9 +509,6 @@ def locked_balance_of(
     print(format_newton_quantity(locked_balance))
 
 
-validator.add_command(locked_balance_of)
-
-
 @validator.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -571,6 +535,3 @@ def unlocked_balance_of(
     liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
     unlocked_balance = liquid_newton.unlocked_balance_of(account)
     print(format_newton_quantity(unlocked_balance))
-
-
-validator.add_command(unlocked_balance_of)

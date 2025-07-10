@@ -30,9 +30,6 @@ def get(rpc_endpoint: Optional[str], identifier: str) -> None:
     print(to_json(block_data))
 
 
-block_group.add_command(get)
-
-
 @block_group.command()
 @rpc_endpoint_option
 def height(rpc_endpoint: Optional[str]) -> None:
@@ -42,6 +39,3 @@ def height(rpc_endpoint: Optional[str]) -> None:
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     print(w3.eth.block_number)
-
-
-block_group.add_command(height)

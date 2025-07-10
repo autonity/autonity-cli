@@ -167,9 +167,6 @@ def make(
     print(to_json(tx))
 
 
-tx_group.add_command(make)
-
-
 @tx_group.command()
 @rpc_endpoint_option
 @argument("tx-file", type=Path())
@@ -185,9 +182,6 @@ def send(rpc_endpoint: Optional[str], tx_file: str) -> None:
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     tx_hash = send_tx(w3, signed_tx)
     print(Web3.to_hex(tx_hash))
-
-
-tx_group.add_command(send)
 
 
 @tx_group.command()
@@ -225,6 +219,3 @@ def wait(
 
     except asyncio.TimeoutError:
         raise ClickException(f"Transaction {tx_hash} timed out")
-
-
-tx_group.add_command(wait)

@@ -70,9 +70,6 @@ def create_schedule(
     print(to_json(tx))
 
 
-governance_group.add_command(create_schedule)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -115,9 +112,6 @@ def set_minimum_base_fee(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_minimum_base_fee)
 
 
 @governance_group.command()
@@ -163,9 +157,6 @@ def set_max_schedule_duration(
     print(to_json(tx))
 
 
-governance_group.add_command(set_max_schedule_duration)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -208,9 +199,6 @@ def set_committee_size(
     print(to_json(tx))
 
 
-governance_group.add_command(set_committee_size)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -251,9 +239,6 @@ def set_unbonding_period(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_unbonding_period)
 
 
 @governance_group.command()
@@ -299,9 +284,6 @@ def set_proposer_reward_rate(
     print(to_json(tx))
 
 
-governance_group.add_command(set_proposer_reward_rate)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -342,9 +324,6 @@ def set_oracle_reward_rate(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_oracle_reward_rate)
 
 
 @governance_group.command()
@@ -388,9 +367,6 @@ def set_withholding_threshold(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_withholding_threshold)
 
 
 @governance_group.command()
@@ -437,9 +413,6 @@ def set_withheld_rewards_pool(
     print(to_json(tx))
 
 
-governance_group.add_command(set_withheld_rewards_pool)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -480,9 +453,6 @@ def set_epoch_period(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_epoch_period)
 
 
 @governance_group.command()
@@ -528,9 +498,6 @@ def set_operator_account(
     print(to_json(tx))
 
 
-governance_group.add_command(set_operator_account)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -574,9 +541,6 @@ def set_treasury_account(
     print(to_json(tx))
 
 
-governance_group.add_command(set_treasury_account)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -618,9 +582,6 @@ def set_treasury_fee(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_treasury_fee)
 
 
 @governance_group.command()
@@ -667,9 +628,6 @@ def set_accountability_contract(
     print(to_json(tx))
 
 
-governance_group.add_command(set_accountability_contract)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -713,9 +671,6 @@ def set_oracle_contract(
     print(to_json(tx))
 
 
-governance_group.add_command(set_oracle_contract)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -757,9 +712,6 @@ def set_acu_contract(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_acu_contract)
 
 
 @governance_group.command()
@@ -806,9 +758,6 @@ def set_supply_control_contract(
     print(to_json(tx))
 
 
-governance_group.add_command(set_supply_control_contract)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -851,9 +800,6 @@ def set_stabilization_contract(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_stabilization_contract)
 
 
 @governance_group.command()
@@ -900,9 +846,6 @@ def set_inflation_controller_contract(
     print(to_json(tx))
 
 
-governance_group.add_command(set_inflation_controller_contract)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -947,9 +890,6 @@ def set_omission_accountability_contract(
     print(to_json(tx))
 
 
-governance_group.add_command(set_omission_accountability_contract)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -992,9 +932,6 @@ def set_liquid_logic_contract(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_liquid_logic_contract)
 
 
 @governance_group.command()
@@ -1045,9 +982,6 @@ def mint(
     print(to_json(tx))
 
 
-governance_group.add_command(mint)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -1096,9 +1030,6 @@ def burn(
     print(to_json(tx))
 
 
-governance_group.add_command(burn)
-
-
 @governance_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -1139,6 +1070,3 @@ def set_slasher(
         chain_id=chain_id,
     )
     print(to_json(tx))
-
-
-governance_group.add_command(set_slasher)

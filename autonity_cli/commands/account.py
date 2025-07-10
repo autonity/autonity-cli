@@ -72,9 +72,6 @@ def list_cmd(keystore: Optional[str], with_files: bool) -> None:
             print(addr)
 
 
-account_group.add_command(list_cmd)
-
-
 @account_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -106,9 +103,6 @@ def info(
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     account_stats = get_account_stats(w3, addresses, asof)
     print(to_json(account_stats, pretty=True))
-
-
-account_group.add_command(info)
 
 
 @account_group.command()
@@ -154,9 +148,6 @@ def balance(
         print(format_auton_quantity(w3.eth.get_balance(account_addr)))
 
 
-account_group.add_command(balance)
-
-
 @account_group.command()
 @rpc_endpoint_option
 @keyfile_option()
@@ -188,9 +179,6 @@ def lntn_balances(
             balances[validator.node_address] = format_newton_quantity(bal)
 
     print(to_json(balances, pretty=True))
-
-
-account_group.add_command(lntn_balances)
 
 
 @account_group.command()
@@ -254,9 +242,6 @@ def new(
     print(f"{keyfile_addr}  {keyfile}")
 
 
-account_group.add_command(new)
-
-
 @account_group.command()
 @keystore_option()
 @keyfile_option(output=True)
@@ -299,9 +284,6 @@ def import_private_key(
     print(f"{keyfile_addr}  {keyfile}")
 
 
-account_group.add_command(import_private_key)
-
-
 @account_group.command()
 @argument("keyfile-path", required=False, type=Path(exists=True))
 def reveal_private_key(
@@ -332,9 +314,6 @@ def reveal_private_key(
         raise ClickException(str(e))
 
     print(Web3.to_hex(key))
-
-
-account_group.add_command(reveal_private_key)
 
 
 @account_group.command()
@@ -370,9 +349,6 @@ def signtx(keyfile: Optional[str], password: Optional[str], tx_file: str) -> Non
     signed_tx = sign_tx(tx, encrypted_key, password)
 
     print(to_json(signed_tx._asdict()))
-
-
-account_group.add_command(signtx)
 
 
 @account_group.command()
@@ -431,9 +407,6 @@ def sign_message(
     print(signature)
 
 
-account_group.add_command(sign_message)
-
-
 @account_group.command()
 @keyfile_option()
 @from_option
@@ -486,6 +459,3 @@ def verify_signature(
         raise ClickException("Signature invalid")
 
     log("signature is valid")
-
-
-account_group.add_command(verify_signature)

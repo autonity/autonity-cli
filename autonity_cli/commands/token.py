@@ -50,9 +50,6 @@ def name(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None:
     print(token_name)
 
 
-token_group.add_command(name)
-
-
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
@@ -73,9 +70,6 @@ def symbol(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> None
     print(token_symbol)
 
 
-token_group.add_command(symbol)
-
-
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
@@ -88,9 +82,6 @@ def decimals(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -> No
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     erc = ERC20(w3, token_addresss)
     print(erc.decimals())
-
-
-token_group.add_command(decimals)
 
 
 @token_group.command()
@@ -107,9 +98,6 @@ def total_supply(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -
     token_decimals = erc.decimals()
     token_total_supply = erc.total_supply()
     print(format_quantity(token_total_supply, token_decimals))
-
-
-token_group.add_command(total_supply)
 
 
 @token_group.command()
@@ -140,9 +128,6 @@ def balance_of(
     print(format_quantity(balance, token_decimals))
 
 
-token_group.add_command(balance_of)
-
-
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
@@ -171,9 +156,6 @@ def allowance(
     token_allowance = erc.allowance(owner_addr, from_addr)
     token_decimals = erc.decimals()
     print(format_quantity(token_allowance, token_decimals))
-
-
-token_group.add_command(allowance)
 
 
 @token_group.command()
@@ -232,9 +214,6 @@ def transfer(
     print(to_json(tx))
 
 
-token_group.add_command(transfer)
-
-
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
@@ -290,9 +269,6 @@ def approve(
     )
 
     print(to_json(tx))
-
-
-token_group.add_command(approve)
 
 
 @token_group.command()
@@ -355,6 +331,3 @@ def transfer_from(
     )
 
     print(to_json(tx))
-
-
-token_group.add_command(transfer_from)
