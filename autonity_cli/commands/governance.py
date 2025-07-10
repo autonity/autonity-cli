@@ -3,11 +3,12 @@ from typing import Optional
 from click import argument, group
 from web3 import Web3
 
-from ..options import from_option, keyfile_option, rpc_endpoint_option, tx_aux_options
+from autonity_cli.auth import validate_authenticator_account
+
+from ..options import from_options, rpc_endpoint_option, tx_aux_options
 from ..utils import (
     autonity_from_endpoint_arg,
     create_contract_tx_from_args,
-    from_address_from_argument,
     parse_newton_value_representation,
     parse_wei_representation,
     to_json,
@@ -23,8 +24,7 @@ def governance_group() -> None:
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("schedule-vault", metavar="ADDRESS")
 @argument("amount", type=int)
@@ -33,6 +33,7 @@ def governance_group() -> None:
 def create_schedule(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -53,7 +54,7 @@ def create_schedule(
     """
 
     vault_address = Web3.to_checksum_address(schedule_vault)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -72,13 +73,13 @@ def create_schedule(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("base-fee-str", metavar="base-fee", nargs=1)
 def set_minimum_base_fee(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -97,7 +98,7 @@ def set_minimum_base_fee(
     """
 
     base_fee = parse_wei_representation(base_fee_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -116,13 +117,13 @@ def set_minimum_base_fee(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("duration", type=int, nargs=1)
 def set_max_schedule_duration(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -140,7 +141,7 @@ def set_max_schedule_duration(
     See `setMaxScheduleDuration` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -159,13 +160,13 @@ def set_max_schedule_duration(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("committee-size", type=int, nargs=1)
 def set_committee_size(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -182,7 +183,7 @@ def set_committee_size(
     Restricted to the Operator account. See `setCommitteeSize` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -201,13 +202,13 @@ def set_committee_size(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("unbonding-period", type=int, nargs=1)
 def set_unbonding_period(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -224,7 +225,7 @@ def set_unbonding_period(
     Restricted to the Operator account. See `setUnbondingPeriod` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -243,13 +244,13 @@ def set_unbonding_period(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("proposer-reward-rate", type=int)
 def set_proposer_reward_rate(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -267,7 +268,7 @@ def set_proposer_reward_rate(
     See `setProposerRewardRate` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -286,13 +287,13 @@ def set_proposer_reward_rate(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("oracle-reward-rate", type=int)
 def set_oracle_reward_rate(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -309,7 +310,7 @@ def set_oracle_reward_rate(
     Restricted to the Operator account. See `setOracleRewardRate` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -328,13 +329,13 @@ def set_oracle_reward_rate(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("withholding_threshold", type=int)
 def set_withholding_threshold(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -352,7 +353,7 @@ def set_withholding_threshold(
     See `setWithholdingThreshold` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -371,13 +372,13 @@ def set_withholding_threshold(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("pool-address-str", metavar="POOL-ADDRESS")
 def set_withheld_rewards_pool(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -396,7 +397,7 @@ def set_withheld_rewards_pool(
     """
 
     pool_address = Web3.to_checksum_address(pool_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -415,13 +416,13 @@ def set_withheld_rewards_pool(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("epoch-period", type=int, nargs=1)
 def set_epoch_period(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -438,7 +439,7 @@ def set_epoch_period(
     Restricted to the Operator account. See `setEpochPeriod` on Autonity contract.
     """
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -457,13 +458,13 @@ def set_epoch_period(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("operator-address-str", metavar="OPERATOR-ADDRESS", nargs=1)
 def set_operator_account(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -481,7 +482,7 @@ def set_operator_account(
     """
 
     operator_address = Web3.to_checksum_address(operator_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -500,13 +501,13 @@ def set_operator_account(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("treasury-address-str", metavar="treasury-address", nargs=1)
 def set_treasury_account(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -524,7 +525,7 @@ def set_treasury_account(
     """
 
     treasury_address = Web3.to_checksum_address(treasury_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -543,13 +544,13 @@ def set_treasury_account(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("treasury-fee-str", metavar="TREASURY-FEE", nargs=1)
 def set_treasury_fee(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -567,7 +568,7 @@ def set_treasury_fee(
     """
 
     treasury_fee = parse_wei_representation(treasury_fee_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -586,13 +587,13 @@ def set_treasury_fee(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_accountability_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -611,7 +612,7 @@ def set_accountability_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -630,13 +631,13 @@ def set_accountability_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_oracle_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -654,7 +655,7 @@ def set_oracle_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -673,13 +674,13 @@ def set_oracle_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_acu_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -697,7 +698,7 @@ def set_acu_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -716,13 +717,13 @@ def set_acu_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_supply_control_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -741,7 +742,7 @@ def set_supply_control_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -760,13 +761,13 @@ def set_supply_control_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_stabilization_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -785,7 +786,7 @@ def set_stabilization_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -804,13 +805,13 @@ def set_stabilization_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_inflation_controller_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -829,7 +830,7 @@ def set_inflation_controller_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -848,13 +849,13 @@ def set_inflation_controller_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_omission_accountability_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -873,7 +874,7 @@ def set_omission_accountability_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -892,13 +893,13 @@ def set_omission_accountability_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("contract-address-str", metavar="CONTRACT-ADDRESS", nargs=1)
 def set_liquid_logic_contract(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -917,7 +918,7 @@ def set_liquid_logic_contract(
     """
 
     contract_address = Web3.to_checksum_address(contract_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(
@@ -936,14 +937,14 @@ def set_liquid_logic_contract(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 @argument("recipient-str", metavar="RECIPIENT", required=False)
 def mint(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -963,7 +964,7 @@ def mint(
     """
 
     token_units = parse_newton_value_representation(amount_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     recipient = Web3.to_checksum_address(recipient_str) if recipient_str else from_addr
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
@@ -984,14 +985,14 @@ def mint(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("amount-str", metavar="AMOUNT")
 @argument("account-str", metavar="ACCOUNT", required=False)
 def burn(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -1012,7 +1013,7 @@ def burn(
     """
 
     token_units = parse_newton_value_representation(amount_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     account = Web3.to_checksum_address(account_str) if account_str else from_addr
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -1032,13 +1033,13 @@ def burn(
 
 @governance_group.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("slasher-address-str", metavar="SLASHER-ADDRESS")
 def set_slasher(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -1055,7 +1056,7 @@ def set_slasher(
     Restricted to the Operator account. See `setSlasher` on Autonity contract.
     """
     slasher_address = Web3.to_checksum_address(slasher_address_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
     tx = create_contract_tx_from_args(

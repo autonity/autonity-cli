@@ -10,12 +10,13 @@ from hexbytes import HexBytes
 from web3 import Web3
 from web3.exceptions import ContractLogicError
 
+from ..auth import validate_authenticator_account
 from ..config import get_node_address
 from ..constants import UnixExitStatus
 from ..denominations import format_auton_quantity, format_newton_quantity
 from ..options import (
-    from_option,
-    keyfile_option,
+    authentication_options,
+    from_options,
     rpc_endpoint_option,
     tx_aux_options,
     validator_option,
@@ -23,7 +24,6 @@ from ..options import (
 from ..utils import (
     autonity_from_endpoint_arg,
     create_contract_tx_from_args,
-    from_address_from_argument,
     parse_commission_rate,
     parse_newton_value_representation,
     to_json,
@@ -85,14 +85,14 @@ def compute_address(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 def bond(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -110,7 +110,7 @@ def bond(
 
     token_units = parse_newton_value_representation(amount_str)
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -130,14 +130,14 @@ def bond(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 def unbond(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -155,7 +155,7 @@ def unbond(
 
     token_units = parse_newton_value_representation(amount_str)
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -175,8 +175,7 @@ def unbond(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("enode")
 @argument("oracle")
@@ -185,6 +184,7 @@ def unbond(
 def register(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -205,7 +205,7 @@ def register(
     consensus_key_bytes = HexBytes(consensus_key)
     proof_bytes = HexBytes(proof)
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     # TODO: validate enode string?
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
@@ -227,13 +227,13 @@ def register(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 def pause(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -251,7 +251,7 @@ def pause(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -271,13 +271,13 @@ def pause(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 def activate(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -295,7 +295,7 @@ def activate(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -315,14 +315,14 @@ def activate(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 @argument("rate", type=str, nargs=1)
 def change_commission_rate(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -341,7 +341,7 @@ def change_commission_rate(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -363,12 +363,13 @@ def change_commission_rate(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
+@authentication_options()
 @validator_option
 @option("--account", help="Delegator account to check")
 def unclaimed_rewards(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     validator_addr_str: Optional[str],
     account: Optional[str],
 ) -> None:
@@ -377,7 +378,7 @@ def unclaimed_rewards(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    account = from_address_from_argument(account, keyfile)
+    account = validate_authenticator_account(account, keyfile=keyfile, trezor=trezor)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
 
@@ -390,13 +391,13 @@ def unclaimed_rewards(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 def claim_rewards(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -412,7 +413,7 @@ def claim_rewards(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     aut = Autonity(w3)
@@ -435,14 +436,14 @@ def claim_rewards(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @validator_option
 @argument("enode", nargs=1)
 def update_enode(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -463,7 +464,7 @@ def update_enode(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     aut = autonity_from_endpoint_arg(rpc_endpoint)
 
@@ -483,12 +484,13 @@ def update_enode(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
+@authentication_options()
 @validator_option
 @option("--account", help="Account to check")
 def locked_balance_of(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     validator_addr_str: Optional[str],
     account: Optional[str],
 ) -> None:
@@ -498,7 +500,7 @@ def locked_balance_of(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    account = from_address_from_argument(account, keyfile)
+    account = validate_authenticator_account(account, keyfile=keyfile, trezor=trezor)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
 
@@ -511,12 +513,13 @@ def locked_balance_of(
 
 @validator.command()
 @rpc_endpoint_option
-@keyfile_option()
+@authentication_options()
 @validator_option
 @option("--account", help="Account to check")
 def unlocked_balance_of(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     validator_addr_str: Optional[str],
     account: Optional[str],
 ) -> None:
@@ -526,7 +529,7 @@ def unlocked_balance_of(
     """
 
     validator_addr = get_node_address(validator_addr_str)
-    account = from_address_from_argument(account, keyfile)
+    account = validate_authenticator_account(account, keyfile=keyfile, trezor=trezor)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
 

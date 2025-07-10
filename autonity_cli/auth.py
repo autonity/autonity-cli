@@ -157,3 +157,23 @@ def validate_authenticator(
         log(f"using key file: {keyfile}")
         keyfile = config.get_keyfile(keyfile)
         return KeyfileAuthenticator(keyfile)
+
+
+def validate_authenticator_account(
+    address: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+) -> ChecksumAddress:
+    """Validate an account address.
+
+    If the `address_str` is provided, return that, otherwise look up the address
+    with the authenticator returned by `validate_authenticator`.
+    """
+    if address:
+        _address = to_checksum_address(address)
+    else:
+        log("No address provided, using an authenticator")
+        auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
+        _address = auth.address
+    log(f"address: {_address}")
+    return _address

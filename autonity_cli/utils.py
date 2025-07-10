@@ -32,8 +32,7 @@ from web3.types import (
 from . import config
 from .constants import COMMISSION_RATE_PRECISION, AutonDenoms
 from .denominations import NEWTON_DECIMALS
-from .keyfile import get_address_from_keyfile, load_keyfile
-from .logging import log
+from .keyfile import load_keyfile
 from .tx import (
     create_contract_function_transaction,
     create_transaction,
@@ -101,48 +100,6 @@ def autonity_from_endpoint_arg(endpoint_arg: Optional[str]) -> autonity.Autonity
     function simply loads the Autonity contract and makes one request.
     """
     return Autonity(web3_from_endpoint_arg(None, endpoint_arg))
-
-
-def from_address_from_argument_optional(
-    from_str: Optional[str], keyfile: Optional[str]
-) -> Optional[ChecksumAddress]:
-    """
-    Given an optional command line parameter, create an address,
-    falling back to the keyfile given in the config.  May be null if
-    neither is given.
-    """
-
-    # If from_str is not set, take the address from a keyfile instead
-    # (if given)
-    if from_str:
-        from_addr: Optional[ChecksumAddress] = Web3.to_checksum_address(from_str)
-    else:
-        log("no from-addr given.  attempting to extract from keyfile")
-        keyfile = config.get_keyfile_optional(keyfile)
-        if keyfile:
-            key_data = load_keyfile(keyfile)
-            from_addr = get_address_from_keyfile(key_data)
-            log(f"got keyfile: {keyfile}, address: {from_addr}")
-        else:
-            log("no keyfile.  empty from-addr")
-            from_addr = None
-    log(f"from_addr: {from_addr}")
-    return from_addr
-
-
-def from_address_from_argument(
-    from_str: Optional[str], keyfile: Optional[str]
-) -> ChecksumAddress:
-    """
-    Given an optional command line parameter, create an address,
-    falling back to the keyfile given in the config.  Throws a
-    ClickException if the address cannot be determined.
-    """
-    from_addr = from_address_from_argument_optional(from_str, keyfile)
-    if from_addr:
-        return from_addr
-
-    raise ClickException("from address or keyfile required")
 
 
 def create_tx_from_args(
