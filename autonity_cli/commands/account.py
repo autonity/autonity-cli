@@ -146,7 +146,7 @@ def balance(
 
 @account_group.command()
 @keystore_option()
-@keyfile_option(required=False, output=True)
+@keyfile_option(output=True)
 @option(
     "--extra-entropy",
     type=Path(),
