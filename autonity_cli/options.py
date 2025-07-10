@@ -7,11 +7,16 @@ from typing import Any, Callable, Iterable, Optional, TypeVar, Union
 
 import click
 from click import Path
+from click_option_group import RequiredAnyOptionGroup
+from click_option_group._decorators import (
+    _OptGroup,  # pyright: ignore[reportPrivateUsage]
+)
 
 Func = TypeVar("Func", bound=Callable[..., Any])
 
 Decorator = Callable[[Func], Func]
 
+optgroup = _OptGroup()
 
 # ┌─────────────┐
 # │ Option Info │
@@ -27,11 +32,13 @@ class OptionInfo:
     type: Optional[Union[click.types.ParamType, Any]] = None
 
 
-def make_option(option: OptionInfo, **overrides: Any) -> Decorator[Func]:
+def make_option(
+    option: OptionInfo, cls: Decorator[Any] = click.option, **overrides: Any
+) -> Decorator[Func]:
     info = dataclasses.asdict(option)
     info.update(**overrides)
     args = info.pop("args")
-    return click.option(*args, **info)
+    return cls(*args, **info)
 
 
 keyfile_option_info = OptionInfo(
@@ -103,8 +110,9 @@ def authentication_options() -> Decorator[Func]:
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
-                make_option(keyfile_option_info),
-                make_option(trezor_option_info),
+                optgroup.group("Authentication", cls=RequiredAnyOptionGroup),
+                make_option(keyfile_option_info, cls=optgroup.option),
+                make_option(trezor_option_info, cls=optgroup.option),
             ]
         ):
             fn = option(fn)
@@ -120,8 +128,9 @@ def newton_or_token_option(fn: Func) -> Func:
     """
     for option in reversed(
         [
-            click.option("--ntn", is_flag=True, help="use Newton (NTN) as token"),
-            click.option(
+            optgroup.group("Token"),
+            optgroup.option("--ntn", is_flag=True, help="use Newton (NTN) as token"),
+            optgroup.option(
                 "--token",
                 "-t",
                 metavar="TOKEN-ADDR",
@@ -139,15 +148,16 @@ def from_options() -> Decorator[Func]:
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
-                click.option(
+                optgroup.group("From address", cls=RequiredAnyOptionGroup),
+                optgroup.option(
                     "--from",
                     "-f",
                     "from_str",
                     metavar="ADDRESS",
                     help="the sender address.",
                 ),
-                make_option(keyfile_option_info),
-                make_option(trezor_option_info),
+                make_option(keyfile_option_info, cls=optgroup.option),
+                make_option(trezor_option_info, cls=optgroup.option),
             ]
         ):
             fn = option(fn)
@@ -189,28 +199,30 @@ def tx_aux_options(fn: Func) -> Func:
     """
     for option in reversed(
         [
-            click.option(
-                "--gas", "-g", help="maximum gas units that can be consumed by the tx."
-            ),
-            click.option(
+            optgroup.group("Type 0 transaction (legacy)"),
+            optgroup.option(
                 "--gas-price",
                 "-p",
                 help="value per gas in Auton (legacy, use -F and -P instead).",
             ),
-            click.option(
+            optgroup.group("Type 2 transaction (EIP-1559)"),
+            optgroup.option(
                 "--max-fee-per-gas",
                 "-F",
                 help="maximum to pay (in Auton) per gas for the total fee of the tx.",
             ),
-            click.option(
+            optgroup.option(
                 "--max-priority-fee-per-gas",
                 "-P",
                 help="maximum to pay (in Auton) per gas as tip to block proposer.",
             ),
-            click.option(
+            optgroup.option(
                 "--fee-factor",
                 type=float,
                 help="set maxFeePerGas to <last-basefee> x <fee-factor> [default: 2].",
+            ),
+            click.option(
+                "--gas", "-g", help="maximum gas units that can be consumed by the tx."
             ),
             click.option(
                 "--nonce",
