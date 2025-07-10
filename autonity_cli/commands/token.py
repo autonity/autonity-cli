@@ -4,18 +4,19 @@ from click import ClickException, argument, group
 from web3 import Web3
 from web3.exceptions import ContractLogicError
 
+from autonity_cli.auth import validate_authenticator_account
+
 from ..denominations import format_quantity
 from ..erc20 import ERC20
 from ..options import (
-    from_option,
-    keyfile_option,
+    authentication_options,
+    from_options,
     newton_or_token_option,
     rpc_endpoint_option,
     tx_aux_options,
 )
 from ..utils import (
     create_contract_tx_from_args,
-    from_address_from_argument,
     newton_or_token_to_address_require,
     parse_token_value_representation,
     to_json,
@@ -103,13 +104,14 @@ def total_supply(rpc_endpoint: Optional[str], ntn: bool, token: Optional[str]) -
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
+@authentication_options()
 @argument("account_str", metavar="ACCOUNT", required=False)
 def balance_of(
     rpc_endpoint: Optional[str],
     ntn: bool,
     token: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     account_str: Optional[str],
 ) -> None:
     """
@@ -119,7 +121,9 @@ def balance_of(
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
-    account_addr = from_address_from_argument(account_str, keyfile)
+    account_addr = validate_authenticator_account(
+        account_str, keyfile=keyfile, trezor=trezor
+    )
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
     erc = ERC20(w3, token_addresss)
@@ -131,14 +135,14 @@ def balance_of(
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
-@from_option
+@from_options()
 @argument("owner")
 def allowance(
     rpc_endpoint: Optional[str],
     ntn: bool,
     token: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     owner: str,
 ) -> None:
@@ -148,7 +152,7 @@ def allowance(
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     owner_addr = Web3.to_checksum_address(owner)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
@@ -161,8 +165,7 @@ def allowance(
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("recipient_str", metavar="RECIPIENT")
 @argument("amount_str", metavar="AMOUNT")
@@ -171,6 +174,7 @@ def transfer(
     ntn: bool,
     token: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -189,7 +193,7 @@ def transfer(
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     recipient_addr = Web3.to_checksum_address(recipient_str)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
@@ -217,8 +221,7 @@ def transfer(
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("spender_str", metavar="SPENDER")
 @argument("amount_str", metavar="AMOUNT")
@@ -228,6 +231,7 @@ def approve(
     token: Optional[str],
     keyfile: Optional[str],
     from_str: Optional[str],
+    trezor: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
     max_priority_fee_per_gas: Optional[str],
@@ -246,7 +250,7 @@ def approve(
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     spender = Web3.to_checksum_address(spender_str)
 
     w3 = web3_from_endpoint_arg(None, rpc_endpoint)
@@ -274,8 +278,7 @@ def approve(
 @token_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_aux_options
 @argument("spender_str", metavar="SPENDER")
 @argument("recipient_str", metavar="RECIPIENT")
@@ -285,6 +288,7 @@ def transfer_from(
     ntn: bool,
     token: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
@@ -307,7 +311,7 @@ def transfer_from(
     """
 
     token_addresss = newton_or_token_to_address_require(ntn, token)
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     spender = Web3.to_checksum_address(spender_str)
     recipient = Web3.to_checksum_address(recipient_str)
 

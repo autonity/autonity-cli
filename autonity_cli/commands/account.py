@@ -12,7 +12,7 @@ from web3 import Web3
 from web3.types import BlockIdentifier
 
 from .. import config
-from ..auth import validate_authenticator
+from ..auth import validate_authenticator, validate_authenticator_account
 from ..denominations import (
     format_auton_quantity,
     format_newton_quantity,
@@ -27,7 +27,7 @@ from ..keyfile import (
 from ..logging import log
 from ..options import (
     authentication_options,
-    from_option,
+    from_options,
     keyfile_option,
     keystore_option,
     newton_or_token_option,
@@ -36,7 +36,6 @@ from ..options import (
 from ..user import get_account_stats
 from ..utils import (
     address_keyfile_dict,
-    from_address_from_argument_optional,
     load_from_file_or_stdin,
     load_from_file_or_stdin_line,
     new_keyfile_from_options,
@@ -73,7 +72,7 @@ def list_cmd(keystore: Optional[str], with_files: bool) -> None:
 
 @account_group.command()
 @rpc_endpoint_option
-@keyfile_option()
+@authentication_options()
 @option(
     "--asof",
     help="state as of TAG, one of block number, 'latest', 'earliest', or 'pending'.",
@@ -82,20 +81,19 @@ def list_cmd(keystore: Optional[str], with_files: bool) -> None:
 def info(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     accounts: List[str],
     asof: Optional[BlockIdentifier],
 ) -> None:
     """
     Print information about the given account.
 
-    Falls back to the default keyfile account if no account is specified.
+    Falls back to the default authenticator account if no account is specified.
     """
 
     if len(accounts) == 0:
-        account = from_address_from_argument_optional(None, keyfile)
-        if not account:
-            raise ClickException("No account specified")
-        accounts = [account]
+        auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
+        accounts = [auth.address]
 
     addresses = [Web3.to_checksum_address(act) for act in accounts]
 
@@ -107,12 +105,13 @@ def info(
 @account_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
+@authentication_options()
 @argument("account_str", metavar="ACCOUNT", default="")
 def balance(
     rpc_endpoint: Optional[str],
     account_str: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     ntn: bool,
     token: Optional[str],
 ) -> None:
@@ -120,11 +119,9 @@ def balance(
     Print the current balance of the given account.
     """
 
-    account_addr = from_address_from_argument_optional(account_str, keyfile)
-    if not account_addr:
-        raise ClickException(
-            "could not determine account address from argument or keyfile"
-        )
+    account_addr = validate_authenticator_account(
+        account_str, keyfile=keyfile, trezor=trezor
+    )
 
     token_addresss = newton_or_token_to_address(ntn, token)
 
@@ -359,8 +356,7 @@ def sign_message(
 
 
 @account_group.command()
-@keyfile_option()
-@from_option
+@from_options()
 @option(
     "--use-message-file",
     "-m",
@@ -378,8 +374,9 @@ def sign_message(
     required=True,
 )
 def verify_signature(
-    keyfile: Optional[str],
     from_str: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
     use_message_file: bool,
     message: str,
     signature_file: str,
@@ -399,7 +396,7 @@ def verify_signature(
         signature_hex = signature_f.read().rstrip()
         signature = HexBytes(signature_hex)
 
-    from_addr = from_address_from_argument_optional(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     recovered_addr = Account().recover_message(
         encode_defunct(text=message), signature=signature

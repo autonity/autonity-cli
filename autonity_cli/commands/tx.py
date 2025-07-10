@@ -8,11 +8,12 @@ from eth_typing import HexStr
 from hexbytes import HexBytes
 from web3 import Web3
 
+from autonity_cli.auth import validate_authenticator_account
+
 from ..erc20 import ERC20
 from ..logging import log
 from ..options import (
-    from_option,
-    keyfile_option,
+    from_options,
     newton_or_token_option,
     rpc_endpoint_option,
     tx_aux_options,
@@ -23,7 +24,6 @@ from ..utils import (
     create_contract_tx_from_args,
     create_tx_from_args,
     finalize_tx_from_args,
-    from_address_from_argument_optional,
     load_from_file_or_stdin,
     newton_or_token_to_address,
     parse_token_value_representation,
@@ -48,8 +48,7 @@ tx_group.add_command(signtx, name="sign")
 @tx_group.command()
 @rpc_endpoint_option
 @newton_or_token_option
-@keyfile_option()
-@from_option
+@from_options()
 @option("--to", "-t", "to_str", help="address to which the transaction is directed.")
 @tx_value_option(required=True)
 @tx_aux_options
@@ -66,6 +65,7 @@ def make(
     ntn: bool,
     token: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     to_str: Optional[str],
     gas: Optional[str],
@@ -91,9 +91,7 @@ def make(
     # Potentially used in multiple places, so avoid re-initializing.
     w3: Optional[Web3] = None
 
-    # If from_str is not set, take the address from a keyfile instead
-    # (if given)
-    from_addr = from_address_from_argument_optional(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     log(f"from_addr: {from_addr}")
 
     to_addr = Web3.to_checksum_address(to_str) if to_str else None

@@ -4,6 +4,8 @@ from typing import Any, List, Optional, Tuple, cast
 from click import ClickException, Path, argument, group, option
 from web3.contract.contract import ContractFunction
 
+from autonity_cli.auth import validate_authenticator_account
+
 from ..abi_parser import (
     find_abi_constructor,
     find_abi_function,
@@ -13,8 +15,7 @@ from ..abi_parser import (
 from ..logging import log
 from ..options import (
     contract_options,
-    from_option,
-    keyfile_option,
+    from_options,
     rpc_endpoint_option,
     tx_aux_options,
     tx_value_option,
@@ -23,7 +24,6 @@ from ..utils import (
     contract_address_and_abi_from_args,
     create_contract_tx_from_args,
     finalize_tx_from_args,
-    from_address_from_argument,
     to_json,
     web3_from_endpoint_arg,
 )
@@ -72,8 +72,7 @@ def function_call_from_args(
 
 @contract_group.command(name="deploy")
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @tx_value_option()
 @tx_aux_options
 @option(
@@ -89,6 +88,7 @@ def deploy_cmd(
     keyfile: Optional[str],
     from_str: Optional[str],
     contract_path: str,
+    trezor: Optional[str],
     gas: Optional[str],
     gas_price: Optional[str],
     max_priority_fee_per_gas: Optional[str],
@@ -121,7 +121,7 @@ def deploy_cmd(
     log(f"fn_params (parsed): {fn_params}")
     deploy_fn = cast(ContractFunction, contract.constructor(*fn_params))
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
 
     deploy_tx = create_contract_tx_from_args(
         function=deploy_fn,
@@ -173,8 +173,7 @@ def call_cmd(
 
 @contract_group.command(name="tx")
 @rpc_endpoint_option
-@keyfile_option()
-@from_option
+@from_options()
 @contract_options
 @tx_value_option()
 @tx_aux_options
@@ -183,6 +182,7 @@ def call_cmd(
 def tx_cmd(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
+    trezor: Optional[str],
     from_str: Optional[str],
     contract_address_str: Optional[str],
     contract_abi_path: Optional[str],
@@ -211,7 +211,7 @@ def tx_cmd(
         parameters,
     )
 
-    from_addr = from_address_from_argument(from_str, keyfile)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
     log(f"from_addr: {from_addr}")
 
     tx = create_contract_tx_from_args(

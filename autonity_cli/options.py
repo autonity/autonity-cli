@@ -44,6 +44,11 @@ keyfile_option_info = OptionInfo(
     help="encrypted private key file (falls back to 'keyfile' in config file).",
 )
 
+trezor_option_info = OptionInfo(
+    args=["--trezor"],
+    metavar="ACCOUNT",
+    help="Trezor account index or full BIP32 derivation path",
+)
 
 # ┌─────────┐
 # │ Options │
@@ -103,11 +108,7 @@ def authentication_options() -> Decorator[Func]:
         for option in reversed(
             [
                 make_option(keyfile_option_info),
-                click.option(
-                    "--trezor",
-                    metavar="ACCOUNT",
-                    help="Trezor account index or full BIP32 derivation path",
-                ),
+                make_option(trezor_option_info),
             ]
         ):
             fn = option(fn)
@@ -136,18 +137,27 @@ def newton_or_token_option(fn: Func) -> Func:
     return fn
 
 
-def from_option(fn: Func) -> Func:
-    """
-    Adds the --from, -f option to specify the from field of a
-    transaction.  Passed to the from_str parameter.
-    """
-    return click.option(
-        "--from",
-        "-f",
-        "from_str",
-        metavar="FROM",
-        help="the sender address (extracted from keyfile if not given).",
-    )(fn)
+def from_options() -> Decorator[Func]:
+    """Specify a 'from' address directly or via authentication options."""
+
+    def decorator(fn: Func) -> Func:
+        for option in reversed(
+            [
+                click.option(
+                    "--from",
+                    "-f",
+                    "from_str",
+                    metavar="ADDRESS",
+                    help="the sender address.",
+                ),
+                make_option(keyfile_option_info),
+                make_option(trezor_option_info),
+            ]
+        ):
+            fn = option(fn)
+        return fn
+
+    return decorator
 
 
 def tx_value_option(required: bool = False) -> Decorator[Func]:
