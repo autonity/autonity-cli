@@ -83,6 +83,7 @@ check-wheel = [
   "check-wheel-contents dist/autonity_cli-$(hatch version)-py3-none-any.whl",
 ]
 check-types = "pyright {args}"
+fix-code = "ruff check --fix {args:.}"
 format = [
   "black {args:.}",
   "ruff check --fix --select I {args:.}",
