@@ -23,7 +23,6 @@ class OptionInfo:
     args: Iterable[str]
     help: str
     # defaults should match click.Option
-    required: bool = False
     metavar: Optional[str] = None
     type: Optional[Union[click.types.ParamType, Any]] = None
 
@@ -85,16 +84,13 @@ def keystore_option() -> Decorator[Func]:
     return decorator
 
 
-def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Func]:
+def keyfile_option(output: bool = False) -> Decorator[Func]:
     """
-    Options: --keyfile.  If `required` is True, --keyfile is
-    required.  If `output` is True, the file does not need to exist.
+    Options: --keyfile. If `output` is True, the file does not need to exist.
     """
 
     def decorator(fn: Func) -> Func:
-        return make_option(
-            keyfile_option_info, required=required, type=Path(exists=not output)
-        )(fn)
+        return make_option(keyfile_option_info, type=Path(exists=not output))(fn)
 
     return decorator
 
