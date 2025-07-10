@@ -2,7 +2,8 @@
 Command line option sets used by multiple commands.
 """
 
-from typing import Any, Callable, TypeVar
+import dataclasses
+from typing import Any, Callable, Iterable, Optional, TypeVar, Union
 
 import click
 from click import Path
@@ -11,6 +12,42 @@ Func = TypeVar("Func", bound=Callable[..., Any])
 
 Decorator = Callable[[Func], Func]
 
+
+# ┌─────────────┐
+# │ Option Info │
+# └─────────────┘
+
+
+@dataclasses.dataclass(kw_only=True)
+class OptionInfo:
+    args: Iterable[str]
+    help: str
+    # defaults should match click.Option
+    required: bool = False
+    metavar: Optional[str] = None
+    type: Optional[Union[click.types.ParamType, Any]] = None
+
+
+def make_option(option: OptionInfo, **overrides: Any) -> Decorator[Func]:
+    info = dataclasses.asdict(option)
+    info.update(**overrides)
+    args = info.pop("args")
+    return click.option(*args, **info)
+
+
+keyfile_option_info = OptionInfo(
+    args=(
+        "--keyfile",
+        "-k",
+    ),
+    type=Path(exists=True),
+    help="encrypted private key file (falls back to 'keyfile' in config file).",
+)
+
+
+# ┌─────────┐
+# │ Options │
+# └─────────┘
 
 # an --rpc-endpoint, -r <url> option
 rpc_endpoint_option = click.option(
@@ -50,12 +87,8 @@ def keyfile_option(required: bool = False, output: bool = False) -> Decorator[Fu
     """
 
     def decorator(fn: Func) -> Func:
-        return click.option(
-            "--keyfile",
-            "-k",
-            required=required,
-            type=Path(exists=not output),
-            help="encrypted private key file (falls back to 'keyfile' in config file).",
+        return make_option(
+            keyfile_option_info, required=required, type=Path(exists=not output)
         )(fn)
 
     return decorator
@@ -69,7 +102,7 @@ def authentication_options() -> Decorator[Func]:
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
-                keyfile_option(),
+                make_option(keyfile_option_info),
                 click.option(
                     "--trezor",
                     metavar="ACCOUNT",
