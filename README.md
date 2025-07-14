@@ -60,6 +60,38 @@ $ pipx install autonity-cli
   Ubuntu, try running `aut` in a new terminal window. Otherwise, ensure that
   `~/.local/bin` appears in your `PATH`. Run `pipx ensurepath` to verify.
 
+## Authentication
+
+Autonity CLI supports the following authentication methods for signing messages
+and transactions:
+
+- Trezor device
+- local keyfile
+
+### Trezor authentication
+
+To authenticate with a Trezor device, pass the `--trezor ACCOUNT` option to the
+relevant command, where `ACCOUNT` is either:
+
+- the _full derivation path_ of the account, for example: `m/44h/60h/0h/123`
+- the _index of the account_ at the default Trezor derivation prefix for
+  Ethereum coins `m/44h/60h/0h`, for example: `123`
+
+The following two options are equivalent:
+
+- `--trezor 123`
+- `--trezor m/44h/60h/0h/123`
+
+### Local keyfile authentication
+
+To authenticate with a local keyfile, pass the `--keyfile PATH` option, where
+`PATH` is the relative or absolute path of the encrypted keyfile to use.
+
+Once the keyfile is loaded, Autonity CLI will normally issue a prompt for the
+password to decrypt the key. But if the environment variable `KEYFILEPWD` has
+been set, then Autonity CLI will skip the password prompt and attempt to use the
+value of this variable as the keyfile password instead.
+
 ## (Optional) Enable command completion (bash and zsh)
 
 Completion is available in `bash` and `zsh` shells as follows. (Adapt these
