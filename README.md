@@ -60,6 +60,12 @@ $ pipx install autonity-cli
   Ubuntu, try running `aut` in a new terminal window. Otherwise, ensure that
   `~/.local/bin` appears in your `PATH`. Run `pipx ensurepath` to verify.
 
+## Authentication
+
+Autonity CLI supports the following authentication methods:
+
+- local keyfile
+
 ## (Optional) Enable command completion (bash and zsh)
 
 Completion is available in `bash` and `zsh` shells as follows. (Adapt these
