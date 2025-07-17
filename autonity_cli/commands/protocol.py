@@ -338,6 +338,34 @@ def total_schedules(rpc_endpoint: Optional[str], vault_address_str: str):
 
 
 @protocol_group.command()
+@rpc_endpoint_option
+@argument("id", type=int)
+def bonding_request(rpc_endpoint: Optional[str], id: int):
+    """
+    The bonding request corresponding to the given bonding ID.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    bonding_request = aut.get_bonding_request_by_id(id)
+    if bonding_request:
+        print(_show_json(bonding_request))
+
+
+@protocol_group.command()
+@rpc_endpoint_option
+@argument("id", type=int)
+def unbonding_request(rpc_endpoint: Optional[str], id: int):
+    """
+    The unbonding request corresponding to the given unbonding ID.
+    """
+
+    aut = Autonity(web3_from_endpoint_arg(None, rpc_endpoint))
+    unbonding_request = aut.get_unbonding_request_by_id(id)
+    if unbonding_request:
+        print(_show_json(unbonding_request))
+
+
+@protocol_group.command()
 def contract_address() -> None:
     """
     Address of the Autonity Contract.

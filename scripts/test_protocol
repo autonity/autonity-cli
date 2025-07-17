@@ -37,6 +37,8 @@ aut protocol total-schedules 0x0000000000000000000000000000000000000000
 aut protocol epoch-info
 aut protocol epoch-by-height 0
 aut protocol is-unbonding-released 0
+aut protocol bonding-request 0
+aut protocol unbonding-request 0
 
 # Reverts if there is no unbonding
 aut protocol unbonding-share --help >/dev/null
