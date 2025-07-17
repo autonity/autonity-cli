@@ -79,16 +79,6 @@ def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
 
 @protocol_group.command()
 @rpc_endpoint_option
-def deployer(rpc_endpoint: Optional[str]) -> None:
-    """
-    Contract deployer.
-    """
-
-    print(autonity_from_endpoint_arg(rpc_endpoint).deployer())
-
-
-@protocol_group.command()
-@rpc_endpoint_option
 def epoch_period(rpc_endpoint: Optional[str]) -> None:
     """
     Epoch period in blocks.

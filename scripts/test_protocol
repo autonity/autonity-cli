@@ -13,7 +13,6 @@ aut protocol epoch-id
 aut protocol last-epoch-time
 aut protocol epoch-total-bonded-stake
 aut protocol inflation-reserve
-aut protocol deployer
 aut protocol epoch-period
 aut protocol block-period
 aut protocol unbonding-period
