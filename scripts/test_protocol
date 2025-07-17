@@ -13,6 +13,7 @@ aut protocol epoch-id
 aut protocol last-epoch-time
 aut protocol epoch-total-bonded-stake
 aut protocol inflation-reserve
+aut protocol current-epoch-period
 aut protocol epoch-period
 aut protocol block-period
 aut protocol unbonding-period
@@ -22,6 +23,7 @@ aut protocol committee
 aut protocol validators
 aut protocol treasury-account
 aut protocol treasury-fee
+aut protocol current-committee-size
 aut protocol max-committee-size
 aut protocol committee-enodes
 aut protocol minimum-base-fee
