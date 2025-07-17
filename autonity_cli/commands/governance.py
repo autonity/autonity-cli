@@ -75,50 +75,6 @@ def create_schedule(
 @rpc_endpoint_option
 @from_options()
 @tx_aux_options
-@argument("base-fee-str", metavar="base-fee", nargs=1)
-def set_minimum_base_fee(
-    rpc_endpoint: Optional[str],
-    keyfile: Optional[str],
-    trezor: Optional[str],
-    from_str: Optional[str],
-    gas: Optional[str],
-    gas_price: Optional[str],
-    max_priority_fee_per_gas: Optional[str],
-    max_fee_per_gas: Optional[str],
-    fee_factor: Optional[float],
-    nonce: Optional[int],
-    chain_id: Optional[int],
-    base_fee_str: str,
-) -> None:
-    """
-    Set the minimum base fee.
-
-    Restricted to the operator account.
-    See `setMinimumBaseFee` on Autonity contract.
-    """
-
-    base_fee = parse_wei_representation(base_fee_str)
-    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
-    aut = autonity_from_endpoint_arg(rpc_endpoint)
-
-    tx = create_contract_tx_from_args(
-        function=aut.set_minimum_base_fee(base_fee),
-        from_addr=from_addr,
-        gas=gas,
-        gas_price=gas_price,
-        max_fee_per_gas=max_fee_per_gas,
-        max_priority_fee_per_gas=max_priority_fee_per_gas,
-        fee_factor=fee_factor,
-        nonce=nonce,
-        chain_id=chain_id,
-    )
-    print(to_json(tx))
-
-
-@governance_group.command()
-@rpc_endpoint_option
-@from_options()
-@tx_aux_options
 @argument("duration", type=int, nargs=1)
 def set_max_schedule_duration(
     rpc_endpoint: Optional[str],
