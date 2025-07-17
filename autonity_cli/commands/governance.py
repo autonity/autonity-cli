@@ -895,6 +895,92 @@ def set_liquid_logic_contract(
 @rpc_endpoint_option
 @from_options()
 @tx_aux_options
+@argument("contract-address-str", metavar="CONTRACT-ADDRESS")
+def set_auctioneer_contract(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    contract_address_str: str,
+):
+    """
+    Set the Auctioneer contract address.
+
+    Restricted to the Operator account. See `setAuctioneerContract` on Autonity
+    contract.
+    """
+    contract_address = Web3.to_checksum_address(contract_address_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_auctioneer_contract(contract_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@governance_group.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@argument("contract-address-str", metavar="CONTRACT-ADDRESS")
+def set_upgrade_manager_contract(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    contract_address_str: str,
+):
+    """
+    Set the Upgrade Manager contract address.
+
+    Restricted to the Operator account. See `setUpgradeManagerContract` on Autonity
+    contract.
+    """
+    contract_address = Web3.to_checksum_address(contract_address_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_upgrade_manager_contract(contract_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@governance_group.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 @argument("recipient-str", metavar="RECIPIENT", required=False)
 def mint(
