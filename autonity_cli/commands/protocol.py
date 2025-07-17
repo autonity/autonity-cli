@@ -34,7 +34,7 @@ def config(rpc_endpoint: Optional[str]) -> None:
     The Autonity contract configuration.
     """
 
-    print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).config()))
+    print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).get_config()))
 
 
 @protocol_group.command()
@@ -44,7 +44,7 @@ def epoch_id(rpc_endpoint: Optional[str]) -> None:
     ID of the current epoch.
     """
 
-    print(autonity_from_endpoint_arg(rpc_endpoint).epoch_id())
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_epoch_id())
 
 
 @protocol_group.command()
@@ -54,7 +54,7 @@ def last_epoch_time(rpc_endpoint: Optional[str]) -> None:
     Timestamp of the last epoch.
     """
 
-    print(autonity_from_endpoint_arg(rpc_endpoint).last_epoch_time())
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_last_epoch_time())
 
 
 @protocol_group.command()
@@ -64,7 +64,7 @@ def epoch_total_bonded_stake(rpc_endpoint: Optional[str]) -> None:
     Total stake bonded this epoch.
     """
 
-    print(autonity_from_endpoint_arg(rpc_endpoint).epoch_total_bonded_stake())
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_epoch_total_bonded_stake())
 
 
 @protocol_group.command()
@@ -74,7 +74,7 @@ def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
     The inflation reserve.
     """
 
-    print(autonity_from_endpoint_arg(rpc_endpoint).inflation_reserve())
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_inflation_reserve())
 
 
 @protocol_group.command()
