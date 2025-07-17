@@ -1,5 +1,6 @@
 from typing import Optional
 
+from autonity.contracts.autonity import Eip1559
 from click import argument, group
 from web3 import Web3
 
@@ -1103,6 +1104,59 @@ def set_slasher(
 
     tx = create_contract_tx_from_args(
         function=aut.set_slasher(slasher_address),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@governance_group.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@argument("min-base-fee", type=int)
+@argument("base-fee-change-denominator", type=int)
+@argument("elasticity-multiplier", type=int)
+@argument("gas-limit-bound-divisor", type=int)
+def set_eip1559_params(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    min_base_fee: int,
+    base_fee_change_denominator: int,
+    elasticity_multiplier: int,
+    gas_limit_bound_divisor: int,
+):
+    """
+    Set the EIP-1559 parameters for the next epoch.
+
+    Restricted to the Operator account. See `setEip1559Params` on Autonity contract.
+    """
+    eip_params = Eip1559(
+        min_base_fee=min_base_fee,
+        base_fee_change_denominator=base_fee_change_denominator,
+        elasticity_multiplier=elasticity_multiplier,
+        gas_limit_bound_divisor=gas_limit_bound_divisor,
+    )
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_eip1559_params(eip_params),
         from_addr=from_addr,
         gas=gas,
         gas_price=gas_price,
