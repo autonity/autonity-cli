@@ -9,7 +9,6 @@ pushd _test_governance_cli
 ../scripts/setup_config_file.sh
 
 # Test help text (does some parameter validation)
-aut governance set-minimum-base-fee --help > /dev/null
 aut governance set-committee-size --help > /dev/null
 aut governance set-unbonding-period --help > /dev/null
 aut governance set-epoch-period --help > /dev/null
