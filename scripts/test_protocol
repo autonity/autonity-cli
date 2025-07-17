@@ -9,6 +9,7 @@ pushd _test_protocol_cli
 ../scripts/setup_config_file.sh
 
 aut protocol config
+aut protocol client-config
 aut protocol epoch-id
 aut protocol last-epoch-time
 aut protocol epoch-total-bonded-stake

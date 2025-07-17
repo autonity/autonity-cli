@@ -39,6 +39,16 @@ def config(rpc_endpoint: Optional[str]) -> None:
 
 @protocol_group.command()
 @rpc_endpoint_option
+def client_config(rpc_endpoint: Optional[str]) -> None:
+    """
+    The current client-aware configuration.
+    """
+
+    print(_show_json(autonity_from_endpoint_arg(rpc_endpoint).get_client_config()))
+
+
+@protocol_group.command()
+@rpc_endpoint_option
 def epoch_id(rpc_endpoint: Optional[str]) -> None:
     """
     ID of the current epoch.
