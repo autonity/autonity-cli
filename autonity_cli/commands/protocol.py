@@ -79,9 +79,20 @@ def inflation_reserve(rpc_endpoint: Optional[str]) -> None:
 
 @protocol_group.command()
 @rpc_endpoint_option
+def current_epoch_period(rpc_endpoint: Optional[str]) -> None:
+    """
+    The current epoch period in blocks.
+    """
+
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_current_epoch_period())
+
+
+@protocol_group.command()
+@rpc_endpoint_option
 def epoch_period(rpc_endpoint: Optional[str]) -> None:
     """
-    Epoch period in blocks.
+    The current epoch period in blocks. If there is an update at epoch end,
+    the new epoch period is returned.
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_epoch_period())
@@ -176,6 +187,16 @@ def treasury_fee(rpc_endpoint: Optional[str]) -> None:
     """
 
     print(autonity_from_endpoint_arg(rpc_endpoint).get_treasury_fee())
+
+
+@protocol_group.command()
+@rpc_endpoint_option
+def current_committee_size(rpc_endpoint: Optional[str]) -> None:
+    """
+    Current committee size.
+    """
+
+    print(autonity_from_endpoint_arg(rpc_endpoint).get_current_committee_size())
 
 
 @protocol_group.command()
