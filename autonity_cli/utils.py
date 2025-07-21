@@ -439,19 +439,15 @@ def newton_or_token_to_address_require(
     return token
 
 
-def prompt_for_new_password(show_password: bool) -> str:
+def prompt_for_new_password() -> str:
     """
     Prompt for a new password (with confirmation), optionally echoing
     to the console.
     """
     prompt = "Password for new account: "
     prompt_2 = "Confirm account password: "
-    if show_password:
-        password = input(prompt)
-        password_2 = input(prompt_2)
-    else:
-        password = getpass(prompt)
-        password_2 = getpass(prompt_2)
+    password = getpass(prompt)
+    password_2 = getpass(prompt_2)
 
     if password != password_2:
         raise ClickException("passwords do not match")

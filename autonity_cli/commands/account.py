@@ -152,16 +152,10 @@ def balance(
     type=Path(),
     help="file containing extra entropy. Use '-' to prompt for keyboard input.",
 )
-@option(
-    "--show-password",
-    is_flag=True,
-    help="echo password input to the terminal.",
-)
 def new(
     keystore: Optional[str],
     keyfile: Optional[str],
     extra_entropy: Optional[str],
-    show_password: bool,
 ) -> None:
     """
     Create a new key and write it to a keyfile.
@@ -184,7 +178,7 @@ def new(
     # Ask for password (and confirmation) and ensure both entries
     # match.
 
-    password = prompt_for_new_password(show_password)
+    password = prompt_for_new_password()
     log("Generating private key ...")
     account = eth_account.Account.create(entropy)
     keyfile_data = create_keyfile_from_private_key(account.key, password)
@@ -208,16 +202,10 @@ def new(
 @account_group.command()
 @keystore_option()
 @keyfile_option(output=True)
-@option(
-    "--show-password",
-    is_flag=True,
-    help="echo password input to the terminal.",
-)
 @argument("private_key_file", type=Path(exists=False))
 def import_private_key(
     keystore: Optional[str],
     keyfile: Optional[str],
-    show_password: bool,
     private_key_file: str,
 ) -> None:
     """
@@ -232,7 +220,7 @@ def import_private_key(
     if len(private_key) != 32:
         raise ClickException("Invalid private key length")
 
-    password = prompt_for_new_password(show_password)
+    password = prompt_for_new_password()
 
     keyfile_data = create_keyfile_from_private_key(PrivateKey(private_key), password)
     keyfile_addr = get_address_from_keyfile(keyfile_data)
