@@ -21,6 +21,8 @@ aut validator unclaimed-rewards
 
 aut validator locked-balance-of
 aut validator unlocked-balance-of
+aut validator bonding-allowance
+aut validator unbonding-allowance
 
 ENODE=enode://d9a7297bb3e2fcc292233d2c3f40c5ca398ff5025867a5b60219ed8b22ae6077fb30d5740296d4a513689aaef85dadb29bcc6564863f1594a037b9d6d91b139e@1.2.3.4:30303
 ORACLE=${v1}
@@ -48,7 +50,11 @@ aut validator unclaimed-rewards --help > /dev/null
 aut validator register --help > /dev/null
 aut validator claim-rewards --help > /dev/null
 aut validator bond --help > /dev/null
+aut validator approve-bonding --help > /dev/null
+aut validator bond-from --help > /dev/null
 aut validator unbond --help > /dev/null
+aut validator approve-unbonding --help > /dev/null
+aut validator unbond-from --help > /dev/null
 aut validator pause --help > /dev/null
 aut validator activate --help > /dev/null
 aut validator update-enode --help > /dev/null

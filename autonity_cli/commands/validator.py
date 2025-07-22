@@ -105,7 +105,9 @@ def bond(
     amount_str: str,
 ) -> None:
     """
-    Bond Newton to a validator.
+    Create a bonding (delegation) request with the sender as delegator.
+
+    The sender is the configured From address.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -132,6 +134,130 @@ def bond(
 @rpc_endpoint_option
 @from_options()
 @tx_aux_options
+@argument("caller-str", metavar="CALLER")
+@argument("amount-str", metavar="AMOUNT")
+def approve_bonding(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    account_str: str,
+    amount_str: str,
+) -> None:
+    """
+    Set AMOUNT as the bonding allowance in NTN of ACCOUNT over the sender's tokens.
+
+    The sender is the configured From address.
+    """
+
+    account_address = Web3.to_checksum_address(account_str)
+    token_units = parse_newton_value_representation(amount_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.approve_bonding(account_address, token_units),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@validator.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@validator_option
+@argument("account-str", metavar="ACCOUNT")
+@argument("amount-str", metavar="AMOUNT")
+def bond_from(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    validator_addr_str: Optional[str],
+    account_str: str,
+    amount_str: str,
+) -> None:
+    """
+    Create a bonding (delegation) request with ACCOUNT as delegator. The sender
+    needs to have the required bonding allowance to bond NTN to ACCOUNT.
+
+    The sender is the configured From address.
+    """
+
+    token_units = parse_newton_value_representation(amount_str)
+    account_addr = Web3.to_checksum_address(account_str)
+    validator_addr = get_node_address(validator_addr_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.bond_from(account_addr, validator_addr, token_units),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@validator.command()
+@rpc_endpoint_option
+@authentication_options()
+@option("--account", help="Account to check (defaults to From address)")
+@argument("owner-str", metavar="OWNER")
+def bonding_allowance(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    validator_addr_str: Optional[str],
+    account: Optional[str],
+    owner_str: str,
+) -> None:
+    """
+    The remaining NTN quantity that ACCOUNT will be allowed to bond on behalf of OWNER
+    through `bond-from`.
+    """
+
+    account = validate_authenticator_account(account, keyfile=keyfile, trezor=trezor)
+    owner_address = Web3.to_checksum_address(owner_str)
+
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+    allowance = aut.bonding_allowance(owner_address, account)
+    print(format_newton_quantity(allowance))
+
+
+@validator.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
 @validator_option
 @argument("amount-str", metavar="AMOUNT", nargs=1)
 def unbond(
@@ -150,7 +276,9 @@ def unbond(
     amount_str: str,
 ) -> None:
     """
-    Unbond Newton from a validator.
+    Create an unbonding request with the sender as delegator.
+
+    The sender is the configured From address.
     """
 
     token_units = parse_newton_value_representation(amount_str)
@@ -171,6 +299,143 @@ def unbond(
         chain_id=chain_id,
     )
     print(to_json(tx))
+
+
+@validator.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@validator_option
+@argument("caller-str", metavar="CALLER")
+@argument("amount-str", metavar="AMOUNT")
+def approve_unbonding(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    validator_addr_str: Optional[str],
+    account_str: str,
+    amount_str: str,
+) -> None:
+    """
+    Set AMOUNT as the unbonding allowance in LNTN of ACCOUNT over the sender's tokens.
+
+    The sender is the configured From address.
+    """
+
+    validator_address = get_node_address(validator_addr_str)
+    account_address = Web3.to_checksum_address(account_str)
+    token_units = parse_newton_value_representation(amount_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_address)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
+
+    tx = create_contract_tx_from_args(
+        function=liquid_newton.approve_unbonding(account_address, token_units),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@validator.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@validator_option
+@argument("account-str", metavar="ACCOUNT")
+@argument("amount-str", metavar="AMOUNT")
+def unbond_from(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    validator_addr_str: Optional[str],
+    account_str: str,
+    amount_str: str,
+) -> None:
+    """
+    Create an unbonding request with ACCOUNT as delegator. The sender needs to have the
+    required unbonding allowance to unbond LNTN from ACCOUNT.
+
+    The sender is the configured From address.
+    """
+
+    token_units = parse_newton_value_representation(amount_str)
+    account_addr = Web3.to_checksum_address(account_str)
+    validator_addr = get_node_address(validator_addr_str)
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.unbond_from(account_addr, validator_addr, token_units),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
+
+
+@validator.command()
+@rpc_endpoint_option
+@authentication_options()
+@validator_option
+@option("--account", help="Account to check (defaults to From address)")
+@argument("owner-str", metavar="OWNER")
+def unbonding_allowance(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    validator_addr_str: Optional[str],
+    account: Optional[str],
+    owner_str: str,
+) -> None:
+    """
+    The remaining LNTN quantity that ACCOUNT will be allowed to unbond on behalf of
+    OWNER through `unbond-from`.
+    """
+
+    validator_addr = get_node_address(validator_addr_str)
+    account = validate_authenticator_account(account, keyfile=keyfile, trezor=trezor)
+    owner_address = Web3.to_checksum_address(owner_str)
+
+    w3 = web3_from_endpoint_arg(None, rpc_endpoint)
+
+    aut = Autonity(w3)
+    validator = aut.get_validator(validator_addr)
+    liquid_newton = LiquidLogic(w3, validator.liquid_state_contract)
+    allowance = liquid_newton.unbonding_allowance(owner_address, account)
+    print(format_newton_quantity(allowance))
 
 
 @validator.command()
@@ -365,7 +630,7 @@ def change_commission_rate(
 @rpc_endpoint_option
 @authentication_options()
 @validator_option
-@option("--account", help="Delegator account to check")
+@option("--account", help="Delegator account to check (defaults to From address)")
 def unclaimed_rewards(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
@@ -486,7 +751,7 @@ def update_enode(
 @rpc_endpoint_option
 @authentication_options()
 @validator_option
-@option("--account", help="Account to check")
+@option("--account", help="Account to check (defaults to From address)")
 def locked_balance_of(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
@@ -515,7 +780,7 @@ def locked_balance_of(
 @rpc_endpoint_option
 @authentication_options()
 @validator_option
-@option("--account", help="Account to check")
+@option("--account", help="Account to check (defaults to From address)")
 def unlocked_balance_of(
     rpc_endpoint: Optional[str],
     keyfile: Optional[str],
