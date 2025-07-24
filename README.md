@@ -77,14 +77,14 @@ firmware version, or a firmware version that is supported by
 To authenticate with a connected Trezor device, pass the `--trezor ACCOUNT`
 option to the relevant command, where `ACCOUNT` is either:
 
-- the _full derivation path_ of the account, for example: `m/44h/60h/0h/123`
+- the _full derivation path_ of the account, for example: `m/44h/60h/0h/0/123`
 - the _index of the account_ at the default Trezor derivation prefix for
-  Ethereum coins `m/44h/60h/0h`, for example: `123`
+  Ethereum coins `m/44h/60h/0h/0`, for example: `123`
 
 The following two options are equivalent:
 
 - `--trezor 123`
-- `--trezor m/44h/60h/0h/123`
+- `--trezor m/44h/60h/0h/0/123`
 
 ### Local keyfile authentication
 
