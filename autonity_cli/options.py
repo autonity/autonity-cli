@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterable, Optional, TypeVar, Union
 
 import click
 from click import Path
-from click_option_group import RequiredAnyOptionGroup
+from click_option_group import MutuallyExclusiveOptionGroup, RequiredAnyOptionGroup
 from click_option_group._decorators import (
     _OptGroup,  # pyright: ignore[reportPrivateUsage]
 )
@@ -104,13 +104,13 @@ def keyfile_option(output: bool = False) -> Decorator[Func]:
 
 def authentication_options() -> Decorator[Func]:
     """
-    Options: --keyfile and --trezor.
+    Options: --keyfile or --trezor, but not both.
     """
 
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
-                optgroup.group("Authentication", cls=RequiredAnyOptionGroup),
+                optgroup.group("Authentication", cls=MutuallyExclusiveOptionGroup),
                 make_option(keyfile_option_info, cls=optgroup.option),
                 make_option(trezor_option_info, cls=optgroup.option),
             ]
