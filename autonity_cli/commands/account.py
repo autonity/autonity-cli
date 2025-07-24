@@ -88,7 +88,7 @@ def info(
     """
     Print information about the given account.
 
-    Falls back to the default authenticator account if no account is specified.
+    Falls back to the default keyfile if no account is specified.
     """
 
     if len(accounts) == 0:
