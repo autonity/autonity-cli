@@ -78,7 +78,7 @@ class TrezorAuthenticator:
 
         try:
             address_str = trezor_eth.get_address(self.client, self.path)
-        except Cancelled as exc:
+        except Cancelled as exc:  # user cancelled optional passphrase prompt
             raise click.Abort() from exc
 
         self.address = to_checksum_address(address_str)
