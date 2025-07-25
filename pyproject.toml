@@ -78,7 +78,13 @@ post-install-commands = [
 
 [tool.hatch.envs.lint]
 description = "Run code linters"
-dependencies = ["black", "check-wheel-contents", "ruff", "pyright", "wheel-inspect"]
+dependencies = [
+  "black",
+  "check-wheel-contents",
+  "ruff",
+  "pyright",
+  "wheel-inspect",
+]
 
 [tool.hatch.envs.lint.scripts]
 all = ["check-code", "check-wheel", "check-types"]
