@@ -54,9 +54,8 @@ def account_group() -> None:
 
 
 @account_group.command(name="list")
-@option("--with-files", is_flag=True, help="also show keyfile names.")
 @keystore_option()
-def list_cmd(keystore: Optional[str], with_files: bool) -> None:
+def list_cmd(keystore: Optional[str]) -> None:
     """
     List the accounts for files in the keystore directory.
     """
@@ -64,10 +63,7 @@ def list_cmd(keystore: Optional[str], with_files: bool) -> None:
     keystore = config.get_keystore_directory(keystore)
     keyfiles = address_keyfile_dict(keystore)
     for addr, keyfile in keyfiles.items():
-        if with_files:
-            print(addr + " " + keyfile)
-        else:
-            print(addr)
+        print(addr + " " + keyfile)
 
 
 @account_group.command()
