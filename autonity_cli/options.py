@@ -50,6 +50,19 @@ keyfile_option_info = OptionInfo(
     help="encrypted private key file (falls back to 'keyfile' in config file).",
 )
 
+keystore_option_info = OptionInfo(
+    args=(
+        "--keystore",
+        "-s",
+    ),
+    type=Path(exists=True),
+    help=(
+        "keystore directory (falls back to 'keystore' in config file, "
+        "defaults to ~/.autonity/keystore)."
+    ),
+)
+
+
 trezor_option_info = OptionInfo(
     args=["--trezor"],
     metavar="ACCOUNT",
@@ -72,21 +85,13 @@ rpc_endpoint_option = click.option(
 )
 
 
-def keystore_option() -> Decorator[Func]:
+def keystore_option(cls: Decorator[Any] = click.option) -> Decorator[Func]:
     """
     Option: --keystore <directory>.
     """
 
     def decorator(fn: Func) -> Func:
-        return click.option(
-            "--keystore",
-            "-s",
-            type=Path(exists=True),
-            help=(
-                "keystore directory (falls back to 'keystore' in config file, "
-                "defaults to ~/.autonity/keystore)."
-            ),
-        )(fn)
+        return make_option(keystore_option_info, cls=cls)(fn)
 
     return decorator
 
