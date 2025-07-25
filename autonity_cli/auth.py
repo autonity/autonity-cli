@@ -14,18 +14,14 @@ from eth_typing import ChecksumAddress
 from eth_utils.conversions import to_int
 from eth_utils.crypto import keccak
 from hexbytes import HexBytes
-from trezorlib.client import get_default_client
 from trezorlib.exceptions import Cancelled
 from trezorlib.messages import Features
 from trezorlib.tools import parse_path
-from trezorlib.transport import DeviceIsBusy
 from web3.types import TxParams
 
-from . import config
+from . import config, device
 from .logging import log
 from .utils import to_checksum_address
-
-TREZOR_DEFAULT_PREFIX = "m/44h/60h/0h/0"
 
 
 class Authenticator(Protocol):
@@ -67,7 +63,7 @@ class KeyfileAuthenticator:
 class TrezorAuthenticator:
     def __init__(self, path_or_index: str):
         if path_or_index.isdigit():
-            path_str = f"{TREZOR_DEFAULT_PREFIX}/{int(path_or_index)}"
+            path_str = f"{device.TREZOR_DEFAULT_PREFIX}/{int(path_or_index)}"
         else:
             path_str = path_or_index
         try:
@@ -76,14 +72,7 @@ class TrezorAuthenticator:
             raise click.ClickException(
                 f"Invalid Trezor BIP32 derivation path '{path_str}'."
             ) from exc
-        try:
-            self.client = get_default_client()
-        except DeviceIsBusy as exc:
-            raise click.ClickException("Device in use by another process.") from exc
-        except Exception as exc:
-            raise click.ClickException(
-                "No Trezor device found. Check device is connected, unlocked, and detected by OS."
-            ) from exc
+        self.client = device.get_client()
         device_info = self.device_info(self.client.features)
         log(f"Connected to Trezor: {device_info}")
 
