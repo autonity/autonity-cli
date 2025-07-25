@@ -2,6 +2,7 @@ import getpass
 import json
 from typing import List, Optional
 
+import click
 import eth_account
 from autonity import Autonity
 from click import ClickException, Path, argument, group, option
@@ -11,8 +12,12 @@ from hexbytes import HexBytes
 from web3 import Web3
 from web3.types import BlockIdentifier
 
-from .. import config
-from ..auth import validate_authenticator, validate_authenticator_account
+from .. import config, device
+from ..auth import (
+    TREZOR_DEFAULT_PREFIX,
+    validate_authenticator,
+    validate_authenticator_account,
+)
 from ..denominations import (
     format_auton_quantity,
     format_newton_quantity,
@@ -31,6 +36,7 @@ from ..options import (
     keyfile_option,
     keystore_option,
     newton_or_token_option,
+    optgroup,
     rpc_endpoint_option,
 )
 from ..user import get_account_stats
@@ -54,16 +60,52 @@ def account_group() -> None:
 
 
 @account_group.command(name="list")
-@keystore_option()
-def list_cmd(keystore: Optional[str]) -> None:
+@optgroup.group("Keyfile accounts")
+@keystore_option(cls=optgroup.option)
+@optgroup.group("Trezor accounts")
+@optgroup.option(
+    "--trezor", "use_trezor", is_flag=True, help="Enumerate Trezor accounts"
+)
+@optgroup.option(
+    "--prefix",
+    metavar="PREFIX",
+    default=TREZOR_DEFAULT_PREFIX,
+    show_default=True,
+    help="Custom BIP32 derivation prefix",
+)
+@optgroup.option(
+    "--start",
+    type=int,
+    default=0,
+    show_default=True,
+    help="Start index at BIP32 derivation prefix",
+)
+@optgroup.option(
+    "-n",
+    type=int,
+    default=20,
+    show_default=True,
+    help="Number of Trezor accounts to list",
+)
+def list_cmd(
+    keystore: Optional[str], use_trezor: bool, prefix: str, start: int, n: int
+) -> None:
     """
-    List the accounts for files in the keystore directory.
+    List accounts in keyfiles or in a Trezor device.
     """
 
-    keystore = config.get_keystore_directory(keystore)
-    keyfiles = address_keyfile_dict(keystore)
-    for addr, keyfile in keyfiles.items():
-        print(addr + " " + keyfile)
+    if use_trezor and keystore:
+        raise click.ClickException(
+            "Options --trezor and --keystore are mutually exclusive."
+        )
+
+    if use_trezor:
+        accounts = device.enumerate_accounts(prefix, start, n)
+    else:
+        keystore = config.get_keystore_directory(keystore)
+        accounts = address_keyfile_dict(keystore).items()
+    for addr, path in accounts:
+        print(addr + " " + path)
 
 
 @account_group.command()
