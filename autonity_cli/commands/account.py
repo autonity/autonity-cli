@@ -290,6 +290,12 @@ def signtx(keyfile: Optional[str], trezor: Optional[str], tx_file: str) -> None:
     # Get auth
     auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
 
+    # Check for mismatch
+    if "from" in tx and tx["from"] != auth.address:
+        raise ClickException(
+            f"TX from-address {tx['from']} does not match signer's address {auth.address}."
+        )
+
     # Sign the tx:
     signed_tx = auth.sign_transaction(tx)
 
