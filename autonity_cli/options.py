@@ -7,7 +7,7 @@ from typing import Any, Callable, Iterable, Optional, TypeVar, Union
 
 import click
 from click import Path
-from click_option_group import MutuallyExclusiveOptionGroup, RequiredAnyOptionGroup
+from click_option_group import MutuallyExclusiveOptionGroup
 from click_option_group._decorators import (
     _OptGroup,  # pyright: ignore[reportPrivateUsage]
 )
@@ -148,7 +148,7 @@ def from_options() -> Decorator[Func]:
     def decorator(fn: Func) -> Func:
         for option in reversed(
             [
-                optgroup.group("From address", cls=RequiredAnyOptionGroup),
+                optgroup.group("From address", cls=MutuallyExclusiveOptionGroup),
                 optgroup.option(
                     "--from",
                     "-f",
