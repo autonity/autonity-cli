@@ -4,11 +4,13 @@ from typing import Optional, Protocol, cast
 import click
 import trezorlib.ethereum as trezor_eth
 from eth_account import Account
-from eth_account._utils.legacy_transactions import encode_transaction
+from eth_account._utils.legacy_transactions import (
+    encode_transaction,
+    serializable_unsigned_transaction_from_dict,
+)
 from eth_account.datastructures import SignedTransaction
 from eth_account.messages import encode_defunct
 from eth_account.signers.local import LocalAccount
-from eth_account.typed_transactions.typed_transaction import TypedTransaction
 from eth_account.types import TransactionDictType
 from eth_typing import ChecksumAddress
 from eth_utils.conversions import to_int
@@ -92,28 +94,45 @@ class TrezorAuthenticator:
     def sign_transaction(self, params: "TxParams") -> SignedTransaction:
         assert "chainId" in params
         assert "gas" in params
-        assert "maxFeePerGas" in params
-        assert "maxPriorityFeePerGas" in params
         assert "nonce" in params
         assert "to" in params
         assert "value" in params
-        v_int, r_bytes, s_bytes = trezor_eth.sign_tx_eip1559(
-            self.client,
-            self.path,
-            nonce=cast(int, params["nonce"]),
-            gas_limit=params["gas"],
-            to=cast(str, params["to"]),
-            value=cast(int, params["value"]),
-            data=HexBytes(params["data"]) if "data" in params else HexBytes(b""),
-            chain_id=params["chainId"],
-            max_gas_fee=int(params["maxFeePerGas"]),
-            max_priority_fee=int(params["maxPriorityFeePerGas"]),
-        )
+        data_bytes = HexBytes(params["data"] if "data" in params else b"")
+        if "gasPrice" in params and params["gasPrice"]:
+            v_int, r_bytes, s_bytes = trezor_eth.sign_tx(
+                self.client,
+                self.path,
+                nonce=cast(int, params["nonce"]),
+                gas_price=cast(int, params["gasPrice"]),
+                gas_limit=params["gas"],
+                to=cast(str, params["to"]),
+                value=cast(int, params["value"]),
+                data=data_bytes,
+                chain_id=params["chainId"],
+            )
+        else:
+            assert "maxFeePerGas" in params
+            assert "maxPriorityFeePerGas" in params
+            v_int, r_bytes, s_bytes = trezor_eth.sign_tx_eip1559(
+                self.client,
+                self.path,
+                nonce=cast(int, params["nonce"]),
+                gas_limit=params["gas"],
+                to=cast(str, params["to"]),
+                value=cast(int, params["value"]),
+                data=data_bytes,
+                chain_id=params["chainId"],
+                max_gas_fee=int(params["maxFeePerGas"]),
+                max_priority_fee=int(params["maxPriorityFeePerGas"]),
+            )
         r_int = to_int(r_bytes)
         s_int = to_int(s_bytes)
-        filtered_params = dict((k, v) for (k, v) in params.items() if k != "from")
-        tx_unsigned = TypedTransaction.from_dict(
-            cast(TransactionDictType, filtered_params)
+        filtered_tx = dict((k, v) for (k, v) in params.items() if k not in ("from"))
+        # In a LegacyTransaction, "type" is not a valid field. See EIP-2718.
+        if "type" in filtered_tx and filtered_tx["type"] == "0x0":
+            filtered_tx.pop("type")
+        tx_unsigned = serializable_unsigned_transaction_from_dict(
+            cast(TransactionDictType, filtered_tx)
         )
         tx_encoded = encode_transaction(tx_unsigned, vrs=(v_int, r_int, s_int))
         txhash = keccak(tx_encoded)
