@@ -4,7 +4,6 @@ from typing import Optional
 
 from click import ClickException, Path, argument, group, option
 from eth_account.datastructures import SignedTransaction
-from eth_typing import HexStr
 from hexbytes import HexBytes
 from web3 import Web3
 
@@ -54,11 +53,6 @@ tx_group.add_command(signtx, name="sign")
 @tx_aux_options
 @option(
     "--data", "-d", help="compiled contract code OR method signature and parameters."
-)
-@option(
-    "--legacy",
-    is_flag=True,
-    help="if set, transaction type is 0x0 (pre-EIP1559), otherwise type is 0x2.",
 )
 def make(
     rpc_endpoint: Optional[str],
@@ -155,12 +149,6 @@ def make(
     # Fill in any missing values.
 
     tx = finalize_tx_from_args(w3, rpc_endpoint, tx, from_addr)
-
-    # If the --legacy flag was given, explicitly set the type,
-    # otherwise have web3 determine it.
-
-    if legacy:
-        tx["type"] = HexStr("0x0")
 
     print(to_json(tx))
 
