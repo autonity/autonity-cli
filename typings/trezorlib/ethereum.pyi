@@ -12,6 +12,20 @@ def get_address(
     encoded_network: Optional[bytes] = None,
     chunkify: bool = False,
 ) -> str: ...
+def sign_tx(
+    client: TrezorClient,
+    n: Address,
+    nonce: int,
+    gas_price: int,
+    gas_limit: int,
+    to: str,
+    value: int,
+    data: Optional[bytes] = None,
+    chain_id: Optional[int] = None,
+    tx_type: Optional[int] = None,
+    definitions: Optional[messages.EthereumDefinitions] = None,
+    chunkify: bool = False,
+) -> Tuple[int, bytes, bytes]: ...
 def sign_tx_eip1559(
     client: TrezorClient,
     n: Address,
