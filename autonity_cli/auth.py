@@ -98,33 +98,36 @@ class TrezorAuthenticator:
         assert "to" in params
         assert "value" in params
         data_bytes = HexBytes(params["data"] if "data" in params else b"")
-        if "gasPrice" in params and params["gasPrice"]:
-            v_int, r_bytes, s_bytes = trezor_eth.sign_tx(
-                self.client,
-                self.path,
-                nonce=cast(int, params["nonce"]),
-                gas_price=cast(int, params["gasPrice"]),
-                gas_limit=params["gas"],
-                to=cast(str, params["to"]),
-                value=cast(int, params["value"]),
-                data=data_bytes,
-                chain_id=params["chainId"],
-            )
-        else:
-            assert "maxFeePerGas" in params
-            assert "maxPriorityFeePerGas" in params
-            v_int, r_bytes, s_bytes = trezor_eth.sign_tx_eip1559(
-                self.client,
-                self.path,
-                nonce=cast(int, params["nonce"]),
-                gas_limit=params["gas"],
-                to=cast(str, params["to"]),
-                value=cast(int, params["value"]),
-                data=data_bytes,
-                chain_id=params["chainId"],
-                max_gas_fee=int(params["maxFeePerGas"]),
-                max_priority_fee=int(params["maxPriorityFeePerGas"]),
-            )
+        try:
+            if "gasPrice" in params and params["gasPrice"]:
+                v_int, r_bytes, s_bytes = trezor_eth.sign_tx(
+                    self.client,
+                    self.path,
+                    nonce=cast(int, params["nonce"]),
+                    gas_price=cast(int, params["gasPrice"]),
+                    gas_limit=params["gas"],
+                    to=cast(str, params["to"]),
+                    value=cast(int, params["value"]),
+                    data=data_bytes,
+                    chain_id=params["chainId"],
+                )
+            else:
+                assert "maxFeePerGas" in params
+                assert "maxPriorityFeePerGas" in params
+                v_int, r_bytes, s_bytes = trezor_eth.sign_tx_eip1559(
+                    self.client,
+                    self.path,
+                    nonce=cast(int, params["nonce"]),
+                    gas_limit=params["gas"],
+                    to=cast(str, params["to"]),
+                    value=cast(int, params["value"]),
+                    data=data_bytes,
+                    chain_id=params["chainId"],
+                    max_gas_fee=int(params["maxFeePerGas"]),
+                    max_priority_fee=int(params["maxPriorityFeePerGas"]),
+                )
+        except Cancelled as exc:  # user cancelled optional passphrase prompt
+            raise click.Abort() from exc
         r_int = to_int(r_bytes)
         s_int = to_int(s_bytes)
         filtered_tx = dict((k, v) for (k, v) in params.items() if k not in ("from"))
