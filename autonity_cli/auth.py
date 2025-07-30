@@ -100,10 +100,10 @@ class TrezorAuthenticator:
         v_int, r_bytes, s_bytes = trezor_eth.sign_tx_eip1559(
             self.client,
             self.path,
-            nonce=params["nonce"],
+            nonce=cast(int, params["nonce"]),
             gas_limit=params["gas"],
-            to=str(params["to"]),
-            value=params["value"],
+            to=cast(str, params["to"]),
+            value=cast(int, params["value"]),
             data=HexBytes(params["data"]) if "data" in params else HexBytes(b""),
             chain_id=params["chainId"],
             max_gas_fee=int(params["maxFeePerGas"]),
