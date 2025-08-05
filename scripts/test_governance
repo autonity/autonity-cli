@@ -33,6 +33,7 @@ aut governance set-withholding-threshold --help > /dev/null
 aut governance set-withheld-rewards-pool --help > /dev/null
 aut governance set-eip1559-params --help > /dev/null
 aut governance set-clustering-threshold --help > /dev/null
+aut governance set-gas-limit --help > /dev/null
 aut governance create-schedule --help > /dev/null
 aut governance mint --help > /dev/null
 aut governance burn --help > /dev/null

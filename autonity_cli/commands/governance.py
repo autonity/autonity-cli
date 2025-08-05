@@ -1209,3 +1209,44 @@ def set_clustering_threshold(
         chain_id=chain_id,
     )
     print(to_json(tx))
+
+
+@governance_group.command()
+@rpc_endpoint_option
+@from_options()
+@tx_aux_options
+@argument("gas_limit", type=int)
+def set_gas_limit(
+    rpc_endpoint: Optional[str],
+    keyfile: Optional[str],
+    trezor: Optional[str],
+    from_str: Optional[str],
+    gas: Optional[str],
+    gas_price: Optional[str],
+    max_priority_fee_per_gas: Optional[str],
+    max_fee_per_gas: Optional[str],
+    fee_factor: Optional[float],
+    nonce: Optional[int],
+    chain_id: Optional[int],
+    gas_limit: int,
+):
+    """
+    Set the gas limit.
+
+    Restricted to the Operator account. See `setGasLimit` on Autonity contract.
+    """
+    from_addr = validate_authenticator_account(from_str, keyfile=keyfile, trezor=trezor)
+    aut = autonity_from_endpoint_arg(rpc_endpoint)
+
+    tx = create_contract_tx_from_args(
+        function=aut.set_gas_limit(gas_limit),
+        from_addr=from_addr,
+        gas=gas,
+        gas_price=gas_price,
+        max_fee_per_gas=max_fee_per_gas,
+        max_priority_fee_per_gas=max_priority_fee_per_gas,
+        fee_factor=fee_factor,
+        nonce=nonce,
+        chain_id=chain_id,
+    )
+    print(to_json(tx))
