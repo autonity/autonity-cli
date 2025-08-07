@@ -71,7 +71,6 @@ def make(
     value: str,
     data: Optional[str],
     chain_id: Optional[int],
-    legacy: bool,
 ) -> None:
     """
     Create a transaction from the parameters passed in.
