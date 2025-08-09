@@ -20,6 +20,32 @@ Template:
 ### Fixed
 -->
 
+## [v2.0.0] - 2025-08-09
+
+### Changed
+
+- Support the Autonity Nile protocol ([#210](https://github.com/autonity/autonity-cli/pull/210))
+- Prefix `reveal-private-key` output with `0x` ([#182](https://github.com/autonity/autonity-cli/pull/182))
+- Include Autonity protocol version in `--version` ([#185](https://github.com/autonity/autonity-cli/pull/185))
+- Group related command options in help text ([`606693b`](https://github.com/autonity/autonity-cli/commit/606693b))
+- Shorten keyfile path in password prompt ([`fc3c96e`](https://github.com/autonity/autonity-cli/commit/fc3c96e))
+
+### Added
+
+- Support authenticating with a Trezor device ([#203](https://github.com/autonity/autonity-cli/pull/203))
+- Implement `validator` commands `locked-balance-of` & `unlocked-balance-of` ([#189](https://github.com/autonity/autonity-cli/issues/161))
+
+### Removed
+
+- Remove insecure `--password` and `--show-password` options ([`b6bbb03`](https://github.com/autonity/autonity-cli/commit/b6bbb03), [`da1eb21`](https://github.com/autonity/autonity-cli/commit/da1eb21))
+- Remove `account lntn-balances` command ([`8450dee`](https://github.com/autonity/autonity-cli/commit/8450dee))
+- Remove `governance set-upgrade-manager-contract` command ([#188](https://github.com/autonity/autonity-cli/issues/188))
+
+### Fixed
+
+- Fix several help message typos and formatting ([#181](https://github.com/autonity/autonity-cli/pull/181))
+- Fix `--pool-address` option of `set-withheld-rewards-pool` ([#191](https://github.com/autonity/autonity-cli/pull/191))
+
 ## [v1.0.0] - 2024-12-12
 
 ### Changed
@@ -88,6 +114,7 @@ Template:
 - Fix startup crash due to `ModuleNotFoundError` from eth_rlp ([#137](https://github.com/autonity/autonity-cli/issues/137))
 
 <!-- [vX.Y.Z]: https://github.com/autonity/autonity.py/releases/tag/vX.Y.Z -->
+[v2.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.0
 [v1.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v1.0.0
 [v0.6.0]: https://github.com/autonity/autonity-cli/releases/tag/v0.6.0
 [v0.5.0]: https://github.com/autonity/autonity-cli/releases/tag/v0.5.0
