@@ -220,7 +220,7 @@ def create_contract_tx_from_args(
                 if max_priority_fee_per_gas
                 else None
             ),
-            nonce=Nonce(nonce) if nonce else None,
+            nonce=(Nonce(nonce) if nonce is not None) else None,
             chain_id=chain_id,
         )
         return finalize_transaction(lambda: function.w3, tx, from_addr)
