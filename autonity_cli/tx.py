@@ -50,7 +50,7 @@ def create_transaction(
     if data:
         tx["data"] = data
 
-    if nonce:
+    if nonce is not None:
         tx["nonce"] = nonce
 
     if gas:
