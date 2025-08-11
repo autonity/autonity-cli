@@ -9,4 +9,7 @@ def get_default_client(
 
 class TrezorClient:
     features: Features
+
+    def end_session(self) -> None: ...
+
     ...

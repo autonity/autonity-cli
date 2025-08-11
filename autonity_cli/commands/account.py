@@ -14,7 +14,7 @@ from web3.types import BlockIdentifier
 
 from .. import config, device
 from ..auth import (
-    validate_authenticator,
+    authenticator,
     validate_authenticator_account,
 )
 from ..denominations import (
@@ -127,8 +127,8 @@ def info(
     """
 
     if len(accounts) == 0:
-        auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
-        accounts = [auth.address]
+        with authenticator(keyfile=keyfile, trezor=trezor) as auth:
+            accounts = [auth.address]
 
     addresses = [Web3.to_checksum_address(act) for act in accounts]
 
@@ -322,17 +322,14 @@ def signtx(keyfile: Optional[str], trezor: Optional[str], tx_file: str) -> None:
     # Read tx
     tx = json.loads(load_from_file_or_stdin(tx_file))
 
-    # Get auth
-    auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
-
-    # Check for mismatch
-    if "from" in tx and tx["from"] != auth.address:
-        raise ClickException(
-            f"TX from-address {tx['from']} does not match signer's address {auth.address}."
-        )
-
-    # Sign the tx:
-    signed_tx = auth.sign_transaction(tx)
+    with authenticator(keyfile=keyfile, trezor=trezor) as auth:
+        # Check for mismatch
+        if "from" in tx and tx["from"] != auth.address:
+            raise ClickException(
+                f"TX from-address {tx['from']} does not match signer's address {auth.address}."
+            )
+        # Sign the tx:
+        signed_tx = auth.sign_transaction(tx)
 
     print(to_json(signed_tx._asdict()))
 
@@ -370,11 +367,10 @@ def sign_message(
         message = load_from_file_or_stdin(message)
 
     # Get auth
-    auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
-
-    # Sign the message
-    log(f'Signing message: "{message}" (len={len(message)})')
-    signature = auth.sign_message(message).hex()
+    with authenticator(keyfile=keyfile, trezor=trezor) as auth:
+        # Sign the message
+        log(f'Signing message: "{message}" (len={len(message)})')
+        signature = auth.sign_message(message).hex()
 
     # Optionally write to the output file
     if signature_file:

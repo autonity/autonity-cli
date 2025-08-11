@@ -1,5 +1,6 @@
 import json
-from typing import Optional, Protocol, cast
+from contextlib import contextmanager
+from typing import Generator, Optional, Protocol, cast
 
 import click
 import trezorlib.ethereum as trezor_eth
@@ -33,6 +34,8 @@ class Authenticator(Protocol):
 
     def sign_message(self, message: str) -> bytes: ...
 
+    def shutdown(self): ...
+
 
 class KeyfileAuthenticator:
     def __init__(self, keyfile: str):
@@ -60,6 +63,9 @@ class KeyfileAuthenticator:
     def sign_message(self, message: str) -> bytes:
         signable = encode_defunct(text=message)
         return self.account.sign_message(signable)["signature"]
+
+    def shutdown(self):
+        pass
 
 
 class TrezorAuthenticator:
@@ -155,19 +161,27 @@ class TrezorAuthenticator:
         )
         return sigdata.signature
 
+    def shutdown(self):
+        self.client.end_session()
 
-def validate_authenticator(
+
+@contextmanager
+def authenticator(
     *, keyfile: Optional[str], trezor: Optional[str]
-) -> Authenticator:
+) -> Generator[Authenticator, None, None]:
     if trezor and keyfile:
         raise RuntimeError("Expected at most one authentication method.")
     elif trezor:
         log(f"using Trezor: {trezor}")
-        return TrezorAuthenticator(trezor)
+        auth = TrezorAuthenticator(trezor)
     else:
         log(f"using key file: {keyfile}")
         keyfile = config.get_keyfile(keyfile)
-        return KeyfileAuthenticator(keyfile)
+        auth = KeyfileAuthenticator(keyfile)
+    try:
+        yield auth
+    finally:
+        auth.shutdown()
 
 
 def validate_authenticator_account(
@@ -184,7 +198,7 @@ def validate_authenticator_account(
         _address = to_checksum_address(address)
     else:
         log("No address provided, using an authenticator")
-        auth = validate_authenticator(keyfile=keyfile, trezor=trezor)
-        _address = auth.address
+        with authenticator(keyfile=keyfile, trezor=trezor) as auth:
+            _address = auth.address
     log(f"address: {_address}")
     return _address
