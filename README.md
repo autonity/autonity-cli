@@ -37,6 +37,13 @@ Once successfully installed, the tool will be available in the shell as the
 `aut` command. All commands are discoverable from the help text. Type
 `aut --help`, `aut <command> --help` etc. for details.
 
+⚠️ To upgrade from using a _development build_ installed from Github, you will
+need to switch back to the stable package by running:
+
+```sh
+pipx install --force autonity-cli
+```
+
 ⚠️ If upgrading from "aut" `v0.5.0` or earlier, you will need to uninstall the
 `aut` package before reinstalling `autonity-cli`:
 
