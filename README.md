@@ -29,7 +29,7 @@ Requirements:
 
 To install Autonity CLI as a pipx package, isolated in its own environment, run:
 
-```console
+```sh
 pipx install autonity-cli
 ```
 
@@ -57,7 +57,7 @@ $ pipx install autonity-cli
 - If `pipx` selects an incompatible version of Python, you may need to specify a
   specific one. Use the `--python` flag:
 
-  ```console
+  ```sh
   pipx install --python /usr/bin/pythonX.Y autonity-cli
   ```
 
@@ -153,7 +153,7 @@ Confirm account password:
 This can be added as the default key for transaction signing (and default
 address for queries) in the `.autrc` file:
 
-```console
+```sh
 echo 'keyfile = keystore/alice.key' >> .autrc
 ```
 
@@ -207,7 +207,7 @@ $ aut account balance 0x4EcE2e62E67a7B64a83D3E180dC86962145b762f
 
 Contract calls are possible using the following syntax:
 
-```console
+```sh
 aut contract call --address CONTRACT_ADDRESS --abi ABI_FILE METHOD [PARAMETERS]...
 ```
 
@@ -260,13 +260,13 @@ installation instructions [here](https://hatch.pypa.io/latest/install/).
 Hatch will automatically manage a virtual environment for the project. To run
 the command in development mode use:
 
-```console
+```sh
 hatch run aut ....
 ```
 
 alternatively, you can open a shell in the `hatch` environment by executing
 
-```console
+```sh
 hatch shell
 ```
 
