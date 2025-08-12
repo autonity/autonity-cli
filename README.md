@@ -20,7 +20,7 @@ After installing, run `aut --help` for a list of all commands and options.
 
 Requirements:
 
-- **Python 3.9 or greater** (Install using the package manager for your OS or
+- **Python 3.10 or greater** (Install using the package manager for your OS or
   [pyenv](https://github.com/pyenv/pyenv) ).
   - (Note that websocket connections are not supported for Python 3.10+ due to
     an issue in the latest stable version of the `web3.py` dependency)
