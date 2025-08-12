@@ -20,6 +20,12 @@ Template:
 ### Fixed
 -->
 
+## [v2.0.2] - 2025-08-12
+
+### Changed
+
+-  Require Python 3.10 or later ([#213](https://github.com/autonity/autonity-cli/issues/213))
+
 ## [v2.0.1] - 2025-08-12
 
 ### Fixed
@@ -120,6 +126,7 @@ Template:
 - Fix startup crash due to `ModuleNotFoundError` from eth_rlp ([#137](https://github.com/autonity/autonity-cli/issues/137))
 
 <!-- [vX.Y.Z]: https://github.com/autonity/autonity.py/releases/tag/vX.Y.Z -->
+[v2.0.2]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.2
 [v2.0.1]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.1
 [v2.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.0
 [v1.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v1.0.0
