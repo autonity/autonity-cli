@@ -1,6 +1,6 @@
 import json
 from contextlib import contextmanager
-from typing import Generator, Optional, Protocol, cast
+from typing import Iterator, Optional, Protocol, cast
 
 import click
 import trezorlib.ethereum as trezor_eth
@@ -168,7 +168,7 @@ class TrezorAuthenticator:
 @contextmanager
 def authenticator(
     *, keyfile: Optional[str], trezor: Optional[str]
-) -> Generator[Authenticator, None, None]:
+) -> Iterator[Authenticator]:
     if trezor and keyfile:
         raise RuntimeError("Expected at most one authentication method.")
     elif trezor:
