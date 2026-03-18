@@ -47,11 +47,11 @@ allow-direct-references = true
 
 [tool.hatch.envs.default]
 description = "The standard dev, build, and test environment"
-dependencies = ["pyright"]
+dependencies = ["pyright", "pytest"]
 
 [tool.hatch.envs.default.scripts]
 test = ["unit-tests", "script-tests", "check-types"]
-unit-tests = "python -m unittest discover {args:tests}"
+unit-tests = "hatch run test:all"
 script-tests = [
   "rm -rf test_*",
   "hatch run ./scripts/test_contract",
@@ -63,6 +63,19 @@ script-tests = [
 ]
 # Keep in default env so it can be used from `github` and `local` envs.
 check-types = "pyright {args}"
+
+[tool.hatch.envs.test]
+description = "Run tests"
+dependencies = [
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+  "responses",
+]
+
+[tool.hatch.envs.test.scripts]
+all = "pytest {args:tests}"
+cov = "pytest --cov=autonity_cli --cov-report=term-missing {args:tests}"
 
 [tool.hatch.envs.github]
 description = "Develop and build against autonity.py from Github"
@@ -95,6 +108,12 @@ format = [
   "black {args:.}",
   "ruff check --fix --select I {args:.}",
   "RUST_LOG=warn taplo fmt pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "integration: requires live RPC endpoint or auth service",
 ]
 
 [tool.pyright]
