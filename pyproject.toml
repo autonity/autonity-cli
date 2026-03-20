@@ -22,9 +22,9 @@ classifiers = [
 ]
 dependencies = [
   "autonity{env:AUTPY_VERSION:==6.0.0}",
-  "click>=8.1.8",
+  "click~=8.1.8",
   "click-option-group",
-  "trezor[ethereum]>=0.13.10",
+  "trezor[ethereum]~=0.13.10",
 ]
 
 [project.urls]
