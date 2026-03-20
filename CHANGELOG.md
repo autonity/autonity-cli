@@ -20,6 +20,12 @@ Template:
 ### Fixed
 -->
 
+## [v2.0.3] - 2026-03-20
+
+### Fixed
+
+- Fix errors due to incompatible libraries ([`cdfe932`](https://github.com/autonity/autonity-cli/commit/cdfe932))
+
 ## [v2.0.2] - 2025-08-12
 
 ### Changed
@@ -126,6 +132,7 @@ Template:
 - Fix startup crash due to `ModuleNotFoundError` from eth_rlp ([#137](https://github.com/autonity/autonity-cli/issues/137))
 
 <!-- [vX.Y.Z]: https://github.com/autonity/autonity.py/releases/tag/vX.Y.Z -->
+[v2.0.3]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.3
 [v2.0.2]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.2
 [v2.0.1]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.1
 [v2.0.0]: https://github.com/autonity/autonity-cli/releases/tag/v2.0.0
