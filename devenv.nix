@@ -17,6 +17,9 @@
     pkgs.libusb1
   ];
 
+  # Don't save `hatch publish` credentials
+  env.PYTHON_KEYRING_BACKEND = "keyring.backends.null.Keyring";
+
   languages.python = {
     enable = true;
     version = "3.13"; # must match `pkgs.hatch` python version
